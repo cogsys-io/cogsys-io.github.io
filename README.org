@@ -1,0 +1,4 @@
+#+title: cogsys.io
+
+- [[cogsys.io][https://cogsys.io/]]
+- [[cogsys-io.github.io][https://cogsys-io.github.io]]
