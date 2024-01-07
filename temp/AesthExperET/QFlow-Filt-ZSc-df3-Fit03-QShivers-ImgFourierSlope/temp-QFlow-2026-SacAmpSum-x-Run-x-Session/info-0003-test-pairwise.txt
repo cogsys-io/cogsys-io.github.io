@@ -1,0 +1,10 @@
+# Linear trend for SacAmpSum
+
+Run           |       Session | Contrast |        95% CI |      p
+-----------------------------------------------------------------
+First-Second  |   First-First |     0.01 | [-0.20, 0.22] | > .999
+First-First   |  First-Second |     0.02 | [-0.22, 0.25] | > .999
+First-Second  |  First-Second |     0.27 | [-0.01, 0.55] | 0.223 
+Second-First  |  First-Second | 6.70e-03 | [-0.27, 0.29] | > .999
+Second-Second |  First-Second |     0.26 | [ 0.03, 0.49] | 0.158 
+First-Second  | Second-Second |     0.25 | [ 0.01, 0.49] | 0.194 

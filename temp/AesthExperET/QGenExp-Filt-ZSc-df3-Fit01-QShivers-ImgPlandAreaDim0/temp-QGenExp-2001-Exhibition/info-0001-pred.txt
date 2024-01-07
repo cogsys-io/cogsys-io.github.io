@@ -1,0 +1,13 @@
+# Predicted values of QGenExp
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.16 | [-0.44, 0.12]
+Real       |      0.29 | [ 0.02, 0.57]
+
+Adjusted for:
+*        FixDurAvg =  0.08
+*        SacAmpSum =  0.06
+*        SacAmpAvg =  0.01
+*         QShivers = -0.02
+* ImgPlandAreaDim0 = 12.77

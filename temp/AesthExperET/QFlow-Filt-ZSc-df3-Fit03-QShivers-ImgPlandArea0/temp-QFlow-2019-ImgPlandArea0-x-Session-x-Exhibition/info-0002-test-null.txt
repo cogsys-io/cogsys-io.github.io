@@ -1,0 +1,8 @@
+# Linear trend for ImgPlandArea0
+
+Session | Exhibition | Slope |         95% CI |     p
+-----------------------------------------------------
+First   |       Fake | -1.20 | [-4.41,  2.01] | 0.754
+Second  |       Fake | -3.59 | [-6.87, -0.31] | 0.129
+First   |       Real |  0.07 | [-0.09,  0.24] | 0.754
+Second  |       Real |  0.13 | [-0.03,  0.29] | 0.363

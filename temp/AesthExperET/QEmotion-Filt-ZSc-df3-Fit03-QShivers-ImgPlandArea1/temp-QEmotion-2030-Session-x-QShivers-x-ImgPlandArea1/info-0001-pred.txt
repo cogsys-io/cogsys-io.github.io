@@ -1,0 +1,78 @@
+# Predicted values of QEmotion
+
+#      QShivers = -2.06472488601762
+# ImgPlandArea1 = -0.96
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.36 | [-3.68, 2.97]
+Second  |      0.24 | [-3.15, 3.64]
+
+#      QShivers = -0.61383712827551
+# ImgPlandArea1 = -0.96
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.00 | [-2.95, 2.95]
+Second  |      0.32 | [-2.71, 3.35]
+
+#      QShivers = 0.837050629466605
+# ImgPlandArea1 = -0.96
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.35 | [-2.81, 3.51]
+Second  |      0.39 | [-2.85, 3.63]
+
+#      QShivers = -2.06472488601762
+# ImgPlandArea1 = 0.02
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.52 | [-3.39, 2.35]
+Second  |     -0.70 | [-3.63, 2.23]
+
+#      QShivers = -0.61383712827551
+# ImgPlandArea1 = 0.02
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.13 | [-2.67, 2.41]
+Second  |     -0.31 | [-2.92, 2.31]
+
+#      QShivers = 0.837050629466605
+# ImgPlandArea1 = 0.02
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.26 | [-2.46, 2.98]
+Second  |      0.09 | [-2.71, 2.89]
+
+#      QShivers = -2.06472488601762
+# ImgPlandArea1 = 1.01
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.69 | [ -9.77, 8.39]
+Second  |     -1.66 | [-10.91, 7.60]
+
+#      QShivers = -0.61383712827551
+# ImgPlandArea1 = 1.01
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.26 | [-8.33, 7.80]
+Second  |     -0.93 | [-9.23, 7.36]
+
+#      QShivers = 0.837050629466605
+# ImgPlandArea1 = 1.01
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.17 | [-8.47, 8.80]
+Second  |     -0.21 | [-9.09, 8.67]
+
+Adjusted for:
+* FixDurAvg = 0.07
+* SacAmpSum = 0.07
+* SacAmpAvg = 0.01

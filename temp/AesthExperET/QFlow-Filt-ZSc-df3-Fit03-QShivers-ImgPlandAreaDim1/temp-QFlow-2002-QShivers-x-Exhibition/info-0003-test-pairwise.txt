@@ -1,0 +1,5 @@
+# Linear trend for QShivers
+
+Exhibition | Contrast |        95% CI |     p
+---------------------------------------------
+Fake-Real  |    -0.12 | [-0.45, 0.21] | 0.483

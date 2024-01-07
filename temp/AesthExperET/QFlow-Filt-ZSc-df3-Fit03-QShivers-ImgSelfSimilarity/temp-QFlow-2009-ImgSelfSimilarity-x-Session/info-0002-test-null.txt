@@ -1,0 +1,6 @@
+# Linear trend for ImgSelfSimilarity
+
+Session | Slope |        95% CI |     p
+---------------------------------------
+First   | -0.14 | [-0.35, 0.08] | 0.432
+Second  |  0.03 | [-0.20, 0.26] | 0.783

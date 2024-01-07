@@ -1,0 +1,28 @@
+# Predicted values of QFlow
+
+# ImgSelfSimilarity = -0.97
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.22 | [ 0.00, 0.44]
+Second  |     -0.08 | [-0.30, 0.15]
+
+# ImgSelfSimilarity = -0.02
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.14 | [-0.03, 0.32]
+Second  |     -0.06 | [-0.24, 0.12]
+
+# ImgSelfSimilarity = 0.94
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.07 | [-0.14, 0.28]
+Second  |     -0.04 | [-0.25, 0.17]
+
+Adjusted for:
+* FixDurAvg =  0.08
+* SacAmpSum =  0.06
+* SacAmpAvg =  0.00
+*  QShivers = -0.01

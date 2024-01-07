@@ -1,0 +1,22 @@
+# Predicted values of QFlow
+
+# Session = First
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.10 | [-0.43, 0.24]
+Real       |      0.26 | [ 0.01, 0.51]
+
+# Session = Second
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.52 | [-0.86, -0.18]
+Real       |      0.17 | [-0.08,  0.42]
+
+Adjusted for:
+*      FixDurAvg =  0.08
+*      SacAmpSum =  0.06
+*      SacAmpAvg =  0.00
+*       QShivers = -0.01
+* ImgEdgeDensity =  0.04

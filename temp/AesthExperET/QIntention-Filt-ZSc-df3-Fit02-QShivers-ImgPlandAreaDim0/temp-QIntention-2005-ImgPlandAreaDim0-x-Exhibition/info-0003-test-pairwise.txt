@@ -1,0 +1,5 @@
+# Linear trend for ImgPlandAreaDim0
+
+Exhibition | Contrast |         95% CI |     p
+----------------------------------------------
+Fake-Real  |    -0.20 | [-0.36, -0.03] | 0.019

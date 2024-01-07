@@ -1,0 +1,78 @@
+# Predicted values of QEmotion
+
+# ImgFourierSlope = -0.97
+#        QShivers = -0.61383712827551
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.24 | [-0.51, 0.03]
+Real       |     -0.21 | [-0.55, 0.14]
+
+# ImgFourierSlope = 0.03
+#        QShivers = -0.61383712827551
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.04 | [-0.30, 0.22]
+Real       |     -0.06 | [-0.34, 0.23]
+
+# ImgFourierSlope = 1.02
+#        QShivers = -0.61383712827551
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.15 | [-0.27, 0.56]
+Real       |      0.09 | [-0.19, 0.38]
+
+# ImgFourierSlope = -0.97
+#        QShivers = -2.06472488601762
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.50 | [-0.93, -0.08]
+Real       |     -0.62 | [-1.18, -0.05]
+
+# ImgFourierSlope = 0.03
+#        QShivers = -2.06472488601762
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.43 | [-0.84, -0.02]
+Real       |     -0.39 | [-0.89,  0.12]
+
+# ImgFourierSlope = 1.02
+#        QShivers = -2.06472488601762
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.35 | [-0.91, 0.21]
+Real       |     -0.16 | [-0.67, 0.35]
+
+# ImgFourierSlope = -0.97
+#        QShivers = 0.837050629466605
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.03 | [-0.31, 0.37]
+Real       |      0.20 | [-0.12, 0.52]
+
+# ImgFourierSlope = 0.03
+#        QShivers = 0.837050629466605
+
+Exhibition | Predicted |       95% CI
+-------------------------------------
+Fake       |      0.34 | [0.01, 0.66]
+Real       |      0.28 | [0.01, 0.54]
+
+# ImgFourierSlope = 1.02
+#        QShivers = 0.837050629466605
+
+Exhibition | Predicted |       95% CI
+-------------------------------------
+Fake       |      0.64 | [0.16, 1.12]
+Real       |      0.35 | [0.08, 0.62]
+
+Adjusted for:
+* FixDurAvg = 0.07
+* SacAmpSum = 0.07
+* SacAmpAvg = 0.01

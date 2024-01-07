@@ -1,0 +1,28 @@
+# Predicted values of QFlow
+
+# QShivers = -2.06472488601762
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.62 | [-1.12, -0.11]
+Real       |     -0.43 | [-0.97,  0.11]
+
+# QShivers = -0.61383712827551
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.32 | [-0.67, 0.03]
+Real       |     -0.03 | [-0.33, 0.28]
+
+# QShivers = 0.837050629466605
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.03 | [-0.44, 0.39]
+Real       |      0.38 | [ 0.10, 0.66]
+
+Adjusted for:
+*        FixDurAvg =  0.08
+*        SacAmpSum =  0.06
+*        SacAmpAvg =  0.00
+* ImgPlandAreaDim1 = 13.63

@@ -1,0 +1,5 @@
+# Linear trend for ImgAnisotropy
+
+Session      | Contrast |        95% CI |     p
+-----------------------------------------------
+First-Second |     0.07 | [ 0.00, 0.15] | 0.067

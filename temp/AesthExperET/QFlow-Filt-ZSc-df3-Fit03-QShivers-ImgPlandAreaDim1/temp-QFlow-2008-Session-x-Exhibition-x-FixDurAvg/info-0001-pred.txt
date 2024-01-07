@@ -1,0 +1,55 @@
+# Predicted values of QFlow
+
+# Exhibition = Fake
+#  FixDurAvg = -0.92
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.32 | [-0.70, 0.06]
+Second  |     -0.31 | [-0.71, 0.09]
+
+# Exhibition = Real
+#  FixDurAvg = -0.92
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.11 | [-0.18, 0.41]
+Second  |      0.02 | [-0.27, 0.32]
+
+# Exhibition = Fake
+#  FixDurAvg = 0.08
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.09 | [-0.45, 0.27]
+Second  |     -0.31 | [-0.69, 0.06]
+
+# Exhibition = Real
+#  FixDurAvg = 0.08
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.20 | [-0.06, 0.46]
+Second  |      0.09 | [-0.17, 0.35]
+
+# Exhibition = Fake
+#  FixDurAvg = 1.08
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.14 | [-0.29, 0.58]
+Second  |     -0.31 | [-0.75, 0.13]
+
+# Exhibition = Real
+#  FixDurAvg = 1.08
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.28 | [-0.02, 0.58]
+Second  |      0.15 | [-0.17, 0.47]
+
+Adjusted for:
+*        SacAmpSum =  0.06
+*        SacAmpAvg =  0.00
+*         QShivers = -0.01
+* ImgPlandAreaDim1 = 13.63

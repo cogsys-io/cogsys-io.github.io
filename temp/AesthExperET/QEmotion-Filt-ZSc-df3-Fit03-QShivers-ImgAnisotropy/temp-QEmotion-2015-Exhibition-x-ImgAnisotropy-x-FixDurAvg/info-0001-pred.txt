@@ -1,0 +1,78 @@
+# Predicted values of QEmotion
+
+# ImgAnisotropy = -0.97
+#     FixDurAvg = -0.93
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.41 | [-0.80, -0.02]
+Real       |      0.14 | [-0.14,  0.42]
+
+# ImgAnisotropy = -0.01
+#     FixDurAvg = -0.93
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.02 | [-0.27, 0.23]
+Real       |      0.02 | [-0.23, 0.27]
+
+# ImgAnisotropy = 0.96
+#     FixDurAvg = -0.93
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.37 | [-0.01, 0.76]
+Real       |     -0.10 | [-0.39, 0.19]
+
+# ImgAnisotropy = -0.97
+#     FixDurAvg = 0.07
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.21 | [-0.57, 0.16]
+Real       |      0.21 | [-0.05, 0.47]
+
+# ImgAnisotropy = -0.01
+#     FixDurAvg = 0.07
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.00 | [-0.24, 0.24]
+Real       |      0.12 | [-0.11, 0.35]
+
+# ImgAnisotropy = 0.96
+#     FixDurAvg = 0.07
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.20 | [-0.16, 0.57]
+Real       |      0.03 | [-0.23, 0.29]
+
+# ImgAnisotropy = -0.97
+#     FixDurAvg = 1.07
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.00 | [-0.43, 0.43]
+Real       |      0.28 | [-0.02, 0.58]
+
+# ImgAnisotropy = -0.01
+#     FixDurAvg = 1.07
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.02 | [-0.27, 0.31]
+Real       |      0.22 | [-0.04, 0.49]
+
+# ImgAnisotropy = 0.96
+#     FixDurAvg = 1.07
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.03 | [-0.39, 0.46]
+Real       |      0.16 | [-0.14, 0.46]
+
+Adjusted for:
+* SacAmpSum =  0.07
+* SacAmpAvg =  0.01
+*  QShivers = -0.02

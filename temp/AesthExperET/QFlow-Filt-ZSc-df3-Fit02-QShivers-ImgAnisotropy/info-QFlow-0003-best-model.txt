@@ -1,0 +1,131 @@
+FitBestName: Fit02 
+FitBestDepVar: QFlow 
+FitBestHasConverged: TRUE 
+FitBestIsSingular: FALSE 
+FitBestDepVar: QFlow 
+FitBestTydyClean: 
+# A tibble: 12 × 9
+   effect group term                         estimate std.error statistic     df p.value stars
+   <chr>  <chr> <chr>                           <dbl>     <dbl>     <dbl>  <dbl>   <dbl> <chr>
+ 1 fixed  <NA>  SessionSecond                 -0.150     0.0674     -2.22 1959.  0.0262  *    
+ 2 fixed  <NA>  SacAmpAvg                     -0.139     0.0578     -2.40 2002.  0.0166  *    
+ 3 fixed  <NA>  QShivers                       0.164     0.0971      1.69   52.8 0.0976  .    
+ 4 fixed  <NA>  ImgAnisotropy                  0.262     0.138       1.89   21.9 0.0720  .    
+ 5 fixed  <NA>  ExhibitionReal:SessionSecond   0.117     0.0796      1.48 1964.  0.140   ?    
+ 6 fixed  <NA>  ExhibitionReal:ImgAnisotropy  -0.236     0.147      -1.60   20.8 0.124   ?    
+ 7 fixed  <NA>  SessionSecond:FixDurAvg       -0.0768    0.0475     -1.61 1986.  0.106   ?    
+ 8 fixed  <NA>  SessionSecond:ImgAnisotropy   -0.0715    0.0390     -1.84 1942.  0.0666  .    
+ 9 fixed  <NA>  SacAmpSum:QShivers            -0.0739    0.0393     -1.88 1996.  0.0603  .    
+10 fixed  <NA>  SacAmpSum:ImgAnisotropy        0.0596    0.0311      1.92 1950.  0.0551  .    
+11 fixed  <NA>  SacAmpAvg:ImgAnisotropy       -0.0571    0.0272     -2.10 1969.  0.0361  *    
+12 fixed  <NA>  QShivers:ImgAnisotropy         0.0712    0.0228      3.12 1947.  0.00182 **   
+FitBestFormula: 
+QFlow ~ (1 | Picture) + (1 | Sub) + Exhibition + Session + Run + 
+    FixDurAvg + SacAmpSum + SacAmpAvg + QShivers + ImgAnisotropy + 
+    Exhibition:Session + Exhibition:Run + Exhibition:FixDurAvg + 
+    Exhibition:SacAmpSum + Exhibition:SacAmpAvg + Exhibition:QShivers + 
+    Exhibition:ImgAnisotropy + Session:Run + Session:FixDurAvg + 
+    Session:SacAmpSum + Session:SacAmpAvg + Session:QShivers + 
+    Session:ImgAnisotropy + Run:FixDurAvg + Run:SacAmpSum + Run:SacAmpAvg + 
+    Run:QShivers + Run:ImgAnisotropy + FixDurAvg:SacAmpSum + 
+    FixDurAvg:SacAmpAvg + FixDurAvg:QShivers + FixDurAvg:ImgAnisotropy + 
+    SacAmpSum:SacAmpAvg + SacAmpSum:QShivers + SacAmpSum:ImgAnisotropy + 
+    SacAmpAvg:QShivers + SacAmpAvg:ImgAnisotropy + QShivers:ImgAnisotropy
+FitBestSummary: 
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: Formula02
+   Data: df8
+
+REML criterion at convergence: 5310.2
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.77439 -0.63314  0.05499  0.66676  2.96701 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ Sub      (Intercept) 0.21035  0.4586  
+ Picture  (Intercept) 0.05057  0.2249  
+ Residual             0.67737  0.8230  
+Number of obs: 2045, groups:  Sub, 51; Picture, 24
+
+Fixed effects:
+                               Estimate Std. Error         df t value Pr(>|t|)   
+(Intercept)                   1.233e-02  1.262e-01  7.605e+01   0.098  0.92245   
+ExhibitionReal                1.326e-01  1.748e-01  7.200e+01   0.759  0.45054   
+SessionSecond                -1.500e-01  6.744e-02  1.959e+03  -2.224  0.02625 * 
+RunSecond                     4.051e-05  6.444e-02  1.944e+03   0.001  0.99950   
+FixDurAvg                     4.392e-02  6.248e-02  1.599e+03   0.703  0.48221   
+SacAmpSum                     4.041e-02  6.619e-02  1.976e+03   0.611  0.54159   
+SacAmpAvg                    -1.387e-01  5.781e-02  2.002e+03  -2.399  0.01655 * 
+QShivers                      1.637e-01  9.705e-02  5.284e+01   1.687  0.09758 . 
+ImgAnisotropy                 2.616e-01  1.384e-01  2.187e+01   1.890  0.07204 . 
+ExhibitionReal:SessionSecond  1.175e-01  7.961e-02  1.964e+03   1.476  0.14020   
+ExhibitionReal:RunSecond      1.666e-02  7.662e-02  1.943e+03   0.217  0.82789   
+ExhibitionReal:FixDurAvg      8.701e-02  6.600e-02  1.592e+03   1.318  0.18760   
+ExhibitionReal:SacAmpSum     -6.432e-03  7.287e-02  1.955e+03  -0.088  0.92967   
+ExhibitionReal:SacAmpAvg      8.441e-02  6.213e-02  1.999e+03   1.359  0.17443   
+ExhibitionReal:QShivers       4.922e-02  1.387e-01  4.496e+01   0.355  0.72432   
+ExhibitionReal:ImgAnisotropy -2.362e-01  1.474e-01  2.079e+01  -1.603  0.12405   
+SessionSecond:RunSecond      -1.324e-02  7.366e-02  1.943e+03  -0.180  0.85742   
+SessionSecond:FixDurAvg      -7.679e-02  4.755e-02  1.986e+03  -1.615  0.10648   
+SessionSecond:SacAmpSum       1.496e-02  5.888e-02  1.970e+03   0.254  0.79949   
+SessionSecond:SacAmpAvg       2.361e-02  5.307e-02  1.969e+03   0.445  0.65638   
+SessionSecond:QShivers        4.301e-02  3.931e-02  1.958e+03   1.094  0.27395   
+SessionSecond:ImgAnisotropy  -7.153e-02  3.897e-02  1.942e+03  -1.835  0.06661 . 
+RunSecond:FixDurAvg          -1.843e-02  4.331e-02  1.957e+03  -0.425  0.67058   
+RunSecond:SacAmpSum          -5.354e-02  5.733e-02  1.964e+03  -0.934  0.35040   
+RunSecond:SacAmpAvg           4.973e-02  5.166e-02  1.957e+03   0.963  0.33586   
+RunSecond:QShivers           -1.117e-03  3.807e-02  1.944e+03  -0.029  0.97660   
+RunSecond:ImgAnisotropy      -2.894e-02  3.899e-02  1.942e+03  -0.742  0.45802   
+FixDurAvg:SacAmpSum          -2.459e-02  3.360e-02  1.991e+03  -0.732  0.46438   
+FixDurAvg:SacAmpAvg           1.325e-02  2.670e-02  1.986e+03   0.496  0.61961   
+FixDurAvg:QShivers           -1.066e-02  3.342e-02  1.869e+03  -0.319  0.74980   
+FixDurAvg:ImgAnisotropy      -2.299e-02  2.252e-02  1.948e+03  -1.020  0.30764   
+SacAmpSum:SacAmpAvg          -2.868e-02  2.134e-02  1.989e+03  -1.343  0.17928   
+SacAmpSum:QShivers           -7.394e-02  3.933e-02  1.996e+03  -1.880  0.06025 . 
+SacAmpSum:ImgAnisotropy       5.964e-02  3.108e-02  1.950e+03   1.919  0.05510 . 
+SacAmpAvg:QShivers            2.530e-02  3.273e-02  1.994e+03   0.773  0.43966   
+SacAmpAvg:ImgAnisotropy      -5.705e-02  2.721e-02  1.969e+03  -2.097  0.03612 * 
+QShivers:ImgAnisotropy        7.119e-02  2.280e-02  1.947e+03   3.123  0.00182 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ExhbtR SssnSc RnScnd FxDrAv ScAmpS ScAmpA QShvrs ImgAns ExR:SS ExR:RS ER:FDA ER:SAS ER:SAA ExR:QS ExR:IA SsS:RS SS:FDA SS:SAS SS:SAA SsS:QS SsS:IA RS:FDA RS:SAS RS:SAA RnS:QS RnS:IA FDA:SAS FDA:SAA FDA:QS FDA:IA SAS:SA SAS:QS SAS:IA SAA:QS SAA:IA
+ExhibitinRl -0.703                                                                                                                                                                                                                                                       
+SessionScnd -0.235  0.119                                                                                                                                                                                                                                                
+RunSecond   -0.240  0.125  0.273                                                                                                                                                                                                                                         
+FixDurAvg    0.082 -0.054 -0.112 -0.004                                                                                                                                                                                                                                  
+SacAmpSum    0.038 -0.021  0.031 -0.005  0.450                                                                                                                                                                                                                           
+SacAmpAvg   -0.022  0.025 -0.041 -0.043 -0.252 -0.653                                                                                                                                                                                                                    
+QShivers     0.209 -0.160 -0.030 -0.021  0.037 -0.050  0.011                                                                                                                                                                                                             
+ImgAnistrpy  0.004 -0.002 -0.009  0.004 -0.001 -0.008 -0.020  0.004                                                                                                                                                                                                      
+ExhbtnRl:SS  0.148 -0.215 -0.623  0.005  0.135  0.011 -0.016  0.048  0.006                                                                                                                                                                                               
+ExhbtnRl:RS  0.149 -0.212  0.021 -0.608  0.037  0.053 -0.025  0.044 -0.007  0.010                                                                                                                                                                                        
+ExhbtnR:FDA -0.045 -0.017  0.108 -0.001 -0.620 -0.217  0.119 -0.026  0.005 -0.048 -0.022                                                                                                                                                                                 
+ExhbtnR:SAS -0.010 -0.020 -0.034 -0.002 -0.207 -0.512  0.336  0.031  0.017  0.013 -0.026  0.440                                                                                                                                                                          
+ExhbtnR:SAA  0.011  0.026  0.033  0.022  0.120  0.352 -0.515 -0.011 -0.007 -0.071 -0.027 -0.265 -0.658                                                                                                                                                                   
+ExhbtnRl:QS -0.133 -0.002  0.003 -0.005 -0.024  0.026 -0.005 -0.646 -0.002  0.002  0.004  0.048 -0.025  0.018                                                                                                                                                            
+ExhbtnRl:IA -0.004  0.007  0.009 -0.002  0.000  0.014 -0.002 -0.005 -0.904 -0.011  0.003 -0.006 -0.009 -0.009 -0.002                                                                                                                                                     
+SssnScnd:RS  0.127  0.009 -0.535 -0.529  0.024  0.031  0.028 -0.011  0.001  0.008 -0.026 -0.002 -0.007  0.011  0.003 -0.002                                                                                                                                              
+SssnScn:FDA -0.014  0.041 -0.014  0.031 -0.404 -0.145  0.059 -0.018  0.008 -0.063 -0.014  0.102 -0.041  0.018  0.015 -0.002 -0.032                                                                                                                                       
+SssnScn:SAS  0.014  0.005  0.008  0.035 -0.157 -0.354  0.244  0.023 -0.011 -0.093 -0.025  0.008 -0.113  0.053  0.002  0.005 -0.038  0.452                                                                                                                                
+SssnScn:SAA -0.006 -0.013 -0.012  0.004  0.082  0.247 -0.454 -0.007  0.029  0.087  0.026 -0.026  0.051 -0.031  0.002 -0.006 -0.023 -0.182 -0.634                                                                                                                         
+SssnScnd:QS -0.037  0.052  0.150 -0.013 -0.044  0.053 -0.040 -0.185  0.002 -0.234 -0.002  0.083  0.013  0.031  0.001  0.003  0.008  0.108 -0.097  0.054                                                                                                                  
+SssnScnd:IA  0.001 -0.008 -0.011  0.001  0.011 -0.024  0.075  0.005 -0.130  0.026  0.000 -0.005  0.015 -0.010  0.004 -0.020 -0.002 -0.031  0.036 -0.135 -0.033                                                                                                           
+RnScnd:FxDA -0.003  0.022  0.026 -0.004 -0.358 -0.224  0.101 -0.015  0.003 -0.014 -0.089  0.011  0.025 -0.016 -0.004  0.001 -0.029  0.005  0.011  0.030 -0.008 -0.010                                                                                                    
+RnScnd:ScAS -0.003  0.023  0.030 -0.001 -0.188 -0.477  0.321  0.023  0.003 -0.025 -0.097  0.026  0.042 -0.048 -0.008 -0.010 -0.036  0.012  0.042 -0.005 -0.003 -0.009  0.493                                                                                             
+RnScnd:ScAA  0.001 -0.023  0.012  0.020  0.091  0.317 -0.506 -0.009  0.020  0.026  0.077 -0.009 -0.055  0.060  0.004 -0.001 -0.035  0.030  0.005  0.012 -0.007  0.001 -0.244 -0.636                                                                                      
+RnScnd:QShv -0.035  0.049 -0.019  0.160 -0.011  0.052 -0.036 -0.191  0.001  0.008 -0.251 -0.003 -0.013  0.017 -0.001  0.003  0.013 -0.001  0.000 -0.015  0.024  0.009  0.090 -0.096  0.052                                                                               
+RnScnd:ImgA  0.002 -0.006  0.007 -0.011  0.005 -0.001  0.056  0.002 -0.143 -0.005  0.038 -0.022 -0.053  0.013  0.002  0.004 -0.004 -0.010 -0.006  0.005  0.006  0.018 -0.024  0.031 -0.123 -0.024                                                                        
+FxDrAvg:SAS  0.076 -0.011 -0.010  0.012  0.358  0.272 -0.210  0.015  0.007  0.027  0.004 -0.053 -0.070  0.066  0.023 -0.006  0.001  0.028  0.013  0.041  0.013 -0.012 -0.014 -0.023  0.026 -0.006 -0.003                                                                 
+FxDrAvg:SAA -0.049 -0.001  0.007 -0.028 -0.216 -0.251  0.198  0.000  0.004 -0.019  0.002  0.045  0.092 -0.134 -0.023 -0.005  0.031 -0.072 -0.014 -0.046  0.003 -0.003 -0.054  0.004 -0.046 -0.024 -0.010 -0.625                                                          
+FxDrAvg:QSh -0.002  0.019 -0.008  0.014  0.128  0.065 -0.016 -0.035 -0.007  0.049 -0.003 -0.271 -0.085  0.013 -0.036  0.014  0.017 -0.004 -0.021  0.037 -0.148 -0.007  0.060  0.022 -0.044 -0.028  0.011 -0.019  -0.003                                                  
+FxDrAvg:ImA -0.003  0.009 -0.009  0.001 -0.014 -0.034  0.034 -0.001  0.004  0.006 -0.019 -0.038 -0.022 -0.021  0.009 -0.031 -0.008  0.025  0.006 -0.007 -0.021  0.056  0.027  0.034 -0.037  0.006 -0.038  0.008  -0.095   0.006                                          
+ScAmpSm:SAA -0.091  0.022 -0.047 -0.031 -0.090 -0.198  0.118 -0.013  0.003  0.014  0.003  0.016  0.073 -0.063  0.006 -0.004  0.042 -0.064 -0.064  0.005 -0.019  0.019 -0.041 -0.060 -0.061  0.006  0.007 -0.025   0.267  -0.008  0.023                                   
+ScAmpSm:QSh -0.024  0.017  0.006  0.005  0.122  0.167 -0.134 -0.036 -0.009  0.017 -0.016 -0.088 -0.222  0.160 -0.009  0.012  0.015 -0.055 -0.070  0.054  0.009 -0.030  0.021  0.028 -0.015  0.002  0.014  0.103  -0.079   0.463 -0.017 -0.012                            
+ScAmpSm:ImA  0.001  0.018 -0.009  0.012 -0.028 -0.050  0.036  0.001  0.017  0.016 -0.043 -0.021  0.015  0.004  0.000 -0.010 -0.007  0.012 -0.013  0.016 -0.016 -0.045  0.032  0.019 -0.018  0.010 -0.097 -0.027   0.035  -0.005  0.529 -0.026 -0.052                     
+ScAmpAvg:QS  0.021 -0.005 -0.016 -0.005 -0.044 -0.117  0.131  0.062  0.004  0.024  0.015  0.017  0.161 -0.203 -0.013 -0.005 -0.023  0.053  0.057 -0.035 -0.078  0.027 -0.039 -0.025  0.018 -0.028 -0.007 -0.072   0.111  -0.286 -0.016 -0.068 -0.688  0.034              
+ScAmpAvg:IA  0.003 -0.031  0.012  0.002  0.049  0.050 -0.030  0.000 -0.006 -0.007  0.010  0.002  0.020 -0.031 -0.005 -0.035  0.007 -0.038  0.011 -0.022  0.009 -0.008 -0.037 -0.020  0.018 -0.002 -0.008  0.040  -0.058  -0.004 -0.461 -0.051  0.036 -0.649 -0.026       
+QShvrs:ImgA  0.003 -0.024 -0.012 -0.006 -0.014 -0.010 -0.008  0.001  0.029  0.025  0.009  0.041  0.001 -0.007  0.029 -0.096  0.008  0.002 -0.002  0.011 -0.031  0.087  0.009  0.018 -0.004 -0.009  0.017  0.012  -0.034  -0.048  0.180  0.013  0.013 -0.030 -0.115  0.009

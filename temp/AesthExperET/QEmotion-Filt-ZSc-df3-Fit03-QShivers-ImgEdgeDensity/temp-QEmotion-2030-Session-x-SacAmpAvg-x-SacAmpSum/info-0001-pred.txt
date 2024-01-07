@@ -1,0 +1,78 @@
+# Predicted values of QEmotion
+
+# SacAmpAvg = -0.94
+# SacAmpSum = -0.9
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.03 | [-0.26, 0.21]
+Second  |      0.08 | [-0.16, 0.33]
+
+# SacAmpAvg = 0.01
+# SacAmpSum = -0.9
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.07 | [-0.18, 0.31]
+Second  |      0.01 | [-0.24, 0.26]
+
+# SacAmpAvg = 0.97
+# SacAmpSum = -0.9
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.16 | [-0.14, 0.46]
+Second  |     -0.06 | [-0.36, 0.23]
+
+# SacAmpAvg = -0.94
+# SacAmpSum = 0.07
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.01 | [-0.27, 0.24]
+Second  |     -0.03 | [-0.29, 0.23]
+
+# SacAmpAvg = 0.01
+# SacAmpSum = 0.07
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.02 | [-0.20, 0.24]
+Second  |     -0.04 | [-0.27, 0.18]
+
+# SacAmpAvg = 0.97
+# SacAmpSum = 0.07
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.06 | [-0.19, 0.30]
+Second  |     -0.06 | [-0.30, 0.18]
+
+# SacAmpAvg = -0.94
+# SacAmpSum = 1.04
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.00 | [-0.34, 0.35]
+Second  |     -0.14 | [-0.50, 0.22]
+
+# SacAmpAvg = 0.01
+# SacAmpSum = 1.04
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.02 | [-0.29, 0.24]
+Second  |     -0.10 | [-0.37, 0.18]
+
+# SacAmpAvg = 0.97
+# SacAmpSum = 1.04
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.05 | [-0.30, 0.20]
+Second  |     -0.05 | [-0.30, 0.20]
+
+Adjusted for:
+*      FixDurAvg =  0.07
+*       QShivers = -0.02
+* ImgEdgeDensity =  0.05

@@ -1,0 +1,10 @@
+# Linear trend for FixDurAvg
+
+Exhibition |       Session | Contrast |        95% CI |      p
+--------------------------------------------------------------
+Fake-Real  |   First-First |     0.08 | [-0.19, 0.34] | > .999
+Fake-Fake  |  First-Second |     0.20 | [ 0.00, 0.40] | 0.311 
+Fake-Real  |  First-Second |    -0.04 | [-0.32, 0.24] | > .999
+Real-Fake  |  First-Second |     0.12 | [-0.16, 0.40] | > .999
+Real-Real  |  First-Second |    -0.12 | [-0.31, 0.08] | 0.945 
+Fake-Real  | Second-Second |    -0.24 | [-0.51, 0.03] | 0.403 

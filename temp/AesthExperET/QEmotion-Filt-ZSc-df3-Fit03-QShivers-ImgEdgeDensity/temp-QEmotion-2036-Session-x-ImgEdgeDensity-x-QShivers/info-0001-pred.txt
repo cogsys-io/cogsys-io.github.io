@@ -1,0 +1,78 @@
+# Predicted values of QEmotion
+
+# ImgEdgeDensity = -0.95
+#       QShivers = -0.61383712827551
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.02 | [-0.22, 0.27]
+Second  |      0.11 | [-0.14, 0.35]
+
+# ImgEdgeDensity = 0.05
+#       QShivers = -0.61383712827551
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.10 | [-0.34, 0.13]
+Second  |     -0.17 | [-0.41, 0.08]
+
+# ImgEdgeDensity = 1.05
+#       QShivers = -0.61383712827551
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.23 | [-0.63,  0.17]
+Second  |     -0.44 | [-0.84, -0.04]
+
+# ImgEdgeDensity = -0.95
+#       QShivers = -2.06472488601762
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.42 | [-0.81, -0.02]
+Second  |     -0.13 | [-0.52,  0.27]
+
+# ImgEdgeDensity = 0.05
+#       QShivers = -2.06472488601762
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.41 | [-0.79, -0.04]
+Second  |     -0.47 | [-0.84, -0.09]
+
+# ImgEdgeDensity = 1.05
+#       QShivers = -2.06472488601762
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.41 | [-0.95,  0.13]
+Second  |     -0.81 | [-1.35, -0.27]
+
+# ImgEdgeDensity = -0.95
+#       QShivers = 0.837050629466605
+
+Session | Predicted |       95% CI
+----------------------------------
+First   |      0.46 | [0.20, 0.72]
+Second  |      0.34 | [0.08, 0.60]
+
+# ImgEdgeDensity = 0.05
+#       QShivers = 0.837050629466605
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.20 | [-0.05, 0.46]
+Second  |      0.14 | [-0.13, 0.40]
+
+# ImgEdgeDensity = 1.05
+#       QShivers = 0.837050629466605
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.05 | [-0.48, 0.38]
+Second  |     -0.07 | [-0.51, 0.37]
+
+Adjusted for:
+* FixDurAvg = 0.07
+* SacAmpSum = 0.07
+* SacAmpAvg = 0.01

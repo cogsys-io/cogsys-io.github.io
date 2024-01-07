@@ -1,0 +1,27 @@
+# Predicted values of QFlow
+
+# FixDurAvg = -0.92
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.02 | [-0.17, 0.21]
+Second  |     -0.04 | [-0.23, 0.15]
+
+# FixDurAvg = 0.08
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.13 | [-0.04, 0.31]
+Second  |     -0.05 | [-0.23, 0.12]
+
+# FixDurAvg = 1.08
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.25 | [ 0.03, 0.46]
+Second  |     -0.07 | [-0.30, 0.16]
+
+Adjusted for:
+* SacAmpSum =  0.06
+* SacAmpAvg =  0.00
+*  QShivers = -0.01

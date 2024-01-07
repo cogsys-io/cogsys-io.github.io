@@ -1,0 +1,78 @@
+# Predicted values of QFlow
+
+# ImgPlandAreaDim1 = 11.31
+#         QShivers = -0.61383712827551
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.09 | [-0.36, 0.19]
+Real       |     -0.09 | [-0.47, 0.29]
+
+# ImgPlandAreaDim1 = 13.63
+#         QShivers = -0.61383712827551
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.32 | [-0.67, 0.03]
+Real       |     -0.03 | [-0.33, 0.28]
+
+# ImgPlandAreaDim1 = 15.95
+#         QShivers = -0.61383712827551
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.56 | [-1.23, 0.12]
+Real       |      0.04 | [-0.25, 0.33]
+
+# ImgPlandAreaDim1 = 11.31
+#         QShivers = -2.06472488601762
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.31 | [-0.74,  0.13]
+Real       |     -0.64 | [-1.27,  0.00]
+
+# ImgPlandAreaDim1 = 13.63
+#         QShivers = -2.06472488601762
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.62 | [-1.12, -0.11]
+Real       |     -0.43 | [-0.97,  0.11]
+
+# ImgPlandAreaDim1 = 15.95
+#         QShivers = -2.06472488601762
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.93 | [-1.78, -0.09]
+Real       |     -0.23 | [-0.75,  0.30]
+
+# ImgPlandAreaDim1 = 11.31
+#         QShivers = 0.837050629466605
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |      0.13 | [-0.21, 0.47]
+Real       |      0.46 | [ 0.11, 0.81]
+
+# ImgPlandAreaDim1 = 13.63
+#         QShivers = 0.837050629466605
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.03 | [-0.44, 0.39]
+Real       |      0.38 | [ 0.10, 0.66]
+
+# ImgPlandAreaDim1 = 15.95
+#         QShivers = 0.837050629466605
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.18 | [-0.93, 0.57]
+Real       |      0.30 | [ 0.03, 0.57]
+
+Adjusted for:
+* FixDurAvg = 0.08
+* SacAmpSum = 0.06
+* SacAmpAvg = 0.00

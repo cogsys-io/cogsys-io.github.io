@@ -1,0 +1,13 @@
+# Predicted values of QEmotion
+
+QShivers | Predicted |         95% CI
+-------------------------------------
+   -2.06 |     -0.39 | [-0.69, -0.10]
+   -0.61 |     -0.09 | [-0.26,  0.08]
+    0.84 |      0.22 | [ 0.03,  0.40]
+
+Adjusted for:
+*        FixDurAvg =  0.07
+*        SacAmpSum =  0.07
+*        SacAmpAvg =  0.01
+* ImgPlandAreaDim1 = 13.64

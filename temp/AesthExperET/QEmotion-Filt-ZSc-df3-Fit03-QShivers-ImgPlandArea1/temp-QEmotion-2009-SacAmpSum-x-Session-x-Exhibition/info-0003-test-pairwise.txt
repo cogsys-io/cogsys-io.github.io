@@ -1,0 +1,10 @@
+# Linear trend for SacAmpSum
+
+Session       | Exhibition | Contrast |        95% CI |     p
+-------------------------------------------------------------
+First-Second  |  Fake-Fake |     0.06 | [-0.18, 0.29] | 0.811
+First-First   |  Fake-Real |    -1.55 | [-4.06, 0.96] | 0.811
+First-Second  |  Fake-Real |    -1.74 | [-4.26, 0.77] | 0.811
+Second-First  |  Fake-Real |    -1.61 | [-4.13, 0.92] | 0.811
+Second-Second |  Fake-Real |    -1.80 | [-4.32, 0.72] | 0.811
+First-Second  |  Real-Real |    -0.19 | [-0.42, 0.04] | 0.596

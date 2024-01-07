@@ -1,0 +1,28 @@
+# Predicted values of QIntention
+
+# ImgPlandAreaDim0 = 10.24
+
+Exhibition | Predicted |        95% CI
+--------------------------------------
+Fake       |     -0.08 | [-0.39, 0.23]
+Real       |      0.03 | [-0.35, 0.42]
+
+# ImgPlandAreaDim0 = 12.77
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.42 | [-0.78, -0.06]
+Real       |      0.19 | [-0.10,  0.48]
+
+# ImgPlandAreaDim0 = 15.3
+
+Exhibition | Predicted |         95% CI
+---------------------------------------
+Fake       |     -0.77 | [-1.44, -0.09]
+Real       |      0.35 | [ 0.07,  0.63]
+
+Adjusted for:
+* FixDurAvg =  0.07
+* SacAmpSum =  0.06
+* SacAmpAvg =  0.01
+*  QShivers = -0.02

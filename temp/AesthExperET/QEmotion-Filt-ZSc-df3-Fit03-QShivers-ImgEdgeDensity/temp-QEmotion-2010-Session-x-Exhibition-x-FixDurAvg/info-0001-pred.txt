@@ -1,0 +1,55 @@
+# Predicted values of QEmotion
+
+# Exhibition = Fake
+#  FixDurAvg = -0.93
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.20 | [-0.58, 0.18]
+Second  |     -0.14 | [-0.54, 0.25]
+
+# Exhibition = Real
+#  FixDurAvg = -0.93
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.11 | [-0.18, 0.40]
+Second  |      0.09 | [-0.19, 0.38]
+
+# Exhibition = Fake
+#  FixDurAvg = 0.07
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.11 | [-0.48, 0.25]
+Second  |     -0.30 | [-0.67, 0.07]
+
+# Exhibition = Real
+#  FixDurAvg = 0.07
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.16 | [-0.10, 0.41]
+Second  |      0.21 | [-0.04, 0.47]
+
+# Exhibition = Fake
+#  FixDurAvg = 1.07
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.02 | [-0.47,  0.42]
+Second  |     -0.45 | [-0.89, -0.01]
+
+# Exhibition = Real
+#  FixDurAvg = 1.07
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.20 | [-0.09, 0.49]
+Second  |      0.33 | [ 0.02, 0.64]
+
+Adjusted for:
+*      SacAmpSum =  0.07
+*      SacAmpAvg =  0.01
+*       QShivers = -0.02
+* ImgEdgeDensity =  0.05

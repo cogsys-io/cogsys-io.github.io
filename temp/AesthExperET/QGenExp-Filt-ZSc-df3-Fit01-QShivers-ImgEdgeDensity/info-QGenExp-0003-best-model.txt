@@ -1,0 +1,60 @@
+FitBestName: Fit01 
+FitBestDepVar: QGenExp 
+FitBestHasConverged: TRUE 
+FitBestIsSingular: FALSE 
+FitBestDepVar: QGenExp 
+FitBestTydyClean: 
+# A tibble: 6 × 9
+  effect group term           estimate std.error statistic     df p.value stars
+  <chr>  <chr> <chr>             <dbl>     <dbl>     <dbl>  <dbl>   <dbl> <chr>
+1 fixed  <NA>  (Intercept)     -0.258     0.142      -1.81   52.5 0.0753  .    
+2 fixed  <NA>  ExhibitionReal   0.552     0.211       2.62   46.1 0.0118  *    
+3 fixed  <NA>  SessionSecond    0.100     0.0327      3.06 2059.  0.00224 **   
+4 fixed  <NA>  FixDurAvg        0.0507    0.0268      1.89 1799.  0.0591  .    
+5 fixed  <NA>  SacAmpAvg       -0.0722    0.0259     -2.78 2092.  0.00541 **   
+6 fixed  <NA>  QShivers         0.177     0.0666      2.66   47.4 0.0107  *    
+FitBestFormula: 
+QGenExp ~ (1 | Picture) + (1 | Sub) + Exhibition + Session + 
+    Run + FixDurAvg + SacAmpSum + SacAmpAvg + QShivers + ImgEdgeDensity
+FitBestSummary: 
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: Formula01
+   Data: df8
+
+REML criterion at convergence: 4976.3
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.4388 -0.6014  0.0451  0.6451  2.9907 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ Sub      (Intercept) 0.2003   0.4475  
+ Picture  (Intercept) 0.1003   0.3166  
+ Residual             0.5453   0.7385  
+Number of obs: 2125, groups:  Sub, 51; Picture, 24
+
+Fixed effects:
+                 Estimate Std. Error         df t value Pr(>|t|)   
+(Intercept)    -2.577e-01  1.420e-01  5.253e+01  -1.815  0.07530 . 
+ExhibitionReal  5.524e-01  2.106e-01  4.615e+01   2.623  0.01177 * 
+SessionSecond   1.000e-01  3.269e-02  2.059e+03   3.060  0.00224 **
+RunSecond      -7.433e-03  3.221e-02  2.049e+03  -0.231  0.81753   
+FixDurAvg       5.067e-02  2.683e-02  1.799e+03   1.889  0.05906 . 
+SacAmpSum       1.802e-02  3.024e-02  2.035e+03   0.596  0.55141   
+SacAmpAvg      -7.222e-02  2.594e-02  2.092e+03  -2.784  0.00541 **
+QShivers        1.770e-01  6.657e-02  4.744e+01   2.658  0.01067 * 
+ImgEdgeDensity -9.164e-02  8.463e-02  2.098e+01  -1.083  0.29115   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ExhbtR SssnSc RnScnd FxDrAv ScAmpS ScAmpA QShvrs
+ExhibitinRl -0.749                                                 
+SessionScnd -0.106 -0.004                                          
+RunSecond   -0.112  0.001  0.009                                   
+FixDurAvg    0.013 -0.034  0.018 -0.017                            
+SacAmpSum    0.020 -0.032 -0.006 -0.021  0.490                     
+SacAmpAvg   -0.001  0.016 -0.054 -0.038 -0.302 -0.636              
+QShivers     0.124 -0.155  0.007  0.003  0.034 -0.015  0.003       
+ImgEdgDnsty  0.347 -0.468 -0.002 -0.001  0.001  0.001  0.026  0.000

@@ -1,0 +1,78 @@
+# Predicted values of QFlow
+
+#      QShivers = -2.06472488601762
+# ImgPlandArea0 = -0.95
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.32 | [-0.96, 0.32]
+Second  |     -0.02 | [-0.67, 0.62]
+
+#      QShivers = -0.61383712827551
+# ImgPlandArea0 = -0.95
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.07 | [-0.41, 0.55]
+Second  |      0.24 | [-0.25, 0.73]
+
+#      QShivers = 0.837050629466605
+# ImgPlandArea0 = -0.95
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.46 | [-0.05, 0.98]
+Second  |      0.51 | [-0.02, 1.04]
+
+#      QShivers = -2.06472488601762
+# ImgPlandArea0 = 0.06
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.64 | [-2.00,  0.71]
+Second  |     -1.83 | [-3.20, -0.46]
+
+#      QShivers = -0.61383712827551
+# ImgPlandArea0 = 0.06
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.42 | [-1.53,  0.69]
+Second  |     -1.53 | [-2.68, -0.39]
+
+#      QShivers = 0.837050629466605
+# ImgPlandArea0 = 0.06
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |     -0.20 | [-1.39, 0.99]
+Second  |     -1.24 | [-2.49, 0.00]
+
+#      QShivers = -2.06472488601762
+# ImgPlandArea0 = 1.07
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.97 | [-4.10,  2.17]
+Second  |     -3.63 | [-6.80, -0.46]
+
+#      QShivers = -0.61383712827551
+# ImgPlandArea0 = 1.07
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.92 | [-3.53,  1.70]
+Second  |     -3.31 | [-6.01, -0.62]
+
+#      QShivers = 0.837050629466605
+# ImgPlandArea0 = 1.07
+
+Session | Predicted |         95% CI
+------------------------------------
+First   |     -0.87 | [-3.67,  1.94]
+Second  |     -2.99 | [-5.92, -0.06]
+
+Adjusted for:
+* FixDurAvg = 0.08
+* SacAmpSum = 0.06
+* SacAmpAvg = 0.00

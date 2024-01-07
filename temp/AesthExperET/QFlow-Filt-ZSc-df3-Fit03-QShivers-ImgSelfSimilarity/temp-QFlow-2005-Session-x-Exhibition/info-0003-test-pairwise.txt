@@ -1,0 +1,10 @@
+# Pairwise comparisons
+
+Session       | Exhibition |  Contrast |        95% CI |      p
+---------------------------------------------------------------
+First-First   |  Fake-Real |     -0.06 | [-0.42, 0.31] | > .999
+First-Second  |  Fake-Fake |      0.32 | [ 0.14, 0.50] | 0.003 
+First-Second  |  Fake-Real | -1.64e-03 | [-0.37, 0.37] | > .999
+First-Second  |  Real-Fake |      0.38 | [ 0.00, 0.75] | 0.251 
+First-Second  |  Real-Real |      0.05 | [-0.11, 0.22] | > .999
+Second-Second |  Fake-Real |     -0.32 | [-0.69, 0.05] | 0.367 

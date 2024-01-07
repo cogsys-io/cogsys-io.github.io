@@ -1,0 +1,5 @@
+# Linear trend for ImgPlandArea0
+
+Slope |       95% CI |     p
+----------------------------
+0.21  | [0.04, 0.37] | 0.015

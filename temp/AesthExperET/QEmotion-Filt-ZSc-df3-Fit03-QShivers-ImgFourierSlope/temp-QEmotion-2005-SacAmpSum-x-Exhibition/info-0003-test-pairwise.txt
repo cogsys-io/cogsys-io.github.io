@@ -1,0 +1,5 @@
+# Linear trend for SacAmpSum
+
+Exhibition | Contrast |       95% CI |     p
+--------------------------------------------
+Fake-Real  |     0.32 | [0.05, 0.59] | 0.020

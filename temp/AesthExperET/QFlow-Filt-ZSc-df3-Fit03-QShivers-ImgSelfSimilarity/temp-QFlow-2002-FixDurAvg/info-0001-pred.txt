@@ -1,0 +1,16 @@
+# Predicted values of QFlow
+
+FixDurAvg | Predicted |        95% CI
+-------------------------------------
+       -2 |     -0.05 | [-0.29, 0.19]
+       -1 |     -0.01 | [-0.19, 0.18]
+        0 |      0.04 | [-0.13, 0.21]
+        1 |      0.09 | [-0.11, 0.29]
+        2 |      0.13 | [-0.13, 0.39]
+        3 |      0.18 | [-0.16, 0.51]
+
+Adjusted for:
+*         SacAmpSum =  0.06
+*         SacAmpAvg =  0.00
+*          QShivers = -0.01
+* ImgSelfSimilarity = -0.02

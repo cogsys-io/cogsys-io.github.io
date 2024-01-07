@@ -1,0 +1,13 @@
+# Predicted values of QIntention
+
+QShivers | Predicted |        95% CI
+------------------------------------
+   -2.06 |     -0.39 | [-0.79, 0.01]
+   -0.61 |     -0.18 | [-0.46, 0.10]
+    0.84 |      0.03 | [-0.26, 0.32]
+
+Adjusted for:
+*        FixDurAvg =  0.07
+*        SacAmpSum =  0.06
+*        SacAmpAvg =  0.01
+* ImgPlandAreaDim1 = 13.60

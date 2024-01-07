@@ -1,0 +1,16 @@
+# Predicted values of QPerception
+
+FixDurAvg | Predicted |        95% CI
+-------------------------------------
+       -2 |     -0.07 | [-0.28, 0.13]
+       -1 |     -0.01 | [-0.19, 0.17]
+        0 |      0.05 | [-0.12, 0.22]
+        1 |      0.11 | [-0.07, 0.29]
+        2 |      0.17 | [-0.03, 0.37]
+        3 |      0.23 | [-0.01, 0.47]
+
+Adjusted for:
+*     SacAmpSum =  0.06
+*     SacAmpAvg =  0.01
+*      QShivers = -0.02
+* ImgPlandArea1 =  0.02

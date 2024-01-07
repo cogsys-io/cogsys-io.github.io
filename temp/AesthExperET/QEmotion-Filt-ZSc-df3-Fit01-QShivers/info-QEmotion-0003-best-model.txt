@@ -1,0 +1,55 @@
+FitBestName: Fit01 
+FitBestDepVar: QEmotion 
+FitBestHasConverged: TRUE 
+FitBestIsSingular: FALSE 
+FitBestDepVar: QEmotion 
+FitBestTydyClean: 
+# A tibble: 3 × 9
+  effect group term      estimate std.error statistic     df p.value stars
+  <chr>  <chr> <chr>        <dbl>     <dbl>     <dbl>  <dbl>   <dbl> <chr>
+1 fixed  <NA>  FixDurAvg   0.0468    0.0304      1.54 1421.  0.123   ?    
+2 fixed  <NA>  SacAmpAvg  -0.0654    0.0296     -2.21 1967.  0.0274  *    
+3 fixed  <NA>  QShivers    0.210     0.0616      3.41   47.8 0.00134 **   
+FitBestFormula: 
+QEmotion ~ (1 | Picture) + (1 | Sub) + Exhibition + Session + 
+    Run + FixDurAvg + SacAmpSum + SacAmpAvg + QShivers
+FitBestSummary: 
+Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
+Formula: Formula01
+   Data: df8
+
+REML criterion at convergence: 5209.5
+
+Scaled residuals: 
+     Min       1Q   Median       3Q      Max 
+-2.79839 -0.68934  0.01883  0.71073  2.49175 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ Sub      (Intercept) 0.1644   0.4055  
+ Picture  (Intercept) 0.0643   0.2536  
+ Residual             0.6910   0.8313  
+Number of obs: 2032, groups:  Sub, 51; Picture, 24
+
+Fixed effects:
+                 Estimate Std. Error         df t value Pr(>|t|)   
+(Intercept)    -7.865e-02  1.169e-01  6.497e+01  -0.673  0.50361   
+ExhibitionReal  1.959e-01  1.615e-01  5.880e+01   1.213  0.23004   
+SessionSecond   4.448e-02  3.766e-02  1.973e+03   1.181  0.23771   
+RunSecond      -8.433e-03  3.707e-02  1.957e+03  -0.227  0.82009   
+FixDurAvg       4.682e-02  3.035e-02  1.421e+03   1.543  0.12315   
+SacAmpSum       1.229e-02  3.444e-02  1.842e+03   0.357  0.72127   
+SacAmpAvg      -6.540e-02  2.963e-02  1.967e+03  -2.207  0.02740 * 
+QShivers        2.098e-01  6.161e-02  4.780e+01   3.406  0.00134 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation of Fixed Effects:
+            (Intr) ExhbtR SssnSc RnScnd FxDrAv ScAmpS ScAmpA
+ExhibitinRl -0.703                                          
+SessionScnd -0.151 -0.005                                   
+RunSecond   -0.156  0.001  0.009                            
+FixDurAvg    0.015 -0.047  0.025 -0.025                     
+SacAmpSum    0.026 -0.045 -0.014 -0.026  0.488              
+SacAmpAvg   -0.011  0.038 -0.050 -0.035 -0.300 -0.634       
+QShivers     0.142 -0.189  0.009  0.003  0.041 -0.023  0.009

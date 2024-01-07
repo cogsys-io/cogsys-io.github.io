@@ -1,0 +1,55 @@
+# Predicted values of QFlow
+
+#       Run = First
+# SacAmpSum = -0.91
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.14 | [-0.08, 0.36]
+Second  |     -0.08 | [-0.30, 0.14]
+
+#       Run = Second
+# SacAmpSum = -0.91
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.10 | [-0.12, 0.32]
+Second  |      0.07 | [-0.16, 0.29]
+
+#       Run = First
+# SacAmpSum = 0.06
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.15 | [-0.03, 0.34]
+Second  |     -0.03 | [-0.23, 0.16]
+
+#       Run = Second
+# SacAmpSum = 0.06
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.13 | [-0.06, 0.33]
+Second  |     -0.08 | [-0.27, 0.11]
+
+#       Run = First
+# SacAmpSum = 1.03
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.17 | [-0.08, 0.41]
+Second  |      0.01 | [-0.25, 0.28]
+
+#       Run = Second
+# SacAmpSum = 1.03
+
+Session | Predicted |        95% CI
+-----------------------------------
+First   |      0.17 | [-0.07, 0.41]
+Second  |     -0.23 | [-0.50, 0.04]
+
+Adjusted for:
+*         FixDurAvg =  0.08
+*         SacAmpAvg =  0.00
+*          QShivers = -0.01
+* ImgSelfSimilarity = -0.02

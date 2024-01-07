@@ -1,0 +1,70 @@
+# Pairwise comparisons
+
+Session       |   SacAmpSum |           Run | Contrast |        95% CI |      p
+-------------------------------------------------------------------------------
+First-First   | -0.91--0.91 |  First-Second |     0.05 | [-0.19, 0.30] | > .999
+First-First   |  -0.91-0.06 |   First-First |    -0.04 | [-0.22, 0.13] | > .999
+First-First   |  -0.91-0.06 |  First-Second |     0.01 | [-0.22, 0.25] | > .999
+First-First   |  -0.91-1.03 |   First-First |    -0.08 | [-0.44, 0.27] | > .999
+First-First   |  -0.91-1.03 |  First-Second |    -0.03 | [-0.36, 0.29] | > .999
+First-Second  | -0.91--0.91 |   First-First |     0.30 | [ 0.04, 0.55] | > .999
+First-Second  | -0.91--0.91 |  First-Second |     0.13 | [-0.15, 0.41] | > .999
+First-Second  |  -0.91-0.06 |   First-First |     0.28 | [ 0.03, 0.52] | > .999
+First-Second  |  -0.91-0.06 |  First-Second |     0.32 | [ 0.08, 0.57] | 0.538 
+First-Second  |  -0.91-1.03 |   First-First |     0.25 | [-0.12, 0.63] | > .999
+First-Second  |  -0.91-1.03 |  First-Second |     0.52 | [ 0.17, 0.87] | 0.219 
+First-First   |  -0.91-0.06 |  Second-First |    -0.10 | [-0.33, 0.13] | > .999
+First-First   |  -0.91-0.06 | Second-Second |    -0.04 | [-0.21, 0.12] | > .999
+First-First   |  -0.91-1.03 |  Second-First |    -0.14 | [-0.47, 0.19] | > .999
+First-First   |  -0.91-1.03 | Second-Second |    -0.09 | [-0.42, 0.24] | > .999
+First-Second  | -0.91--0.91 |  Second-First |     0.24 | [-0.04, 0.53] | > .999
+First-Second  | -0.91--0.91 | Second-Second |     0.08 | [-0.18, 0.33] | > .999
+First-Second  |  -0.91-0.06 |  Second-First |     0.22 | [-0.02, 0.47] | > .999
+First-Second  |  -0.91-0.06 | Second-Second |     0.27 | [ 0.03, 0.51] | > .999
+First-Second  |  -0.91-1.03 |  Second-First |     0.20 | [-0.15, 0.55] | > .999
+First-Second  |  -0.91-1.03 | Second-Second |     0.46 | [ 0.10, 0.83] | 0.645 
+First-First   |   0.06-0.06 |  First-Second |     0.05 | [-0.12, 0.22] | > .999
+First-First   |   0.06-1.03 |   First-First |    -0.04 | [-0.22, 0.13] | > .999
+First-First   |   0.06-1.03 |  First-Second | 8.23e-03 | [-0.24, 0.26] | > .999
+First-Second  |  0.06--0.91 |   First-First |     0.34 | [ 0.09, 0.59] | 0.404 
+First-Second  |  0.06--0.91 |  First-Second |     0.17 | [-0.07, 0.41] | > .999
+First-Second  |   0.06-0.06 |   First-First |     0.32 | [ 0.14, 0.50] | 0.035 
+First-Second  |   0.06-0.06 |  First-Second |     0.37 | [ 0.17, 0.56] | 0.019 
+First-Second  |   0.06-1.03 |   First-First |     0.30 | [ 0.00, 0.59] | > .999
+First-Second  |   0.06-1.03 |  First-Second |     0.56 | [ 0.25, 0.87] | 0.031 
+First-First   |   0.06-1.03 |  Second-First |    -0.09 | [-0.35, 0.16] | > .999
+First-First   |   0.06-1.03 | Second-Second |    -0.04 | [-0.21, 0.12] | > .999
+First-Second  |  0.06--0.91 |  Second-First |     0.29 | [ 0.03, 0.54] | > .999
+First-Second  |  0.06--0.91 | Second-Second |     0.12 | [-0.12, 0.36] | > .999
+First-Second  |   0.06-0.06 |  Second-First |     0.27 | [ 0.06, 0.47] | 0.540 
+First-Second  |   0.06-0.06 | Second-Second |     0.31 | [ 0.13, 0.50] | 0.056 
+First-Second  |   0.06-1.03 |  Second-First |     0.24 | [-0.08, 0.56] | > .999
+First-Second  |   0.06-1.03 | Second-Second |     0.51 | [ 0.21, 0.80] | 0.048 
+First-First   |   1.03-1.03 |  First-Second |     0.05 | [-0.23, 0.33] | > .999
+First-Second  |  1.03--0.91 |   First-First |     0.38 | [ 0.03, 0.73] | > .999
+First-Second  |  1.03--0.91 |  First-Second |     0.21 | [-0.10, 0.53] | > .999
+First-Second  |   1.03-0.06 |   First-First |     0.36 | [ 0.10, 0.62] | 0.365 
+First-Second  |   1.03-0.06 |  First-Second |     0.41 | [ 0.13, 0.69] | 0.271 
+First-Second  |   1.03-1.03 |   First-First |     0.34 | [ 0.02, 0.65] | > .999
+First-Second  |   1.03-1.03 |  First-Second |     0.60 | [ 0.23, 0.97] | 0.087 
+First-Second  |  1.03--0.91 |  Second-First |     0.33 | [ 0.01, 0.66] | > .999
+First-Second  |  1.03--0.91 | Second-Second |     0.16 | [-0.17, 0.50] | > .999
+First-Second  |   1.03-0.06 |  Second-First |     0.31 | [ 0.03, 0.59] | > .999
+First-Second  |   1.03-0.06 | Second-Second |     0.36 | [ 0.10, 0.61] | 0.356 
+First-Second  |   1.03-1.03 |  Second-First |     0.29 | [-0.08, 0.66] | > .999
+First-Second  |   1.03-1.03 | Second-Second |     0.55 | [ 0.24, 0.87] | 0.037 
+Second-Second | -0.91--0.91 |  First-Second |    -0.17 | [-0.42, 0.08] | > .999
+Second-Second |  -0.91-0.06 |   First-First |    -0.02 | [-0.23, 0.18] | > .999
+Second-Second |  -0.91-0.06 |  First-Second |     0.03 | [-0.23, 0.28] | > .999
+Second-Second |  -0.91-1.03 |   First-First |    -0.04 | [-0.46, 0.37] | > .999
+Second-Second |  -0.91-1.03 |  First-Second |     0.22 | [-0.16, 0.60] | > .999
+Second-Second |  -0.91-0.06 |  Second-First |     0.15 | [-0.10, 0.40] | > .999
+Second-Second |  -0.91-0.06 | Second-Second |     0.19 | [ 0.00, 0.39] | > .999
+Second-Second |  -0.91-1.03 |  Second-First |     0.12 | [-0.26, 0.51] | > .999
+Second-Second |  -0.91-1.03 | Second-Second |     0.39 | [-0.01, 0.78] | > .999
+Second-Second |   0.06-0.06 |  First-Second |     0.05 | [-0.14, 0.23] | > .999
+Second-Second |   0.06-1.03 |   First-First |    -0.02 | [-0.23, 0.18] | > .999
+Second-Second |   0.06-1.03 |  First-Second |     0.24 | [-0.05, 0.53] | > .999
+Second-Second |   0.06-1.03 |  Second-First |    -0.07 | [-0.36, 0.22] | > .999
+Second-Second |   0.06-1.03 | Second-Second |     0.19 | [ 0.00, 0.39] | > .999
+Second-Second |   1.03-1.03 |  First-Second |     0.26 | [-0.06, 0.59] | > .999
