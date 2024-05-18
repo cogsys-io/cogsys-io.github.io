@@ -1,5 +1,0 @@
-# Linear trend for ImgSelfSimilarity
-
-Session      | Contrast |        95% CI |     p
------------------------------------------------
-First-Second |    -0.17 | [-0.34, 0.00] | 0.050

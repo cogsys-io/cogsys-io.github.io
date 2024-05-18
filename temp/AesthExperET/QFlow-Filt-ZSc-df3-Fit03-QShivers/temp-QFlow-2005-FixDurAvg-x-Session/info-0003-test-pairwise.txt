@@ -1,5 +1,0 @@
-# Linear trend for FixDurAvg
-
-Session      | Contrast |       95% CI |     p
-----------------------------------------------
-First-Second |     0.19 | [0.01, 0.37] | 0.039

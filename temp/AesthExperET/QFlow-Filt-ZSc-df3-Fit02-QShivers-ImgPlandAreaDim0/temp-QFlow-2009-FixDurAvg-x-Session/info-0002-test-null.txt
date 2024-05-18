@@ -1,6 +1,0 @@
-# Linear trend for FixDurAvg
-
-Session | Slope |        95% CI |     p
----------------------------------------
-First   |  0.05 | [-0.08, 0.18] | 0.886
-Second  | -0.03 | [-0.16, 0.10] | 0.886

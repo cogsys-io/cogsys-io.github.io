@@ -1,5 +1,0 @@
-# Pairwise comparisons
-
-Exhibition | Contrast |       95% CI |     p
---------------------------------------------
-Real-Fake  |     0.45 | [0.03, 0.87] | 0.035

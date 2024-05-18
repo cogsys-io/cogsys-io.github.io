@@ -1,5 +1,0 @@
-# Linear trend for ImgAnisotropy
-
-Exhibition | Contrast |       95% CI |     p
---------------------------------------------
-Fake-Real  |     0.42 | [0.04, 0.81] | 0.032

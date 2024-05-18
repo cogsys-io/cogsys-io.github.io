@@ -1,8 +1,0 @@
-# Comparison of Model Performance Indices
-
-Name  |           Model | R2 (cond.) | R2 (marg.) |   ICC |  RMSE | Sigma | AIC weights | AICc weights | BIC weights | Performance-Score
-----------------------------------------------------------------------------------------------------------------------------------------
-Fit01 | lmerModLmerTest |      0.456 |      0.124 | 0.379 | 0.744 | 0.758 |       0.998 |        0.999 |        1.00 |            79.80%
-Fit03 | lmerModLmerTest |      0.471 |      0.159 | 0.370 | 0.726 | 0.754 |    4.10e-14 |     4.50e-16 |   2.13e-117 |            50.00%
-Fit02 | lmerModLmerTest |      0.464 |      0.144 | 0.374 | 0.737 | 0.755 |       0.002 |     8.64e-04 |    6.57e-38 |            46.14%
-Fit00 | lmerModLmerTest |      0.390 |      0.000 | 0.390 | 0.763 | 0.774 |    0.00e+00 |     0.00e+00 |    0.00e+00 |            12.50%

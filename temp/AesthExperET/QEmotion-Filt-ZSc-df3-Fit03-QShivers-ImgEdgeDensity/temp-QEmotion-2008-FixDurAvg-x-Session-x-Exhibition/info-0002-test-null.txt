@@ -1,8 +1,0 @@
-# Linear trend for FixDurAvg
-
-Session | Exhibition | Slope |        95% CI |      p
------------------------------------------------------
-First   |       Fake |  0.10 | [-0.12, 0.31] | > .999
-Second  |       Fake | -0.10 | [-0.32, 0.11] | > .999
-First   |       Real |  0.02 | [-0.15, 0.19] | > .999
-Second  |       Real |  0.14 | [-0.04, 0.32] | 0.521 

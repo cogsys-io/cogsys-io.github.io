@@ -1,5 +1,0 @@
-# Pairwise comparisons
-
-Session      | Contrast |       95% CI |     p
-----------------------------------------------
-First-Second |     0.26 | [0.06, 0.46] | 0.010

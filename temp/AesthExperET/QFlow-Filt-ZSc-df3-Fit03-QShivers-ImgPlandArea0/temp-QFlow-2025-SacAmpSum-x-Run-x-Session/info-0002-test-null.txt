@@ -1,8 +1,0 @@
-# Linear trend for SacAmpSum
-
-Run    | Session | Slope |        95% CI |     p
-------------------------------------------------
-First  |   First | -0.74 | [-2.23, 0.74] | 0.941
-Second |   First | -0.76 | [-2.22, 0.71] | 0.941
-First  |  Second | -0.69 | [-2.17, 0.79] | 0.941
-Second |  Second | -0.94 | [-2.41, 0.53] | 0.846

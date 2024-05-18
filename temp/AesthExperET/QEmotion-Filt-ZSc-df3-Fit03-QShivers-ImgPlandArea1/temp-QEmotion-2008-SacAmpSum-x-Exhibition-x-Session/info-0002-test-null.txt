@@ -1,8 +1,0 @@
-# Linear trend for SacAmpSum
-
-Exhibition | Session | Slope |        95% CI |     p
-----------------------------------------------------
-Fake       |   First | -1.67 | [-4.18, 0.83] | 0.711
-Real       |   First | -0.12 | [-0.33, 0.08] | 0.711
-Fake       |  Second | -1.73 | [-4.25, 0.79] | 0.711
-Real       |  Second |  0.07 | [-0.11, 0.25] | 0.711

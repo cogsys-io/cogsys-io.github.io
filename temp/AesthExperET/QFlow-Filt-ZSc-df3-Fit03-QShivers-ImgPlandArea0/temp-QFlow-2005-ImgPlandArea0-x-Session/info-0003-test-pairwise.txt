@@ -1,5 +1,0 @@
-# Linear trend for ImgPlandArea0
-
-Session      | Contrast |        95% CI |     p
------------------------------------------------
-First-Second |     2.39 | [ 0.00, 4.79] | 0.050

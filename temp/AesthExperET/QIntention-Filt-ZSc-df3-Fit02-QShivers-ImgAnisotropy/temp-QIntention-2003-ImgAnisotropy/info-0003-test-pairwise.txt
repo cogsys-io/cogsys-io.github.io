@@ -1,5 +1,0 @@
-# Linear trend for ImgAnisotropy
-
-Slope |        95% CI |     p
------------------------------
-0.10  | [-0.09, 0.28] | 0.299
