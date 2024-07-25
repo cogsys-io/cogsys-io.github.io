@@ -18,9 +18,9 @@ format:
     code-fold: true
     code-overflow: scroll
     code-line-numbers: true
-    code-copy: false
-    code-link: false
-    code-tools: false
+    code-copy: true
+    code-link: true
+    code-tools: true
     grid: 
       body-width: 1000px
       sidebar-width: 10px
