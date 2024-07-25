@@ -1,0 +1,1190 @@
+---
+title: "Regression (Phase-based)"
+editor: visual
+execute:
+  echo: true
+  warning: false
+  error: true
+  collapse: true
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 4
+    toc-expand: 4
+    toc-title: Contents
+    html-math-method: katex
+    css: styles.css
+    code-fold: true
+    code-overflow: scroll
+    code-line-numbers: true
+    code-copy: true
+    code-link: true
+    code-tools: true
+    grid: 
+      body-width: 1000px
+      sidebar-width: 10px
+      margin-width: 450px
+---
+
+## Init {.collapse}
+
+-   Supplementary materials for the manuscript *The Role of Linguistic Agency in Mobilizing Election Candidate Support*
+
+-   Data is available from: Nikadon, J., & Formanowicz, M. (2024). 2020 U.S. Congressional Elections Tweet Data. figshare. Dataset. <https://doi.org/10.6084/m9.figshare.25523734>
+
+-   [SM-Linguistic-Agency-in-Mobilising-Election-Candidate-Support.pdf](SM-Linguistic-Agency-in-Mobilising-Election-Candidate-Support.pdf)
+
+Set Working Directory
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+rm(list = ls())
+HERE <- paste(
+  "~/cc/dev/2024/20240430T001543-politicians-auxiliary-models/",
+  "code/n0001-rstudio-project", 
+  sep="")
+setwd(HERE)
+cat(getwd(), sep="\n")
+```
+
+Imports
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+options(cogsys.quiet = TRUE)
+options(tidyverse.quiet = TRUE)
+library(plyr)
+library(cogsys)
+library(tidyverse)
+```
+
+Input and Output Directories and Files
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+ifd2 <- "./data/20240428T200156-politicians-aux-analysis/i0001-init-raw-data/"
+ifd3 <- "./data/20240428T200156-politicians-aux-analysis/i0002-aggregated/"
+ofd0 <- "./data/20240428T200156-politicians-aux-analysis/n0001-init/"
+dir.create(ofd0, showWarnings=FALSE, recursive=TRUE)
+
+ifn2 <- "i0001-politicians-not-aggregated.rds"
+ifn3 <- "i0001-politicians-aggregated.rds"
+ifn5 <- "i0005-politicians-aggregated-sample-15e3-df5.rds"
+
+suppressWarnings(rm(list=ls(pattern="^df")))
+
+df2 <- readr::read_rds(file.path(ifd2, ifn2)) %>%
+  dplyr::select(
+    ## matches(".*"),
+    Name, Party, Outcome, Period, Phase, Time, Days, Agency,
+    RetweetCount, ReplyCount, LikeCount, QuoteCount, WordCount,
+    Anger, Disgust, Fear, Joy, Neutral, Sadness, Surprise,
+    Concreteness, Readability,  
+  )
+
+df3 <- readr::read_rds(file.path(ifd3, ifn3)) %>%
+  dplyr::select(
+    ## matches(".*"),
+    Name, Party, Outcome, Period, Phase, Time, Days, Agency,
+    RetweetCount, ReplyCount, LikeCount, QuoteCount, WordCount,
+    Anger, Disgust, Fear, Joy, Neutral, Sadness, Surprise,
+    Concreteness, Readability,  
+  )
+ 
+df5 <- readr::read_rds(file.path(ifd3, ifn5)) %>%
+  dplyr::select(
+    ## matches(".*"),
+    Name, Party, Outcome, Period, Phase, Time, Days, Agency,
+    RetweetCount, ReplyCount, LikeCount, QuoteCount, WordCount,
+    Anger, Disgust, Fear, Joy, Neutral, Sadness, Surprise,
+    Concreteness, Readability,  
+  )
+ 
+
+df0 <- df3
+
+df2 %>% dim() %>% cogsys::cat0()
+df3 %>% dim() %>% cogsys::cat0()
+df5 %>% dim() %>% cogsys::cat0()
+df0 %>% dim() %>% cogsys::cat0()
+
+```
+
+Check Period and Phase in df2
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+df2 %>%
+  dplyr::group_by(Phase, Period) %>%
+  dplyr::summarize(
+    DaysMin = min(Days),
+    DaysMax = max(Days),
+    Count = n(),
+    .groups = "drop") %>%
+  dplyr::mutate(Perc = round(Count/nrow(df2), 2))
+```
+
+Check Period and Phase in df3
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+df3 %>%
+  dplyr::group_by(Phase, Period) %>%
+  dplyr::summarize(
+    DaysMin = min(Days),
+    DaysMax = max(Days),
+    Count = n(),
+    .groups = "drop") %>%
+  dplyr::mutate(Perc = round(Count/nrow(df3), 2))
+```
+
+Prepare for Regression
+
+```{r}
+ofd4 <- file.path(ofd0, "n0001-models-phase-i0021-all") ## CAUTION
+ofd4 <- file.path(ofd0, "n0001-models-phase-i0008-all") ## CAUTION
+dir.create(ofd4, showWarnings = FALSE, recursive = TRUE)
+
+model <- "fit0x0"
+fbase <- file.path(ofd4, model)
+fpath <- paste0(fbase, ".extension")
+cat0(fpath)
+```
+
+Fitting and Marginalization
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+REML <- TRUE
+control <- lme4::lmerControl(optimizer = "Nelder_Mead")
+
+options(ggeffects_margin = "mean_reference") ## DEFAULT
+options(ggeffects_margin = "marginalmeans")
+options(ggeffects_margin = "mean_mode")
+options(ggeffects_margin = "empirical")
+```
+
+Cleanup
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+suppressWarnings(rm(list = ls(pattern = "(^fit)|(^model.*)|(^Model.*)")))
+
+for (var0 in ls(pattern = "(^df.*)|(^data.*)")) {cat0(var0)}
+for (var0 in ls(pattern = "(^fit.*)|(^m.*)")) {cat0(var0)}
+```
+
+Save Data for Reference
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+file <- file.path(ofd4, "data-df2.rds")
+df2 %>% readr::write_rds(file)
+cat0(file)
+file <- file.path(ofd4, "data-df3.rds")
+df3 %>% readr::write_rds(file)
+cat0(file)
+file <- file.path(ofd4, "data-df0.rds")
+df0 %>% readr::write_rds(file)
+cat0(file)
+file <- file.path(ofd4, "data-df5.rds")
+df5 %>% readr::write_rds(file)
+cat0(file)
+```
+
+Source Helpers
+
+```{r}
+#| echo: false
+#| results: 'hide'
+#| message: false
+#| warning: false
+#| error: false
+#| collapse: true
+source("./helpers/helpers0.R")
+source("./helpers/helpers2.R")
+
+knitr::opts_chunk$set(fig.width=unit(6,"cm"), fig.height=unit(4,"cm"))
+
+```
+
+## Tweet Counts by Outcome, Phase and Party
+
+```{r}
+df2 %>%
+  dplyr::count(Outcome, Phase, Party) %>%
+  identity() %>%
+  ggplot() +
+  geom_bar(
+    aes(
+      x=Phase,
+      y=n,
+      group = Outcome,
+      fill = Outcome
+      ),
+    alpha=0.75,
+    stat="identity") +
+  ## geom_text(
+  ggrepel::geom_text_repel(
+    aes(
+      x = Phase,
+      y = n,
+      label = n,
+      group = Outcome
+    ),
+    position = position_stack(vjust = 0.5),
+    size = 2.5,
+    angle = 0,
+    family = "Times New Roman",
+    color = "black",
+    box.padding = 0.025,
+    point.padding = 1e-06,
+    min.segment.length = 0.05,
+    force = 0.01,
+  ) +
+  scale_y_continuous(labels = scales::label_number()) +
+  labs(y = "tweet count")  +
+  theme_ggeffects() +
+  cogsys::theme0 +
+  scale_fill_brewer(palette = "Set1") +
+  facet_wrap(~ Party) +
+  NULL
+
+
+
+```
+
+## Tweet Counts by Time (Days)
+
+```{r}
+df2 %>%
+  dplyr::count(Days) %>%
+  identity() %>%
+  ggplot() +
+  geom_line(aes(x=Days, y=n)) +
+  lineED + lineRD + lineTD + timeDD +
+  theme_ggeffects() +
+  cogsys::theme0 +
+  ## cogsys::theme2 +
+  scale_y_continuous(labels = scales::label_number()) +
+  labs(y = "tweet count")  +
+  scale_fill_brewer(palette = "Set1") +
+  NULL
+
+```
+
+## Links to Additional Plots
+
+-   [scatter_batch_0021_GAUSS_2.html](scatter_batch_0021_GAUSS_2.html)
+
+-   [scatter_batch_0021_GAUSS_4.html](scatter_batch_0021_GAUSS_4.html)
+
+-   [scatter_batch_0021_DAILY_2.html](scatter_batch_0021_DAILY_2.html)
+
+-   [scatter_batch_0021_DAILY_4.html](scatter_batch_0021_DAILY_4.html)
+
+## Model `fit01aPh`: Null
+
+### Fit
+
+```{r}
+model <- "fit01aPh"
+suppressWarnings(rm(list = model))
+assign(
+  model,
+  lmerTest::lmer(
+    formula = Agency ~ (1 | Name) + 1,
+    data = df0,
+    REML = REML,
+    control = control))
+
+fbase <- get_model_info(model, ofd4)
+```
+
+### Efects: Random
+
+```{r}
+model <- "fit01aPh"
+extra <- "9001"
+terms <- NULL
+
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- sjPlot::plot_model(get(model), type="re")
+
+fbasefig <- file.path(ofd4, paste0(model, "-xtr-", extra, "-random", paste(terms, collapse = "-x-")))
+
+ggsave(file=paste0(fbasefig,".png"),plot=gg88,width=8,height=44,limitsize=FALSE)
+ggsave(file=paste0(fbasefig,".svg"),plot=gg88,width=8,height=88,limitsize=FALSE)
+gg88
+```
+
+## Model `fit02aPh`: Time
+
+### Fit
+
+```{r}
+model <- "fit02aPh"
+suppressWarnings(rm(list = model))
+assign(
+  model,
+  lmerTest::lmer(
+    formula = Agency ~ (Time | Name) + Time,
+    data = df0,
+    REML = REML,
+    control = control))
+
+fbase <- get_model_info(model, ofd4)
+```
+
+### Effects: Time
+
+#### Compute
+
+```{r}
+model <- "fit02aPh"
+extra <- "1001"
+terms <- c("Time")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+## gg88 <- gg88 + timeD + lineE + lineT + lineR + rect5 + cogsys::theme0 ## + scaleA
+
+gg88 <- gg88 + timeD + lineE + lineT + lineR + rect3 + cogsys::theme0 + scaleC
+
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=16, height=48)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-Fig.svg"), plot = gg88 + cogsys::theme2, width=12, height=48, limitsize = FALSE)
+
+gg88
+```
+
+## Model `fit03aPh`: Time x Phase
+
+### Fit
+
+```{r}
+model <- "fit03aPh"
+suppressWarnings(rm(list = model))
+assign(
+  model,
+  lmerTest::lmer(
+    formula = Agency ~ (Time | Name) + Time * Phase,
+    data = df0,
+    REML = REML,
+    control = control))
+
+fbase <- get_model_info(model, ofd4)
+```
+
+### Effects: Time
+
+#### Compute
+
+```{r}
+model <- "fit03aPh"
+extra <- "1001"
+terms <- c("Time")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 + cogsys::theme0 + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=16, height=48)
+
+gg88
+```
+
+### Effects: Phase
+
+#### Compute
+
+```{r}
+model <- "fit03aPh"
+extra <- "1002"
+terms <- c("Phase")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 + cogsys::theme0 # + timeD + lineE + lineT + lineR + rect4 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=16, height=48)
+
+gg88
+```
+
+### Effects: Time x Phase
+
+#### Compute
+
+```{r}
+model <- "fit03aPh"
+extra <- "1003"
+terms <- c("Time","Phase")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 + timeD + lineE + lineT + lineR + rect0 + cogsys::theme0 + scaleA
+## gg88 <- gg88 + cogsys::theme0 + timeD + lineE + lineT + lineR + rect3 + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=12, height=36, limitsize = FALSE)
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-Fig.svg"), plot = gg88 + cogsys::theme2, width=12, height=48, limitsize = FALSE)
+
+gg88
+```
+
+#### Plot: Nicer
+
+```{r}
+# knitr::opts_chunk$set(fig.width=unit(12,"cm"), fig.height=unit(18,"cm"))
+# gg88
+suppressWarnings(rm(list = ls(pattern = "^gg99")))
+gg99 <- gg88 + cogsys::theme2 + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-FIG.svg"), plot = gg99 + cogsys::theme2, width=12, height=48, limitsize = FALSE)
+
+## gg99
+```
+
+## Model `fit04aPh`: Time x Phase x Outcome
+
+### Fit + Concreteness
+
+```{r}
+model <- "fit04cPh"
+suppressWarnings(rm(list = model))
+assign(
+  model,
+  lmerTest::lmer(
+    formula = Agency ~ (Time | Name) + Concreteness + Time * Phase * Outcome,
+    data = df0,
+    REML = REML,
+    control = control))
+
+fbase <- get_model_info(model, ofd4)
+
+
+model <- "fit04aPh"
+suppressWarnings(rm(list = model))
+assign(
+  model,
+  lmerTest::lmer(
+    formula = Agency ~ (Time | Name) + Time * Phase * Outcome,
+    data = df0,
+    REML = REML,
+    control = control))
+
+fbase <- get_model_info(model, ofd4)
+```
+
+### 
+
+### Fit
+
+```{r}
+model <- "fit04aPh"
+suppressWarnings(rm(list = model))
+assign(
+  model,
+  lmerTest::lmer(
+    formula = Agency ~ (Time | Name) + Time * Phase * Outcome,
+    data = df0,
+    REML = REML,
+    control = control))
+
+fbase <- get_model_info(model, ofd4)
+```
+
+### Parameters
+
+```{r}
+model <- "fit04aPh"
+
+pp(model);
+parameters::model_parameters(get(model))
+```
+
+### Summary
+
+```{r}
+model <- "fit04aPh"
+
+pp(model)
+tbl0 <- gtsummary::tbl_regression(
+  get(model),
+  add_pairwise_contrasts = TRUE,
+  exponentiate = FALSE,
+  tidy_fun = broom.mixed::tidy,
+)
+tbl0
+```
+
+### Effects: Time
+
+#### Compute
+
+```{r}
+model <- "fit04aPh"
+extra <- "1001"
+terms <- c("Time")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 + cogsys::theme0 + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=16, height=48)
+
+gg88
+```
+
+### Effects: Phase
+
+#### Compute
+
+```{r}
+model <- "fit04aPh"
+extra <- "1002"
+terms <- c("Phase")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 + cogsys::theme0 # + timeD + lineE + lineT + lineR + rect4 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=16, height=48)
+
+gg88
+```
+
+### Effects: Time x Phase
+
+#### Compute
+
+```{r}
+model <- "fit04aPh"
+extra <- "1003"
+terms <- c("Time","Phase")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 + cogsys::theme0 + timeD + lineE + lineT + lineR + rect3 + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=16, height=48)
+
+gg88
+```
+
+### Effects: Phase x Outcome
+
+#### Compute
+
+```{r}
+model <- "fit04aPh"
+extra <- "1004"
+terms <- c("Phase","Outcome")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 + cogsys::theme0 # + timeD + lineE + lineT + lineR + rect3 + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=16, height=48)
+
+gg88
+```
+
+### Effects: Time x Phase x Outcome
+
+#### Compute
+
+```{r}
+model <- "fit04aPh"
+extra <- "1005"
+terms <- c("Time", "Outcome", "Phase")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd4)
+
+## test3 <- ggeffects::test_predictions(ggeff$pred0, test="pairwise", p_adjust="fdr", collapse_levels=TRUE)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Filter test table
+
+```{r}
+ggeff$test3 <- ggeffects::test_predictions(ggeff$pred0, test="pairwise", p_adjust="fdr", collapse_levels=TRUE)
+## cat0(sep0)
+## print(ggeff$test3, n = Inf)
+ggeff$test4 <- ggeff$test3 %>% as_tibble() %>%
+  dplyr::mutate(
+    PhaseDashCount = str_count(Phase, fixed("-")),
+    OutcomeDashCount = str_count(Outcome, fixed("-")),
+    TotalDashCount = PhaseDashCount + OutcomeDashCount,
+    ) %>%
+  dplyr::filter(TotalDashCount==1) %>%
+  dplyr::select(-TotalDashCount) %>%
+  dplyr::arrange(PhaseDashCount, Outcome, Phase) %>%
+  dplyr::select(-c(PhaseDashCount, OutcomeDashCount)) %>%
+  identity()
+
+print(ggeff$test4)
+```
+
+#### Plot: Basic
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 + timeD + lineE + lineT + lineR + rect0 + cogsys::theme0 + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88 + cogsys::theme2, width=8, height=24)
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88 + cogsys::theme2, width=24, height=72, limitsize = FALSE)
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-Fig.svg"), plot = gg88 + cogsys::theme2, width=24, height=96, limitsize = FALSE)
+
+gg88
+```
+
+#### Plot: Nicer
+
+```{r}
+# knitr::opts_chunk$set(fig.width=unit(12,"cm"), fig.height=unit(18,"cm"))
+# gg88
+suppressWarnings(rm(list = ls(pattern = "^gg99")))
+gg99 <- gg88 + cogsys::theme2 + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-FIG.svg"), plot = gg99 + cogsys::theme2, width=24, height=96, limitsize = FALSE)
+
+## gg99
+```
+
+## Save Workspace
+
+```{r}
+save.image(file=file.path(ofd4, "session0.RData"))
+## load(file.path(ofd4, "session0.RData"))
+## load(file.path(ofd4, "session2.RData"))
+```
+
+## Model `fit04xPh`: Time x Phase x Outcome
+
+### Prepare Data for the Re-scaled Model
+
+```{r}
+count8 = 15e3
+count8 = 1e3
+
+df8 <- df0 %>% 
+  ## dplyr::group_by(Phase) %>%        ## CAUTION 
+  ## dplyr::slice_sample(n=count8) %>% ## CAUTION 
+  bruceR::grand_mean_center(
+    vars=c("Agency", "Time"), 
+    std=FALSE, 
+    add.suffix="C") %>%
+  identity()
+
+contrasts(df8$Phase) <- contr.sum(levels(df8$Phase))
+contrasts(df8$Outcome) <- contr.sum(levels(df8$Outcome))
+
+contrasts(df8$Phase)
+contrasts(df8$Outcome)
+
+## attributes(df8$Phase)
+## attributes(df8$Outcome)
+```
+
+### Fit
+
+```{r}
+model <- "fit04xPh"
+suppressWarnings(rm(list = model))
+assign(
+  model,
+  lmerTest::lmer(
+    ## formula = AgencyC ~ (TimeC | Name) + TimeC, ## CAUTION
+    formula = AgencyC ~ (TimeC | Name) + TimeC * Phase * Outcome,
+    data = df8,
+    REML = REML,
+    control = control))
+
+fbase <- get_model_info(model, ofd4)
+```
+
+### Performance: Check Model (EXPERIMENTAL)
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+do_checks <- TRUE
+do_checks <- FALSE
+
+if (do_checks) {
+
+  knitr::opts_chunk$set(fig.width=unit(8,"cm"), fig.height=unit(24,"cm"))
+
+  suppressWarnings(rm(list = ls(pattern = "^check8")))
+  check8 <- performance::check_model(get(model))
+
+  suppressWarnings(rm(list = ls(pattern = "^gg88")))
+  gg88 <- plot(check8)
+  ## gg88
+}
+```
+
+#### Save checks plot
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+if (do_checks) {
+  model <- "fit04xPh"
+  pp(model)
+
+  knitr::opts_chunk$set(fig.width=unit(8,"cm"), fig.height=unit(24,"cm"))
+
+  ggsave(
+    file = file.path(ofd4, paste0("summary-check-model-", model, ".png")),
+    plot = gg88,
+    ## plot = last_plot(),
+    width=8,
+    height=24)
+}
+```
+
+### Performance: Check Collinearity
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+## performance::check_collinearity(get(model))
+```
+
+### Performance: Check Convergence
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+performance::check_convergence(get(model))
+```
+
+### Performance: Check Heteroscedasticity
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+performance::check_heteroscedasticity(get(model))
+```
+
+### Performance: Check Homogeneity
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+## performance::check_homogeneity(get(model))
+```
+
+### Performance: Check Outliers
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+performance::check_outliers(get(model))
+```
+
+### Performance: Check Overdispersion
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+performance::check_overdispersion(get(model))
+```
+
+### Performance: Check Predictions
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+performance::check_predictions(get(model))
+```
+
+### Performance: Check Singularity
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+performance::check_singularity(get(model))
+```
+
+### Performance: Check Zeroinflation
+
+```{r}
+model <- "fit04xPh"
+pp(model)
+
+## performance::check_zeroinflation(get(model))
+```
+
+## Performance
+
+### Reclaim Model fit04aPh
+
+```{r}
+model <- "fit02aPh"
+model <- "fit03aPh"
+model <- "fit04aPh"
+cat0(model)
+```
+
+## Score
+
+```{r}
+file = file.path(
+  ofd4, "summary-performance-score.png")
+
+perf0 <- performance::compare_performance(
+  fit01aPh, # [df0] Agency ~ (1 | Name) + 1
+  fit02aPh, # [df0] Agency ~ (Time | Name) + Time
+  fit03aPh, # [df0] Agency ~ (Time | Name) + Time * Phase
+  fit04aPh, # [df0] Agency ~ (Time | Name) + Time * Phase * Outcome
+  ## CAUTION: COMMA
+  rank = TRUE, verbose = FALSE)
+
+perf0 %>% performance::print_html()
+
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- perf0 %>% plot()
+ggsave(
+  file = file,
+  plot = gg88,
+  width=8,
+  height=6)
+
+knitr::opts_chunk$set(fig.width=unit(6,"cm"), fig.height=unit(6,"cm"))
+gg88
+```
+
+### Performance Table Sorted by R2_conditional
+
+```{r}
+perf0 %>% dplyr::arrange(desc(R2_conditional)) %>% performance::print_html()
+```
+
+### Performance Table Sorted by R2_marginal
+
+```{r}
+perf0 %>% dplyr::arrange(desc(R2_marginal)) %>% performance::print_html()
+```
+
+### Interpret R2
+
+```{r}
+model <- "fit01aPh" # [df0] Agency ~ (1 | Name) + 1
+model <- "fit02aPh" # [df0] Agency ~ (Time | Name) + Time
+model <- "fit03aPh" # [df0] Agency ~ (Time | Name) + Time * Phase
+model <- "fit04aPh" # [df0] Agency ~ (Time | Name) + Time * Phase * Outcome
+
+cat0(effectsize::interpret_r2(performance::r2(get(model))$R2_conditional, rules="cohen1988"))
+cat0(effectsize::interpret_r2(performance::r2(get(model))$R2_marginal, rules="cohen1988"))
+```
+
+### Plot models
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- sjPlot::plot_models(
+  ## CAUTION the null model can not be used here 
+  ## Thus to keep the numbers consistent I have 
+  ## used model 02 as an input twice
+  ## fit01aPh, # [df0] Agency ~ (Time | Name) + Time
+  fit02aPh, # [df0] Agency ~ (Time | Name) + Time
+  fit03aPh, # [df0] Agency ~ (Time | Name) + Time * Phase
+  fit04aPh, # [df0] Agency ~ (Time | Name) + Time * Phase * Outcome
+  fit04cPh,
+  m.labels = c("Model 2", "Model 3", "Model 4", "Model 4concr"),
+  legend.title = "Model",
+  spacing=1, 
+  dot.size=1
+) + line0h
+
+ggsave(
+  file = file.path(ofd4, "summary-plot-models-i0001-base.png"),
+  plot = gg88,
+  width=8,
+  height=8)
+
+knitr::opts_chunk$set(fig.width=unit(6,"cm"), fig.height=unit(6,"cm"))
+gg88
+```
+
+### Tabulate Models
+
+```{r}
+
+## library(sjPlot)
+## library(sjmisc)
+## library(sjlabelled)
+
+file <- file.path(ofd4, "summary-tab-model-i0001-base.html")
+sjPlot::tab_model(
+  fit01aPh, # [df0] Agency ~ (1 | Name) + 1
+  fit02aPh, # [df0] Agency ~ (Time | Name) + Time
+  fit03aPh, # [df0] Agency ~ (Time | Name) + Time * Phase
+  fit04aPh, # [df0] Agency ~ (Time | Name) + Time * Phase * Outcome
+  show.reflvl = FALSE,
+  show.intercept = TRUE,
+  show.p = FALSE,
+  p.style = "numeric_stars",
+  dv.labels = c("Model 1", "Model 2", "Model 3", "Model 4"),
+  wrap.labels = 225,  
+  file = file)
+
+## knitr::html
+## papaja::
+## rmarkdown::render
+## rmarkdown::render(tab0$knitr)
+## tab0$knitr
+cat0(file)
+```
+
+-   [tab_model](./data/20240428T200156-politicians-aux-analysis/n0001-init//n0001-models-phase-i0008-all/summary-tab-model-i0001-base.html "tab_model")
+
+## Report `fit01aPh`
+
+```{r}
+result01aPh <- report::report(fit01aPh)
+```
+
+```{r}
+print(result01aPh)
+```
+
+## Report `fit02aPh`
+
+```{r}
+result02aPh <- report::report(fit02aPh)
+```
+
+```{r}
+print(result02aPh)
+```
+
+## Report `fit03aPh`
+
+```{r}
+result03aPh <- report::report(fit03aPh)
+```
+
+```{r}
+print(result03aPh)
+
+```
+
+## Report `fit04aPh`
+
+```{r}
+result04aPh <- report::report(fit04aPh)
+```
+
+```{r}
+print(result04aPh)
+
+```
+
+## Save Workspace
+
+```{r}
+save.image(file=file.path(ofd4, "session3.RData"))
+## load(file.path(ofd4, "session3.RData")
+```
+
+## List important variables
+
+```{r}
+
+cat0(sep0)
+for (var0 in ls(pattern = "(^df.*)|(^data.*)")) {cat0(var0)}
+
+cat0(sep0)
+for (var0 in ls(pattern = "(^fit.*)|(^xFit.*)")) {cat0(var0)}
+```
+
+## 
+
+## 
