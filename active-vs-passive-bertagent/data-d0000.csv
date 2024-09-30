@@ -1,0 +1,76 @@
+"Idx0","ActiveVoice","PassiveVoice","ba0Act","ba0Pas","ba0ActTot","ba0PasTot"
+"i1","['The chef cooked the meal.']","['The meal was cooked by the chef.']","[0.24802616238594055]","[0.1421811878681183]",0.24802616238594055,0.1421811878681183
+"i2","['The teacher praised the student.']","['The student was praised by the teacher.']","[0.2835060954093933]","[0.34773051738739014]",0.2835060954093933,0.34773051738739014
+"i3","['The storm destroyed the village.']","['The village was destroyed by the storm.']","[-0.11013370007276535]","[-0.15956221520900726]",-0.11013370007276535,-0.15956221520900726
+"i4","['She wrote a letter.']","['A letter was written by her.']","[0.06712695211172104]","[0.055579621344804764]",0.06712695211172104,0.055579621344804764
+"i5","['They built the bridge.']","['The bridge was built by them.']","[0.18222345411777496]","[0.09893353283405304]",0.18222345411777496,0.09893353283405304
+"i6","['The cat chased the mouse.']","['The mouse was chased by the cat.']","[0.20127542316913605]","[0.00562366284430027]",0.20127542316913605,0.00562366284430027
+"i7","['John painted the house.']","['The house was painted by John.']","[0.09321779012680054]","[0.026356596499681473]",0.09321779012680054,0.026356596499681473
+"i8","['The company released a new product.']","['A new product was released by the company.']","[0.4263879060745239]","[0.29888468980789185]",0.4263879060745239,0.29888468980789185
+"i9","['We cleaned the room.']","['The room was cleaned by us.']","[0.1257847398519516]","[0.1396791636943817]",0.1257847398519516,0.1396791636943817
+"i10","['She discovered the secret.']","['The secret was discovered by her.']","[0.2599920630455017]","[0.17917460203170776]",0.2599920630455017,0.17917460203170776
+"i11","['The dog bit the man.']","['The man was bitten by the dog.']","[0.02835838496685028]","[-0.03963164985179901]",0.02835838496685028,-0.03963164985179901
+"i12","['The artist drew a portrait.']","['A portrait was drawn by the artist.']","[0.09628483653068542]","[0.16931238770484924]",0.09628483653068542,0.16931238770484924
+"i13","['They solved the problem.']","['The problem was solved by them.']","[0.41524451971054077]","[0.27544447779655457]",0.41524451971054077,0.27544447779655457
+"i14","['The farmer harvested the crops.']","['The crops were harvested by the farmer.']","[0.12261715531349182]","[0.049738701432943344]",0.12261715531349182,0.049738701432943344
+"i15","['He repaired the car.']","['The car was repaired by him.']","[0.10695010423660278]","[0.09200441837310791]",0.10695010423660278,0.09200441837310791
+"i16","['She sang a song.']","['A song was sung by her.']","[0.23346149921417236]","[0.05844802036881447]",0.23346149921417236,0.05844802036881447
+"i17","['The scientist conducted an experiment.']","['An experiment was conducted by the scientist.']","[0.27092045545578003]","[0.2044246792793274]",0.27092045545578003,0.2044246792793274
+"i18","['They won the match.']","['The match was won by them.']","[0.40624046325683594]","[0.20526443421840668]",0.40624046325683594,0.20526443421840668
+"i19","['The child broke the vase.']","['The vase was broken by the child.']","[-0.1438027173280716]","[-0.09354715794324875]",-0.1438027173280716,-0.09354715794324875
+"i20","['He delivered the package.']","['The package was delivered by him.']","[0.3119182586669922]","[0.16310293972492218]",0.3119182586669922,0.16310293972492218
+"i21","['We launched the campaign.']","['The campaign was launched by us.']","[0.49351125955581665]","[0.48323580622673035]",0.49351125955581665,0.48323580622673035
+"i22","['She taught the lesson.']","['The lesson was taught by her.']","[0.32386597990989685]","[0.1943773776292801]",0.32386597990989685,0.1943773776292801
+"i23","['The engineer designed the machine.']","['The machine was designed by the engineer.']","[0.3296598196029663]","[0.19682838022708893]",0.3296598196029663,0.19682838022708893
+"i24","['They organized the event.']","['The event was organized by them.']","[0.3156452476978302]","[0.24251437187194824]",0.3156452476978302,0.24251437187194824
+"i25","['He discovered the solution.']","['The solution was discovered by him.']","[0.4233834147453308]","[0.29938754439353943]",0.4233834147453308,0.29938754439353943
+"i26","['The committee approved the proposal.']","['The proposal was approved by the committee.']","[0.3782864809036255]","[0.4030587673187256]",0.3782864809036255,0.4030587673187256
+"i27","['She cleaned the house.']","['The house was cleaned by her.']","[0.21057085692882538]","[0.10354024171829224]",0.21057085692882538,0.10354024171829224
+"i28","['They opened the new store.']","['The new store was opened by them.']","[0.17866434156894684]","[0.1568780243396759]",0.17866434156894684,0.1568780243396759
+"i29","['He wrote the book.']","['The book was written by him.']","[0.23982416093349457]","[0.1267082840204239]",0.23982416093349457,0.1267082840204239
+"i30","['The director announced the results.']","['The results were announced by the director.']","[0.31080877780914307]","[0.13571323454380035]",0.31080877780914307,0.13571323454380035
+"i31","['We updated the software.']","['The software was updated by us.']","[0.18718977272510529]","[0.1864137500524521]",0.18718977272510529,0.1864137500524521
+"i32","['The police arrested the suspect.']","['The suspect was arrested by the police.']","[0.27453312277793884]","[0.19334712624549866]",0.27453312277793884,0.19334712624549866
+"i33","['She baked a cake.']","['A cake was baked by her.']","[0.10693852603435516]","[0.08071022480726242]",0.10693852603435516,0.08071022480726242
+"i34","['They decorated the hall.']","['The hall was decorated by them.']","[0.06740588694810867]","[0.04042581468820572]",0.06740588694810867,0.04042581468820572
+"i35","['He scored the winning goal.']","['The winning goal was scored by him.']","[0.5301534533500671]","[0.3701173663139343]",0.5301534533500671,0.3701173663139343
+"i36","['The manager scheduled the meeting.']","['The meeting was scheduled by the manager.']","[0.23835588991641998]","[0.12406747788190842]",0.23835588991641998,0.12406747788190842
+"i37","['She planted the flowers.']","['The flowers were planted by her.']","[0.0958462506532669]","[0.030010154470801353]",0.0958462506532669,0.030010154470801353
+"i38","['They filmed the movie.']","['The movie was filmed by them.']","[0.09123121947050095]","[0.04860464856028557]",0.09123121947050095,0.04860464856028557
+"i39","['He composed a song.']","['A song was composed by him.']","[0.2485770434141159]","[0.11126424372196198]",0.2485770434141159,0.11126424372196198
+"i40","['The student answered the question.']","['The question was answered by the student.']","[0.3233101963996887]","[0.2681494951248169]",0.3233101963996887,0.2681494951248169
+"i41","['We designed the website.']","['The website was designed by us.']","[0.20934617519378662]","[0.17833639681339264]",0.20934617519378662,0.17833639681339264
+"i42","['She organized the files.']","['The files were organized by her.']","[0.1611865609884262]","[0.05289025604724884]",0.1611865609884262,0.05289025604724884
+"i43","['They launched the rocket.']","['The rocket was launched by them.']","[0.35725152492523193]","[0.2178250104188919]",0.35725152492523193,0.2178250104188919
+"i44","['He invented a new device.']","['A new device was invented by him.']","[0.4524327218532562]","[0.3648781478404999]",0.4524327218532562,0.3648781478404999
+"i45","['The nurse cared for the patient.']","['The patient was cared for by the nurse.']","[0.16796331107616425]","[-0.06700591742992401]",0.16796331107616425,-0.06700591742992401
+"i46","['She prepared the presentation.']","['The presentation was prepared by her.']","[0.35581591725349426]","[0.18663457036018372]",0.35581591725349426,0.18663457036018372
+"i47","['They explored the cave.']","['The cave was explored by them.']","[0.1654624193906784]","[0.14331121742725372]",0.1654624193906784,0.14331121742725372
+"i48","['He completed the marathon.']","['The marathon was completed by him.']","[0.580793023109436]","[0.36440885066986084]",0.580793023109436,0.36440885066986084
+"i49","['The author published the article.']","['The article was published by the author.']","[0.12082662433385849]","[0.07028880715370178]",0.12082662433385849,0.07028880715370178
+"i50","['We solved the equation.']","['The equation was solved by us.']","[0.3573966324329376]","[0.3233955502510071]",0.3573966324329376,0.3233955502510071
+"i51","['The gardener watered the plants.']","['The plants were watered by the gardener.']","[0.08769690990447998]","[0.00869913399219513]",0.08769690990447998,0.00869913399219513
+"i52","['She delivered the speech.']","['The speech was delivered by her.']","[0.439375102519989]","[0.18138356506824493]",0.439375102519989,0.18138356506824493
+"i53","['They painted the fence.']","['The fence was painted by them.']","[0.03888866677880287]","[0.01655181497335434]",0.03888866677880287,0.01655181497335434
+"i54","['He fixed the computer.']","['The computer was fixed by him.']","[0.1903996616601944]","[0.1568640172481537]",0.1903996616601944,0.1568640172481537
+"i55","['The team developed the app.']","['The app was developed by the team.']","[0.4078426957130432]","[0.32166993618011475]",0.4078426957130432,0.32166993618011475
+"i56","['We organized the workshop.']","['The workshop was organized by us.']","[0.34416866302490234]","[0.3316027522087097]",0.34416866302490234,0.3316027522087097
+"i57","['The judge announced the verdict.']","['The verdict was announced by the judge.']","[0.19162894785404205]","[0.1670088917016983]",0.19162894785404205,0.1670088917016983
+"i58","['She cooked dinner.']","['Dinner was cooked by her.']","[0.18322554230690002]","[0.07204528152942657]",0.18322554230690002,0.07204528152942657
+"i59","['They cleaned the beach.']","['The beach was cleaned by them.']","[0.1081332340836525]","[0.059075746685266495]",0.1081332340836525,0.059075746685266495
+"i60","['He taught the class.']","['The class was taught by him.']","[0.26360344886779785]","[0.07717575132846832]",0.26360344886779785,0.07717575132846832
+"i61","['The mechanic serviced the car.']","['The car was serviced by the mechanic.']","[0.05505241081118584]","[-0.022742222994565964]",0.05505241081118584,-0.022742222994565964
+"i62","['She wrote the report.']","['The report was written by her.']","[0.2725140452384949]","[0.1289910227060318]",0.2725140452384949,0.1289910227060318
+"i63","['They managed the project.']","['The project was managed by them.']","[0.3469931483268738]","[0.15792959928512573]",0.3469931483268738,0.15792959928512573
+"i64","['He discovered the error.']","['The error was discovered by him.']","[-0.00044376333244144917]","[-0.018037918955087662]",-0.00044376333244144917,-0.018037918955087662
+"i65","['The chef prepared the meal.']","['The meal was prepared by the chef.']","[0.26249146461486816]","[0.15016259253025055]",0.26249146461486816,0.15016259253025055
+"i66","['We conducted the survey.']","['The survey was conducted by us.']","[0.27600425481796265]","[0.1801634281873703]",0.27600425481796265,0.1801634281873703
+"i67","['She sang the national anthem.']","['The national anthem was sung by her.']","[0.12547796964645386]","[0.058410122990608215]",0.12547796964645386,0.058410122990608215
+"i68","['They programmed the robot.']","['The robot was programmed by them.']","[0.18163885176181793]","[0.03913447633385658]",0.18163885176181793,0.03913447633385658
+"i69","['He edited the video.']","['The video was edited by him.']","[0.15201778709888458]","[0.06330776959657669]",0.15201778709888458,0.06330776959657669
+"i70","['The company launched the product.']","['The product was launched by the company.']","[0.3083084225654602]","[0.17405305802822113]",0.3083084225654602,0.17405305802822113
+"i71","['She translated the document.']","['The document was translated by her.']","[0.2368095964193344]","[0.11520327627658844]",0.2368095964193344,0.11520327627658844
+"i72","['They analyzed the data.']","['The data was analyzed by them.']","[0.23757173120975494]","[0.17669513821601868]",0.23757173120975494,0.17669513821601868
+"i73","['He photographed the scene.']","['The scene was photographed by him.']","[0.06519537419080734]","[0.11721032112836838]",0.06519537419080734,0.11721032112836838
+"i74","['The council approved the budget.']","['The budget was approved by the council.']","[0.15580196678638458]","[0.25415313243865967]",0.15580196678638458,0.25415313243865967
+"i75","['We updated the database.']","['The database was updated by us.']","[0.21659506857395172]","[0.1823524683713913]",0.21659506857395172,0.1823524683713913
