@@ -1,0 +1,21 @@
+#+title: Info: 20240930T035104 Text Info
+
+
+- [[file:./fig-0001-visualize_topics.html]]
+- [[file:./fig-0002-visualize_topics_as_heatmap.html]]
+- [[file:./fig-0003-visualize_documents.html]]
+- [[file:./fig-0004-visualize_tokens_from_sample_doc.html]]
+- [[file:./fig-0005-visualize_terms.html]]
+- [[file:./fig-0006-visualize_topics_hierarchy.html]]
+- [[file:./fig-1001-visualize_topics_per_class_Question.html]]
+- [[file:./fig-1002-visualize_topics_per_class_Group.html]]
+- [[file:./fig-1003-visualize_topics_per_class_Group-Question-ALT.html]]
+- [[file:./fig-gg01a.svg]]
+- [[file:./fig-gg02a.svg]]
+- [[file:./fig-gg03a.svg]]
+- [[file:./fig-gg04a.svg]]
+- [[file:./fig-gg05a.svg]]
+- [[file:./fig-gg06a.svg]]
+- [[file:./fig-gg07a.svg]]
+- [[file:./tab-data.html]]
+- [[file:./tab-topics-per-class.html]]
