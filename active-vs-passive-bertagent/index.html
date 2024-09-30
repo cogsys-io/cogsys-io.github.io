@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-09-30 Mon 07:27 -->
+<!-- 2024-09-30 Mon 07:29 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>i0002 Rlang</title>
@@ -196,27 +196,29 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">i0002 Rlang</h1>
-<div id="outline-container-org2b3ddd2" class="outline-2">
-<h2 id="org2b3ddd2"><span class="section-number-2">1.</span> PDF</h2>
+<div id="outline-container-orgc75e40d" class="outline-2">
+<h2 id="orgc75e40d"><span class="section-number-2">1.</span> PDF</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li><a href="i0002-rlang.pdf">i0002-rlang.pdf</a></li>
+<li><a href="test.yaml">test.yaml</a></li>
+<li><a href="data-d0000.csv">data-d0000.csv</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org28bf606" class="outline-2">
-<h2 id="org28bf606"><span class="section-number-2">2.</span> prod: Data</h2>
+<div id="outline-container-org52a3742" class="outline-2">
+<h2 id="org52a3742"><span class="section-number-2">2.</span> prod: Data</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org849c8f7" class="outline-3">
-<h3 id="org849c8f7"><span class="section-number-3">2.1.</span> Spec</h3>
+<div id="outline-container-org85afbe5" class="outline-3">
+<h3 id="org85afbe5"><span class="section-number-3">2.1.</span> Spec</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-R">readr::spec(df0)
 </pre>
 </div>
 
-<pre class="example" id="org80804b4">
+<pre class="example" id="org734408e">
 cols(
   Idx0 = col_factor(levels = NULL, ordered = FALSE, include_na = FALSE),
   ActiveVoice = col_character(),
@@ -229,8 +231,8 @@ cols(
 </pre>
 </div>
 </div>
-<div id="outline-container-orgd67bfd0" class="outline-3">
-<h3 id="orgd67bfd0"><span class="section-number-3">2.2.</span> Sample</h3>
+<div id="outline-container-org0bad1ba" class="outline-3">
+<h3 id="org0bad1ba"><span class="section-number-3">2.2.</span> Sample</h3>
 <div class="outline-text-3" id="text-2-2">
 <div class="org-src-container">
 <pre class="src src-R">cogsys::set.w(<span style="color: #da8548; font-weight: bold;">8888</span>)
@@ -238,7 +240,7 @@ df0 <span style="color: #a9a1e1;">%&gt;%</span> dplyr::slice_head(n=<span style=
 </pre>
 </div>
 
-<pre class="example" id="org9e61be5">
+<pre class="example" id="org9dcdfa7">
 # A tibble: 4 × 7
   Idx0  ActiveVoice                          PassiveVoice                                ba0Act                 ba0Pas                 ba0ActTot ba0PasTot
   &lt;fct&gt; &lt;chr&gt;                                &lt;chr&gt;                                       &lt;chr&gt;                  &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;
@@ -249,8 +251,8 @@ df0 <span style="color: #a9a1e1;">%&gt;%</span> dplyr::slice_head(n=<span style=
 </pre>
 </div>
 </div>
-<div id="outline-container-org356c851" class="outline-3">
-<h3 id="org356c851"><span class="section-number-3">2.3.</span> Spec</h3>
+<div id="outline-container-org3d8107c" class="outline-3">
+<h3 id="org3d8107c"><span class="section-number-3">2.3.</span> Spec</h3>
 <div class="outline-text-3" id="text-2-3">
 <div class="org-src-container">
 <pre class="src src-R">cogsys::set.w(<span style="color: #da8548; font-weight: bold;">111</span>)
@@ -258,7 +260,7 @@ skimr::skim(df0)
 </pre>
 </div>
 
-<pre class="example" id="orgb5697b4">
+<pre class="example" id="orgd6cd56d">
 ── Data Summary ────────────────────────
                            Values
 Name                       df0
@@ -290,15 +292,15 @@ Group variables            None
 </pre>
 </div>
 </div>
-<div id="outline-container-orgee8bac1" class="outline-3">
-<h3 id="orgee8bac1"><span class="section-number-3">2.4.</span> DF2</h3>
+<div id="outline-container-org56b4486" class="outline-3">
+<h3 id="org56b4486"><span class="section-number-3">2.4.</span> DF2</h3>
 <div class="outline-text-3" id="text-2-4">
 <div class="org-src-container">
 <pre class="src src-R">df2
 </pre>
 </div>
 
-<pre class="example" id="org7334597">
+<pre class="example" id="orgedd4b73">
 # A tibble: 150 × 7
    Idx0  ActiveVoice                          PassiveVoice                        ba0Act ba0Pas feature   value
    &lt;fct&gt; &lt;chr&gt;                                &lt;chr&gt;                               &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;
@@ -317,8 +319,8 @@ Group variables            None
 </pre>
 </div>
 </div>
-<div id="outline-container-org0eb10db" class="outline-3">
-<h3 id="org0eb10db"><span class="section-number-3">2.5.</span> Test</h3>
+<div id="outline-container-org1d53c9f" class="outline-3">
+<h3 id="org1d53c9f"><span class="section-number-3">2.5.</span> Test</h3>
 <div class="outline-text-3" id="text-2-5">
 <div class="org-src-container">
 <pre class="src src-R">t_test_result <span style="color: #a9a1e1;">&lt;-</span> t.test(value ~ feature, data = df2, paired = <span style="color: #ECBE7B;">TRUE</span>)
@@ -326,7 +328,7 @@ t_test_result
 </pre>
 </div>
 
-<pre class="example" id="orgb434e51">
+<pre class="example" id="org5a0b8c4">
 
 	Paired t-test
 
@@ -341,8 +343,8 @@ mean difference
 </pre>
 </div>
 </div>
-<div id="outline-container-org1e75b19" class="outline-3">
-<h3 id="org1e75b19"><span class="section-number-3">2.6.</span> Test 2</h3>
+<div id="outline-container-org1076e04" class="outline-3">
+<h3 id="org1076e04"><span class="section-number-3">2.6.</span> Test 2</h3>
 <div class="outline-text-3" id="text-2-6">
 <div class="org-src-container">
 <pre class="src src-R">suppressWarnings(<span style="color: #a9a1e1;">rm</span>(list=ls(pattern=<span style="color: #98be65;">"^model"</span>)))
@@ -351,7 +353,7 @@ summary(model_lm)
 </pre>
 </div>
 
-<pre class="example" id="org2ec6ac9">
+<pre class="example" id="orgd9cf2ef">
 
 Call:
 lm(formula = value ~ feature, data = df2)
@@ -373,8 +375,8 @@ F-statistic: 14.44 on 1 and 148 DF,  p-value: 0.0002111
 </pre>
 </div>
 </div>
-<div id="outline-container-org3068540" class="outline-3">
-<h3 id="org3068540"><span class="section-number-3">2.7.</span> Test 2</h3>
+<div id="outline-container-org6174da3" class="outline-3">
+<h3 id="org6174da3"><span class="section-number-3">2.7.</span> Test 2</h3>
 <div class="outline-text-3" id="text-2-7">
 <div class="org-src-container">
 <pre class="src src-R"><span style="color: #a9a1e1;">library</span>(lmerTest)
@@ -384,7 +386,7 @@ summary(model_lmer)
 </pre>
 </div>
 
-<pre class="example" id="orgcebda9a">
+<pre class="example" id="orgc3f97d3">
 Linear mixed model fit by REML. t-tests use Satterthwaite's method ['lmerModLmerTest']
 Formula: value ~ feature + (1 | Idx0)
    Data: df2
@@ -417,7 +419,7 @@ featrb0PsTt -0.280
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2024-09-30 Mon 07:27</p>
+<p class="date">Created: 2024-09-30 Mon 07:29</p>
 </div>
 </body>
 </html>
