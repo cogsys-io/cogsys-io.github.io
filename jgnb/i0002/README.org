@@ -1,0 +1,92 @@
+#+title: README
+#+PROPERTY: header-args:python  :tangle   no
+#+PROPERTY: header-args:python  :tangle   yes
+
+#+PROPERTY: header-args:python+ :shebang  "#!/usr/bin/env ipython\n# -*- coding: utf-8 -*-\n\n"
+#+PROPERTY: header-args:python+ :eval     yes
+#+PROPERTY: header-args:python+ :comments org
+#+PROPERTY: header-args:python+ :results  raw drawer pp
+#+PROPERTY: header-args:python+ :results  raw drawer
+#+PROPERTY: header-args:python+ :exports  both
+#+PROPERTY: header-args:python+ :async    yes
+#+PROPERTY: header-args:python+ :display  plain
+
+#+PROPERTY: header-args:python+ :session  python3 :kernel python3
+#+PROPERTY: header-args:python+ :session  remote_fast8_jiko_at_buka2 :kernel remote_fast8_jiko_at_buka2
+#+PROPERTY: header-args:python+ :session  local_py3p11 :kernel local_py3p11
+#+PROPERTY: header-args:python+ :session  local_py3p11v2 :kernel local_py3p11v2
+#+PROPERTY: header-args:python+ :session  local_fast4 :kernel local_fast4
+#+PROPERTY: header-args:python+ :session  local_fast8 :kernel local_fast8
+
+* Quick Start:
+1. Clone this repo.
+3. Open =i0008-beh-data.qmd= file using RStudio.
+2. If needed install required R packages.
+
+* Also See:
+- http://cogsys.io/jgnb/i0002/i0008-beh-data.html
+- http://cogsys.io/jgnb/i0002/data/i0002-out/all-models-r1002-result-ALL.html
+- http://cogsys.io/jgnb/i0002/data/i0002-out/aux-models-r1002-result-ALL.html (includes =KSS= and =Gender=)
+
+* Basic Models
+#+begin_src R :session *R*
+fit.RT    = lmerTest::lmer(formula=RT    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.TP    = lmerTest::lmer(formula=TP    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FP    = lmerTest::lmer(formula=FP    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.TN    = lmerTest::lmer(formula=TN    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FN    = lmerTest::lmer(formula=FN    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Accur = lmerTest::lmer(formula=Accur ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Sensi = lmerTest::lmer(formula=Sensi ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Speci = lmerTest::lmer(formula=Speci ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Preci = lmerTest::lmer(formula=Preci ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FPR   = lmerTest::lmer(formula=FPR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FNR   = lmerTest::lmer(formula=FNR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FDR   = lmerTest::lmer(formula=FDR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.NPV   = lmerTest::lmer(formula=NPV   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FOR   = lmerTest::lmer(formula=FOR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+#+end_src
+* Auxiliary Models
+Included additional EVs: =+ KSS + Gender=
+#+begin_src R :session *R*
+fit.RT    = lmerTest::lmer(formula=RT    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.TP    = lmerTest::lmer(formula=TP    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FP    = lmerTest::lmer(formula=FP    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.TN    = lmerTest::lmer(formula=TN    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FN    = lmerTest::lmer(formula=FN    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Accur = lmerTest::lmer(formula=Accur ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Sensi = lmerTest::lmer(formula=Sensi ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Speci = lmerTest::lmer(formula=Speci ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Preci = lmerTest::lmer(formula=Preci ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FPR   = lmerTest::lmer(formula=FPR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FNR   = lmerTest::lmer(formula=FNR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FDR   = lmerTest::lmer(formula=FDR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.NPV   = lmerTest::lmer(formula=NPV   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FOR   = lmerTest::lmer(formula=FOR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+#+end_src
+* Basic Performance Metrics
+Additional DVs based on =TP=, =FP=, =TN= and =FN=. (see below).
+#+begin_src python :async yes
+df9n["RT"]    # this is `nanmedian()` from n-back logs
+df9n["TP"]    # this is `nansum()`    from n-back logs
+df9n["FP"]    # this is `nansum()`    from n-back logs
+df9n["TN"]    # this is `nansum()`    from n-back logs
+df9n["FN"]    # this is `nansum()`    from n-back logs
+df9n["Accur"] = df9n.apply(lambda row: (row.TP + row.TN)/(row.TN + row.FN + row.FP + row.TP) if (row.TN + row.FN + row.FP + row.TP) != 0 else np.nan, axis=1)
+df9n["Sensi"] = df9n.apply(lambda row: (row.TP)/(row.TP + row.FN) if (row.TP + row.FN) != 0 else np.nan, axis=1)
+df9n["Speci"] = df9n.apply(lambda row: (row.TN)/(row.FP + row.TN) if (row.FP + row.TN) != 0 else np.nan, axis=1)
+df9n["Preci"] = df9n.apply(lambda row: (row.TP)/(row.TP + row.FP) if (row.TP + row.FP) != 0 else np.nan, axis=1)
+df9n["FPR"]   = df9n.apply(lambda row: (row.FP)/(row.FP + row.TN) if (row.FP + row.TN) != 0 else np.nan, axis=1)
+df9n["FNR"]   = df9n.apply(lambda row: (row.FN)/(row.TP + row.FN) if (row.TP + row.FN) != 0 else np.nan, axis=1)
+df9n["FDR"]   = df9n.apply(lambda row: (row.FP)/(row.TP + row.FP) if (row.TP + row.FP) != 0 else np.nan, axis=1)
+df9n["NPV"]   = df9n.apply(lambda row: (row.TN)/(row.FN + row.TN) if (row.FN + row.TN) != 0 else np.nan, axis=1)
+df9n["FOR"]   = df9n.apply(lambda row: (row.FN)/(row.FN + row.TN) if (row.FN + row.TN) != 0 else np.nan, axis=1)
+#+end_src
+* Binary Classification Nomenclature Used
+|                                  | outcome was: taget  | outcome was: distractor |
+|----------------------------------+---------------------+-------------------------|
+| *actual stimuli was: target*     | HIT                 | MISS                    |
+|                                  | TP = true positive  | FN = false negative     |
+|                                  | CD = correct detect |                         |
+|----------------------------------+---------------------+-------------------------|
+| *actual stimuli was: distractor* | FA = false alarm    | CR = correct reject     |
+|                                  | FP = false positive | TN = true negative      |

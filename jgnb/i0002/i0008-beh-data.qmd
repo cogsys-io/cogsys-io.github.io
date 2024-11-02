@@ -27,9 +27,9 @@ format:
       margin-width: 450px
 ---
 
-# Overview 
+# Overview
 
-[View Color-Coded Results](./data/i0002-out/all-models-r1002-result-ALL.html)
+[View Color-Coded Results](./data/i0002-out/aux-models-r1002-result-ALL.html)
 
 # Init
 
@@ -47,7 +47,7 @@ library(RColorBrewer)
 ifd0 <- "data/i0001-src"
 ofd0 <- "data/i0002-out"
 dir.create(ofd0, showWarnings=FALSE, recursive=TRUE)
-ifn0 <- "jgnb-df9u.csv"
+ifn0 <- "jgnb-df9v.csv"
 suppressWarnings(rm(list=ls(pattern="^df")))
 df0 <- readr::read_csv(
   file = file.path(ifd0, ifn0),
@@ -102,23 +102,21 @@ df2 %>% dim()
 REML <- TRUE
 control <- lme4::lmerControl(optimizer = "Nelder_Mead")
 
-fit.RT    = lmerTest::lmer(formula=RT    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.RT    = lmerTest::lmer(formula=RT    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.TP    = lmerTest::lmer(formula=TP    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FP    = lmerTest::lmer(formula=FP    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.TN    = lmerTest::lmer(formula=TN    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FN    = lmerTest::lmer(formula=FN    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Accur = lmerTest::lmer(formula=Accur ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Sensi = lmerTest::lmer(formula=Sensi ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Speci = lmerTest::lmer(formula=Speci ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Preci = lmerTest::lmer(formula=Preci ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FPR   = lmerTest::lmer(formula=FPR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FNR   = lmerTest::lmer(formula=FNR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FDR   = lmerTest::lmer(formula=FDR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.NPV   = lmerTest::lmer(formula=NPV   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FOR   = lmerTest::lmer(formula=FOR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
 
-fit.TP    = lmerTest::lmer(formula=TP    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FP    = lmerTest::lmer(formula=FP    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.TN    = lmerTest::lmer(formula=TN    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FN    = lmerTest::lmer(formula=FN    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-
-fit.Accur = lmerTest::lmer(formula=Accur ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.Sensi = lmerTest::lmer(formula=Sensi ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.Speci = lmerTest::lmer(formula=Speci ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.Preci = lmerTest::lmer(formula=Preci ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-
-fit.FPR   = lmerTest::lmer(formula=FPR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FNR   = lmerTest::lmer(formula=FNR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FDR   = lmerTest::lmer(formula=FDR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.NPV   = lmerTest::lmer(formula=NPV   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FOR   = lmerTest::lmer(formula=FOR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
 ```
 
 # Save Models
@@ -161,7 +159,7 @@ fit.FOR   <- readr::read_rds(file.path(ofd0, "fit.FOR.rds"))
 
 # Tabulate Models
 
-[View Color-Coded Results](./data/i0002-out/all-models-r1002-result-ALL.html)
+[View Color-Coded Results](./data/i0002-out/aux-models-r1002-result-ALL.html)
 
 ```{r}
 sjPlot::tab_model(
@@ -266,23 +264,20 @@ df2 %>% dim()
 REML <- TRUE
 control <- lme4::lmerControl(optimizer = "Nelder_Mead")
 
-fit.RT    = lmerTest::lmer(formula=RT    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-
-fit.TP    = lmerTest::lmer(formula=TP    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FP    = lmerTest::lmer(formula=FP    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.TN    = lmerTest::lmer(formula=TN    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FN    = lmerTest::lmer(formula=FN    ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-
-fit.Accur = lmerTest::lmer(formula=Accur ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.Sensi = lmerTest::lmer(formula=Sensi ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.Speci = lmerTest::lmer(formula=Speci ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.Preci = lmerTest::lmer(formula=Preci ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-
-fit.FPR   = lmerTest::lmer(formula=FPR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FNR   = lmerTest::lmer(formula=FNR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FDR   = lmerTest::lmer(formula=FDR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.NPV   = lmerTest::lmer(formula=NPV   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
-fit.FOR   = lmerTest::lmer(formula=FOR   ~ Ses + Chrono + Run + Condit + NumBack + (1 | Sub), data=df2, REML=REML, control=control)
+fit.RT    = lmerTest::lmer(formula=RT    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.TP    = lmerTest::lmer(formula=TP    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FP    = lmerTest::lmer(formula=FP    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.TN    = lmerTest::lmer(formula=TN    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FN    = lmerTest::lmer(formula=FN    ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Accur = lmerTest::lmer(formula=Accur ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Sensi = lmerTest::lmer(formula=Sensi ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Speci = lmerTest::lmer(formula=Speci ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.Preci = lmerTest::lmer(formula=Preci ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FPR   = lmerTest::lmer(formula=FPR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FNR   = lmerTest::lmer(formula=FNR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FDR   = lmerTest::lmer(formula=FDR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.NPV   = lmerTest::lmer(formula=NPV   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
+fit.FOR   = lmerTest::lmer(formula=FOR   ~ Ses + Chrono + Run + Condit + NumBack + KSS + Gender + (1 | Sub), data=df2, REML=REML, control=control)
 
 ```
 
@@ -305,10 +300,40 @@ model <- "fit.RT"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Chrono`
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
 terms <- c("Chrono")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -335,49 +360,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### Effect of `NumBack`
-
-```{r}
-extra <- "1002"
-terms <- c("NumBack")
-
-suppressWarnings(rm(list = ls(pattern = "^ggeff")))
-ggeff <- get_eff_null(model, terms, extra, ofd0)
-
-cat0(sep0)
-print(ggeff$pred0, n = Inf)
-cat0(sep0)
-print(ggeff$test0, n = Inf)
-cat0(sep0)
-print(ggeff$test2, n = Inf)
-```
-
-#### Plot Effect
-
-```{r}
-suppressWarnings(rm(list = ls(pattern = "^gg88")))
-gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
-gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
-
-ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
-ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
-
-gg88
-```
-
-### 
-
-## Check Model `fit.TP`
-
-```{r}
-model <- "fit.TP"
-fbase <- get_model_info(model, ofd0)
-```
-
 ### Effect of `Run`
 
 ```{r}
-extra <- "1001"
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -404,49 +390,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### Effect of `NumBack`
-
-```{r}
-extra <- "1002"
-terms <- c("NumBack")
-
-suppressWarnings(rm(list = ls(pattern = "^ggeff")))
-ggeff <- get_eff_null(model, terms, extra, ofd0)
-
-cat0(sep0)
-print(ggeff$pred0, n = Inf)
-cat0(sep0)
-print(ggeff$test0, n = Inf)
-cat0(sep0)
-print(ggeff$test2, n = Inf)
-```
-
-#### Plot Effect
-
-```{r}
-suppressWarnings(rm(list = ls(pattern = "^gg88")))
-gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
-gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
-
-ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
-ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
-
-gg88
-```
-
-### 
-
-## Check Model `fit.FP`
-
-```{r}
-model <- "fit.FP"
-fbase <- get_model_info(model, ofd0)
-```
-
 ### Effect of `Condit`
 
 ```{r}
-extra <- "1001"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -476,7 +423,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1002"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -502,6 +449,504 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 
 gg88
 ```
+
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## Check Model `fit.TP`
+
+```{r}
+model <- "fit.TP"
+fbase <- get_model_info(model, ofd0)
+```
+
+### Effect of `Ses`
+
+```{r}
+extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
+terms <- c("Run")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Condit`
+
+```{r}
+extra <- "1004"
+terms <- c("Condit")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `NumBack`
+
+```{r}
+extra <- "1005"
+terms <- c("NumBack")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
+
+## Check Model `fit.FP`
+
+```{r}
+model <- "fit.FP"
+fbase <- get_model_info(model, ofd0)
+```
+
+### Effect of `Ses`
+
+```{r}
+extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
+terms <- c("Run")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Condit`
+
+```{r}
+extra <- "1004"
+terms <- c("Condit")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `NumBack`
+
+```{r}
+extra <- "1005"
+terms <- c("NumBack")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.TN`
 
@@ -540,12 +985,70 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
+terms <- c("Run")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
 
 ### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -575,7 +1078,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -601,6 +1104,68 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 
 gg88
 ```
+
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.FN`
 
@@ -609,10 +1174,70 @@ model <- "fit.FN"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run`
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -639,12 +1264,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
 ### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -674,7 +1297,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -701,7 +1324,67 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.Accur`
 
@@ -710,10 +1393,70 @@ model <- "fit.Accur"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run`
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -740,12 +1483,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
 ### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -775,7 +1516,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -801,6 +1542,68 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 
 gg88
 ```
+
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.Sensi`
 
@@ -809,10 +1612,70 @@ model <- "fit.Sensi"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run`
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -839,12 +1702,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
 ### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -874,7 +1735,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -901,7 +1762,67 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.Speci`
 
@@ -910,10 +1831,70 @@ model <- "fit.Speci"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run` CAUTION - NS! (this should not be checked)
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -940,12 +1921,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
-### Effect of `Condit` CAUTION - NS! (this should not be checked)
+### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -975,7 +1954,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1002,7 +1981,67 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.Preci`
 
@@ -1011,10 +2050,70 @@ model <- "fit.Preci"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run` 
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1041,12 +2140,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
-### Effect of `Condit` 
+### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1076,7 +2173,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1103,7 +2200,67 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.FPR`
 
@@ -1112,10 +2269,130 @@ model <- "fit.FPR"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `NumBack`
+### Effect of `Ses`
+
+```{r}
+extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
 
 ```{r}
 extra <- "1003"
+terms <- c("Run")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Condit`
+
+```{r}
+extra <- "1004"
+terms <- c("Condit")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `NumBack`
+
+```{r}
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1142,7 +2419,67 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.FNR`
 
@@ -1151,10 +2488,70 @@ model <- "fit.FNR"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run` 
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1181,12 +2578,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
-### Effect of `Condit` 
+### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1216,7 +2611,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1243,7 +2638,67 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.FDR`
 
@@ -1252,10 +2707,70 @@ model <- "fit.FDR"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run` 
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1282,12 +2797,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
-### Effect of `Condit` 
+### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1317,7 +2830,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1344,7 +2857,67 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.NPV`
 
@@ -1353,10 +2926,70 @@ model <- "fit.NPV"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run` 
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1383,12 +3016,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
-### Effect of `Condit` 
+### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1418,7 +3049,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1445,7 +3076,67 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
 
 ## Check Model `fit.FOR`
 
@@ -1454,10 +3145,70 @@ model <- "fit.FOR"
 fbase <- get_model_info(model, ofd0)
 ```
 
-### Effect of `Run` 
+### Effect of `Ses`
 
 ```{r}
 extra <- "1001"
+terms <- c("Ses")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Chrono`
+
+```{r}
+extra <- "1002"
+terms <- c("Chrono")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Run`
+
+```{r}
+extra <- "1003"
 terms <- c("Run")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1484,12 +3235,10 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
-
-### Effect of `Condit` 
+### Effect of `Condit`
 
 ```{r}
-extra <- "1002"
+extra <- "1004"
 terms <- c("Condit")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1519,7 +3268,7 @@ gg88
 ### Effect of `NumBack`
 
 ```{r}
-extra <- "1003"
+extra <- "1005"
 terms <- c("NumBack")
 
 suppressWarnings(rm(list = ls(pattern = "^ggeff")))
@@ -1546,4 +3295,69 @@ ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, h
 gg88
 ```
 
-### 
+### Effect of `KSS`
+
+```{r}
+extra <- "1005"
+terms <- c("KSS")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+### Effect of `Gender`
+
+```{r}
+extra <- "1006"
+terms <- c("Gender")
+
+suppressWarnings(rm(list = ls(pattern = "^ggeff")))
+ggeff <- get_eff_null(model, terms, extra, ofd0)
+
+cat0(sep0)
+print(ggeff$pred0, n = Inf)
+cat0(sep0)
+print(ggeff$test0, n = Inf)
+cat0(sep0)
+print(ggeff$test2, n = Inf)
+```
+
+#### Plot Effect
+
+```{r}
+suppressWarnings(rm(list = ls(pattern = "^gg88")))
+gg88 <- ggeff$pred0 %>% plot(limit_range=FALSE, show_data = FALSE, dot_alpha = 0.05)
+gg88 <- gg88 # + timeD + lineE + lineT + lineR + rect3 ## + scaleA
+
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.png"), plot = gg88, width=8, height=24)
+ggsave(file = paste0(ggeff$fbasefig, "-pred0-fig.svg"), plot = gg88, width=16, height=48)
+
+gg88
+```
+
+## 
+
+```{r}
+ls()
+
+```
