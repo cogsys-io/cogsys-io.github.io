@@ -1,0 +1,14 @@
+#+title: Test
+
+#+PROPERTY: header-args:R  :tangle   yes
+#+PROPERTY: header-args:R+ :eval     yes
+#+PROPERTY: header-args:R+ :comments org
+#+PROPERTY: header-args:R+ :results  output drawer pp
+#+PROPERTY: header-args:R+ :exports  both
+#+PROPERTY: header-args:R+ :session  *R*
+#+PROPERTY: header-args:R+ :var      HERE=(file-name-directory buffer-file-name)
+
+#+begin_src R :session *R*
+
+
+#+end_src

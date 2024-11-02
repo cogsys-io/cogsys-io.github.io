@@ -1,0 +1,110 @@
+<!DOCTYPE html> 
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tinytable_rs3bpc43u9wl17m3li6e</title>
+    <style>
+.table td.tinytable_css_q1bu33aazt48ho6b9syp, .table th.tinytable_css_q1bu33aazt48ho6b9syp {    border-bottom: solid 0.1em #d3d8dc; }
+    </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+    </script>
+  </head>
+
+  <body>
+    <div class="container">
+      <table class="table table-borderless" id="tinytable_rs3bpc43u9wl17m3li6e" style="width: auto; margin-left: auto; margin-right: auto;" data-quarto-disable-processing='true'>
+        <thead>
+        <caption>Pairwise comparisons</caption>
+              <tr>
+                <th scope="col">NumBack</th>
+                <th scope="col">Contrast</th>
+                <th scope="col">95% CI</th>
+                <th scope="col">p</th>
+              </tr>
+        </thead>
+        
+        <tbody>
+                <tr>
+                  <td>n01-n02</td>
+                  <td>-0.15</td>
+                  <td>-0.17, -0.12</td>
+                  <td>< .001</td>
+                </tr>
+                <tr>
+                  <td>n01-n03</td>
+                  <td>-0.28</td>
+                  <td>-0.30, -0.25</td>
+                  <td>< .001</td>
+                </tr>
+                <tr>
+                  <td>n02-n03</td>
+                  <td>-0.13</td>
+                  <td>-0.16, -0.11</td>
+                  <td>< .001</td>
+                </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      function styleCell_tinytable_6ni04gfdrnrhjlnz7sud(i, j, css_id) {
+        var table = document.getElementById("tinytable_rs3bpc43u9wl17m3li6e");
+        table.rows[i].cells[j].classList.add(css_id);
+      }
+      function insertSpanRow(i, colspan, content) {
+        var table = document.getElementById('tinytable_rs3bpc43u9wl17m3li6e');
+        var newRow = table.insertRow(i);
+        var newCell = newRow.insertCell(0);
+        newCell.setAttribute("colspan", colspan);
+        // newCell.innerText = content;
+        // this may be unsafe, but innerText does not interpret <br>
+        newCell.innerHTML = content;
+      }
+      function spanCell_tinytable_6ni04gfdrnrhjlnz7sud(i, j, rowspan, colspan) {
+        var table = document.getElementById("tinytable_rs3bpc43u9wl17m3li6e");
+        const targetRow = table.rows[i];
+        const targetCell = targetRow.cells[j];
+        for (let r = 0; r < rowspan; r++) {
+          // Only start deleting cells to the right for the first row (r == 0)
+          if (r === 0) {
+            // Delete cells to the right of the target cell in the first row
+            for (let c = colspan - 1; c > 0; c--) {
+              if (table.rows[i + r].cells[j + c]) {
+                table.rows[i + r].deleteCell(j + c);
+              }
+            }
+          }
+          // For rows below the first, delete starting from the target column
+          if (r > 0) {
+            for (let c = colspan - 1; c >= 0; c--) {
+              if (table.rows[i + r] && table.rows[i + r].cells[j]) {
+                table.rows[i + r].deleteCell(j);
+              }
+            }
+          }
+        }
+        // Set rowspan and colspan of the target cell
+        targetCell.rowSpan = rowspan;
+        targetCell.colSpan = colspan;
+      }
+
+window.addEventListener('load', function () { styleCell_tinytable_6ni04gfdrnrhjlnz7sud(0, 0, 'tinytable_css_q1bu33aazt48ho6b9syp') })
+window.addEventListener('load', function () { styleCell_tinytable_6ni04gfdrnrhjlnz7sud(0, 1, 'tinytable_css_q1bu33aazt48ho6b9syp') })
+window.addEventListener('load', function () { styleCell_tinytable_6ni04gfdrnrhjlnz7sud(0, 2, 'tinytable_css_q1bu33aazt48ho6b9syp') })
+window.addEventListener('load', function () { styleCell_tinytable_6ni04gfdrnrhjlnz7sud(0, 3, 'tinytable_css_q1bu33aazt48ho6b9syp') })
+    </script>
+
+  </body>
+
+</html>

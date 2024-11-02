@@ -1,0 +1,39 @@
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      // Select the table by its ID
+      const table = document.getElementById('results-table');
+
+      // Check if the table exists
+      if (!table) {
+          console.error('Table with ID "results-table" not found.');
+          return;
+      } else {console.log("Got TABLE")}
+
+      const rows = table.querySelectorAll('tbody tr');
+      // const rows = table.querySelectorAll('tbody tr.Interesting');
+      rows.forEach(function(row) {
+          const cells = row.querySelectorAll('td');
+          cells.forEach(function(cell) {
+              const text = cell.textContent.trim();
+              if (text.includes("*")) {
+                  console.log("Significant Estimate")
+                  const num = parseFloat(text);
+
+                  if (!isNaN(num)) {
+                      if (num < 0) {
+                          cell.classList.add('negative');
+                      } else if (num > 0) {
+                          cell.classList.add('positive');
+                      } else {
+                          cell.classList.add('zero');
+                      }
+                  } else {
+                      cell.classList.add('non-numeric');
+                  }
+              }
+          });
+      });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Conditional Number Styling</title>
+  <style>
+    /* Basic styling for the table */
+    th, td {
+      border: 0px solid #333333;
+      padding: 10px;
+      text-align: center;
+      font-size: 18px;
+    }
+    th {
+      background-color: #ffffff;
+    }
+    td {white-space: nowrap;}
+    .negative {
+      color: #3366ff;
+      font-weight: bold;
+    }
+    .positive {
+      color: #ff0066;
+      font-weight: bold;
+    }
+    .zero {
+      color: #666666;
+      font-weight: bold;
+    }
+    .non-numeric {
+      color: #000000;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+<table style="border-collapse:collapse; border:none;"  id="results-table">
