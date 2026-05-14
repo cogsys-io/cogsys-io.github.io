@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2026-05-14 Thu 12:23 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>R Practical Test</title>
+<meta name="author" content="R Course" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'JavaScript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">R Practical Test</h1>
+<div id="outline-container-org164fdac" class="outline-2">
+<h2 id="org164fdac"><span class="section-number-2">1.</span> Instructions</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>Work in <b>Google Colab</b> (R kernel) — one notebook for the whole test.</li>
+<li>Put each exercise in its own section. Use <b>code cells</b> for R code and
+<b>text (Markdown) cells</b> for short written answers / comments.</li>
+<li>Add brief comments (lines starting with <code>#</code>) inside code cells to
+explain what each chunk does.</li>
+<li>You may use base R or the tidyverse — whichever you prefer.</li>
+<li>All data work uses the Titanic dataset, loaded from the URL below.</li>
+<li><p>
+When finished, <b>download the notebook</b> from Colab via
+<code>File → Download → Download .ipynb</code>
+and name the file using your <b>student-id-surname-name</b> pattern, e.g.:
+</p>
+
+<pre class="example" id="orge5594bc">
+  123456-kowalski-anna.ipynb
+</pre></li>
+
+<li><b>Email</b> the notebook as an attachment to <b>nikadon@umk.pl</b>.</li>
+</ul>
+</div>
+<div id="outline-container-orgdbbe794" class="outline-3">
+<h3 id="orgdbbe794"><span class="section-number-3">1.1.</span> Data loading</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+Run this at the top of your notebook:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code><span style="color: #a9a1e1;">library</span><span style="color: #51afef;">(</span>tidyverse<span style="color: #51afef;">)</span>
+
+titanic <span style="color: #a9a1e1;">&lt;-</span> read_csv<span style="color: #51afef;">(</span>
+  <span style="color: #98be65;">"https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/Titanic.csv"</span>
+<span style="color: #51afef;">)</span>
+</code></pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orge35fa9f" class="outline-3">
+<h3 id="orge35fa9f"><span class="section-number-3">1.2.</span> Hint: data preparation (optional but useful)</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+For Exercises 4 and 5 it can be helpful to add a few well-typed columns
+to the data frame. You can paste this in once, near the top of your notebook,
+right after loading the data:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>titanic <span style="color: #a9a1e1;">&lt;-</span> titanic <span style="color: #a9a1e1;">%&gt;%</span>
+  mutate<span style="color: #51afef;">(</span>
+    survived = ifelse<span style="color: #c678dd;">(</span>Survived == 1, <span style="color: #98be65;">"Yes"</span>, <span style="color: #98be65;">"No"</span><span style="color: #c678dd;">)</span> <span style="color: #a9a1e1;">%&gt;%</span> factor<span style="color: #c678dd;">(</span>levels = c<span style="color: #98be65;">(</span><span style="color: #98be65;">"No"</span>, <span style="color: #98be65;">"Yes"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>,
+    Pclass   = factor<span style="color: #c678dd;">(</span>Pclass, labels = c<span style="color: #98be65;">(</span><span style="color: #98be65;">"1st"</span>, <span style="color: #98be65;">"2nd"</span>, <span style="color: #98be65;">"3rd"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>,
+    Sex      = factor<span style="color: #c678dd;">(</span>Sex<span style="color: #c678dd;">)</span>,
+    type     = ifelse<span style="color: #c678dd;">(</span>Age &lt;= 17, <span style="color: #98be65;">"child"</span>, <span style="color: #98be65;">"adult"</span><span style="color: #c678dd;">)</span> <span style="color: #a9a1e1;">%&gt;%</span> factor<span style="color: #c678dd;">()</span>
+  <span style="color: #51afef;">)</span>
+</code></pre>
+</div>
+
+<p>
+After running this you will have:
+</p>
+<ul class="org-ul">
+<li><code>survived</code> — a factor &ldquo;No&rdquo;/&ldquo;Yes&rdquo; (in addition to the original numeric <code>Survived</code>),</li>
+<li><code>Pclass</code>   — a factor &ldquo;1st&rdquo;<i>&ldquo;2nd&rdquo;</i>&ldquo;3rd&rdquo;,</li>
+<li><code>Sex</code>      — a factor,</li>
+<li><code>type</code>     — a factor &ldquo;child&rdquo;/&ldquo;adult&rdquo;.</li>
+</ul>
+
+<p>
+You can use either the original numeric columns or these factor versions —
+whichever is more convenient for the exercise.
+</p>
+
+<p>
+Useful columns:
+</p>
+<ul class="org-ul">
+<li><code>Survived</code> — 0 = died, 1 = survived</li>
+<li><code>Pclass</code>   — ticket class (1, 2, 3)</li>
+<li><code>Sex</code>      — &ldquo;male&rdquo; / &ldquo;female&rdquo;</li>
+<li><code>Age</code>      — age in years (contains <code>NA</code> values)</li>
+<li><code>SibSp</code>    — number of siblings / spouses aboard</li>
+<li><code>Parch</code>    — number of parents / children aboard</li>
+<li><code>Fare</code>     — ticket price in pounds</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="outline-container-org278407b" class="outline-2">
+<h2 id="org278407b"><span class="section-number-2">2.</span> Exercise 1 — Vector basics (easy)</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+Create a numeric vector <code>v</code> containing the following values:
+</p>
+
+<pre class="example" id="orgdf36a17">
+12, 25, 7, 40, 18, 33, 9, 50, 22, 15
+</pre>
+
+<p>
+For this vector, compute and print:
+</p>
+
+<ol class="org-ol">
+<li>The number of elements (<code>length</code>).</li>
+<li>The minimum, maximum, and the difference between them.</li>
+<li>The mean and the standard deviation.</li>
+<li>A new vector containing only the values greater than <code>20</code>.</li>
+</ol>
+
+<p>
+Hint: <code>c()</code>, <code>length()</code>, <code>min()</code>, <code>max()</code>, <code>mean()</code>, <code>sd()</code>, <code>v[v &gt; 20]</code>.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd18d7db" class="outline-2">
+<h2 id="orgd18d7db"><span class="section-number-2">3.</span> Exercise 2 — Descriptive statistics on the <code>Age</code> column (easy)</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+Using the <code>titanic</code> data frame:
+</p>
+
+<ol class="org-ol">
+<li>Print the first 6 rows of the data (<code>head()</code>).</li>
+<li>Compute the mean, median, and standard deviation of the <code>Age</code> column.
+Remember that <code>Age</code> contains missing values — you must handle them
+(use <code>na.rm = TRUE</code>).</li>
+<li>How many passengers have a missing age?
+Hint: <code>sum(is.na(titanic$Age))</code>.</li>
+<li>What is the age of the <b>oldest</b> and the <b>youngest</b> passenger on board?</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-orgb0bf387" class="outline-2">
+<h2 id="orgb0bf387"><span class="section-number-2">4.</span> Exercise 3 — Descriptive statistics on the <code>Fare</code> column (easy)</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Using the same <code>titanic</code> data frame, repeat the same kind of analysis,
+but this time on the <code>Fare</code> column:
+</p>
+
+<ol class="org-ol">
+<li>Compute the mean, median, and standard deviation of <code>Fare</code>
+(again, use <code>na.rm = TRUE</code> just to be safe).</li>
+<li>What is the most expensive ticket price? The cheapest?</li>
+<li>How many passengers paid more than <code>50</code> pounds for their ticket?
+Hint: <code>sum(titanic$Fare &gt; 50, na.rm = TRUE)</code>.</li>
+<li>Draw a histogram of <code>Fare</code> (<code>hist()</code> in base R, or <code>geom_histogram()</code> in <code>ggplot2</code>).</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org229f0a2" class="outline-2">
+<h2 id="org229f0a2"><span class="section-number-2">5.</span> Exercise 4 — Group summaries (medium)</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+Using the tidyverse (<code>%&gt;%</code> or <code>|&gt;</code>, <code>group_by</code>, <code>summarise</code>, <code>mutate</code>, <code>filter</code>):
+</p>
+
+<ol class="org-ol">
+<li>For each <b>ticket class</b> (<code>Pclass</code>, values 1, 2, 3), compute:
+<ul class="org-ul">
+<li>the number of passengers,</li>
+<li>the mean <code>Fare</code>,</li>
+<li>the mean <code>Age</code> (remember <code>na.rm = TRUE</code>),</li>
+<li>the <b>survival rate</b> in percent
+(hint: <code>mean(Survived) * 100</code>, since <code>Survived</code> is 0/1).</li>
+</ul></li>
+<li>Which class had the highest survival rate? Which had the lowest?
+Write your answer as a short comment in the script.</li>
+<li>Add a new column to the data frame called <code>type</code>
+that contains <code>"child"</code> if <code>Age &lt;</code> 17= and <code>"adult"</code> otherwise.
+Then count how many children and how many adults are in the dataset.
+(If you already created <code>type</code> using the data-preparation hint above,
+just count the categories here.)</li>
+</ol>
+
+<p>
+Expected output for part 1 should look roughly like:
+</p>
+
+<pre class="example" id="org0d27756">
+# A tibble: 3 × 5
+  Pclass     n mean_fare mean_age survival_rate
+   &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;
+1      1   216      84.2     38.2          63.0
+2      2   184      20.7     29.9          47.3
+3      3   491      13.7     25.1          24.2
+</pre>
+
+<p>
+(Your numbers should be close to these.)
+</p>
+</div>
+</div>
+<div id="outline-container-orge66edb7" class="outline-2">
+<h2 id="orge66edb7"><span class="section-number-2">6.</span> Exercise 5 — A hypothesis test (harder)</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+We want to check whether <b>women survived at a different rate than men</b>
+on the Titanic.
+</p>
+
+<p>
+Do the following:
+</p>
+
+<ol class="org-ol">
+<li>Build a <b>contingency table</b> of <code>Sex</code> against <code>Survived</code>
+using <code>table(titanic$Sex, titanic$Survived)</code>.
+Print it.</li>
+<li>From this table, compute the <b>survival proportion</b> within each sex
+(hint: <code>prop.table(your_table, margin = 1)</code>).</li>
+<li>Run a <b>chi-squared test of independence</b> on the contingency table
+(<code>chisq.test</code>). Print the result.</li>
+<li>Make a bar plot in <code>ggplot2</code> showing survival counts split by <code>Sex</code>
+(<code>geom_bar(position = "dodge")</code> with <code>fill = factor(Survived)</code>
+inside <code>aes()</code>).</li>
+<li>Write a <b>one or two sentence comment</b> in the script answering:
+<ul class="org-ul">
+<li>Is the difference statistically significant (look at the p-value)?</li>
+<li>In plain words: did women or men survive more often, and by how much?</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org5830b0b" class="outline-2">
+<h2 id="org5830b0b"><span class="section-number-2">7.</span> Submission</h2>
+<div class="outline-text-2" id="text-7">
+<ul class="org-ul">
+<li>Make sure the notebook <b>runs from top to bottom without errors</b>
+in a fresh Colab session
+(<code>Runtime → Restart session and run all</code>).</li>
+<li>Download the notebook: <code>File → Download → Download .ipynb</code>.</li>
+<li>Name the file using your <b>student-id-surname-name</b> pattern, e.g.
+<code>123456-Smith-John.ipynb</code>.</li>
+<li>Email the <code>.ipynb</code> file as an attachment to <b>nikadon@umk.pl</b>.</li>
+</ul>
+
+<p>
+Good luck!
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: R Course</p>
+<p class="date">Created: 2026-05-14 Thu 12:23</p>
+</div>
+</body>
+</html>
