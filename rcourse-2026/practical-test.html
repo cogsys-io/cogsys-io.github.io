@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-05-14 Thu 12:23 -->
+<!-- 2026-05-14 Thu 12:37 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>R Practical Test</title>
@@ -198,8 +198,8 @@
 <body>
 <div id="content" class="content">
 <h1 class="title">R Practical Test</h1>
-<div id="outline-container-org164fdac" class="outline-2">
-<h2 id="org164fdac"><span class="section-number-2">1.</span> Instructions</h2>
+<div id="outline-container-org2553bfd" class="outline-2">
+<h2 id="org2553bfd"><span class="section-number-2">1.</span> Instructions</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li>Work in <b>Google Colab</b> (R kernel) — one notebook for the whole test.</li>
@@ -215,15 +215,16 @@ When finished, <b>download the notebook</b> from Colab via
 and name the file using your <b>student-id-surname-name</b> pattern, e.g.:
 </p>
 
-<pre class="example" id="orge5594bc">
-  123456-kowalski-anna.ipynb
+<pre class="example" id="org8a8f8ae">
+  rcourse-test-123456-Smith-John.ipynb
 </pre></li>
 
 <li><b>Email</b> the notebook as an attachment to <b>nikadon@umk.pl</b>.</li>
+<li>Please use email subject &ldquo;R-course 2026&rdquo;</li>
 </ul>
 </div>
-<div id="outline-container-orgdbbe794" class="outline-3">
-<h3 id="orgdbbe794"><span class="section-number-3">1.1.</span> Data loading</h3>
+<div id="outline-container-org89a5b83" class="outline-3">
+<h3 id="org89a5b83"><span class="section-number-3">1.1.</span> Data loading</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 Run this at the top of your notebook:
@@ -239,8 +240,8 @@ titanic <span style="color: #a9a1e1;">&lt;-</span> read_csv<span style="color: #
 </div>
 </div>
 </div>
-<div id="outline-container-orge35fa9f" class="outline-3">
-<h3 id="orge35fa9f"><span class="section-number-3">1.2.</span> Hint: data preparation (optional but useful)</h3>
+<div id="outline-container-org5111ced" class="outline-3">
+<h3 id="org5111ced"><span class="section-number-3">1.2.</span> Hint: data preparation (optional but useful)</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 For Exercises 4 and 5 it can be helpful to add a few well-typed columns
@@ -289,14 +290,14 @@ Useful columns:
 </div>
 </div>
 </div>
-<div id="outline-container-org278407b" class="outline-2">
-<h2 id="org278407b"><span class="section-number-2">2.</span> Exercise 1 — Vector basics (easy)</h2>
+<div id="outline-container-org787827b" class="outline-2">
+<h2 id="org787827b"><span class="section-number-2">2.</span> Exercise 1 — Vector basics (easy)</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Create a numeric vector <code>v</code> containing the following values:
 </p>
 
-<pre class="example" id="orgdf36a17">
+<pre class="example" id="org761c44c">
 12, 25, 7, 40, 18, 33, 9, 50, 22, 15
 </pre>
 
@@ -316,8 +317,8 @@ Hint: <code>c()</code>, <code>length()</code>, <code>min()</code>, <code>max()</
 </p>
 </div>
 </div>
-<div id="outline-container-orgd18d7db" class="outline-2">
-<h2 id="orgd18d7db"><span class="section-number-2">3.</span> Exercise 2 — Descriptive statistics on the <code>Age</code> column (easy)</h2>
+<div id="outline-container-org036ce4e" class="outline-2">
+<h2 id="org036ce4e"><span class="section-number-2">3.</span> Exercise 2 — Descriptive statistics on the <code>Age</code> column (easy)</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Using the <code>titanic</code> data frame:
@@ -334,8 +335,8 @@ Hint: <code>sum(is.na(titanic$Age))</code>.</li>
 </ol>
 </div>
 </div>
-<div id="outline-container-orgb0bf387" class="outline-2">
-<h2 id="orgb0bf387"><span class="section-number-2">4.</span> Exercise 3 — Descriptive statistics on the <code>Fare</code> column (easy)</h2>
+<div id="outline-container-orgaad7a72" class="outline-2">
+<h2 id="orgaad7a72"><span class="section-number-2">4.</span> Exercise 3 — Descriptive statistics on the <code>Fare</code> column (easy)</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 Using the same <code>titanic</code> data frame, repeat the same kind of analysis,
@@ -352,8 +353,8 @@ Hint: <code>sum(titanic$Fare &gt; 50, na.rm = TRUE)</code>.</li>
 </ol>
 </div>
 </div>
-<div id="outline-container-org229f0a2" class="outline-2">
-<h2 id="org229f0a2"><span class="section-number-2">5.</span> Exercise 4 — Group summaries (medium)</h2>
+<div id="outline-container-org7d48e39" class="outline-2">
+<h2 id="org7d48e39"><span class="section-number-2">5.</span> Exercise 4 — Group summaries (medium)</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 Using the tidyverse (<code>%&gt;%</code> or <code>|&gt;</code>, <code>group_by</code>, <code>summarise</code>, <code>mutate</code>, <code>filter</code>):
@@ -381,7 +382,7 @@ just count the categories here.)</li>
 Expected output for part 1 should look roughly like:
 </p>
 
-<pre class="example" id="org0d27756">
+<pre class="example" id="orgca4956b">
 # A tibble: 3 × 5
   Pclass     n mean_fare mean_age survival_rate
    &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt;    &lt;dbl&gt;         &lt;dbl&gt;
@@ -395,8 +396,8 @@ Expected output for part 1 should look roughly like:
 </p>
 </div>
 </div>
-<div id="outline-container-orge66edb7" class="outline-2">
-<h2 id="orge66edb7"><span class="section-number-2">6.</span> Exercise 5 — A hypothesis test (harder)</h2>
+<div id="outline-container-orgba45ef0" class="outline-2">
+<h2 id="orgba45ef0"><span class="section-number-2">6.</span> Exercise 5 — A hypothesis test (harder)</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 We want to check whether <b>women survived at a different rate than men</b>
@@ -426,8 +427,8 @@ inside <code>aes()</code>).</li>
 </ol>
 </div>
 </div>
-<div id="outline-container-org5830b0b" class="outline-2">
-<h2 id="org5830b0b"><span class="section-number-2">7.</span> Submission</h2>
+<div id="outline-container-org835de17" class="outline-2">
+<h2 id="org835de17"><span class="section-number-2">7.</span> Submission</h2>
 <div class="outline-text-2" id="text-7">
 <ul class="org-ul">
 <li>Make sure the notebook <b>runs from top to bottom without errors</b>
@@ -435,7 +436,7 @@ in a fresh Colab session
 (<code>Runtime → Restart session and run all</code>).</li>
 <li>Download the notebook: <code>File → Download → Download .ipynb</code>.</li>
 <li>Name the file using your <b>student-id-surname-name</b> pattern, e.g.
-<code>123456-Smith-John.ipynb</code>.</li>
+<code>rcourse-test-123456-Smith-John.ipynb</code>.</li>
 <li>Email the <code>.ipynb</code> file as an attachment to <b>nikadon@umk.pl</b>.</li>
 </ul>
 
@@ -447,7 +448,7 @@ Good luck!
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: R Course</p>
-<p class="date">Created: 2026-05-14 Thu 12:23</p>
+<p class="date">Created: 2026-05-14 Thu 12:37</p>
 </div>
 </body>
 </html>
