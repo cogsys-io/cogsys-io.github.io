@@ -1,0 +1,2595 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2026-05-28 Thu 17:05 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Regression in R — from the ground up (with diagnoza data)</title>
+<meta name="author" content="R Course" />
+<meta name="generator" content="Org Mode" />
+<style type="text/css">
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-c:before { content: 'C'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'JavaScript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">Regression in R — from the ground up (with diagnoza data)</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org7a20813">1. 0. Setup</a></li>
+<li><a href="#org1dbda78">2. 1. The intuition: a line through a cloud of points</a></li>
+<li><a href="#orgd6b23b9">3. 2. Get and clean the data</a>
+<ul>
+<li><a href="#org32a6c2e">3.1. 2.1 Rename and select — call things by their English names</a></li>
+<li><a href="#org30a3687">3.2. 2.2 Recode the factor labels into English</a></li>
+<li><a href="#org61c2624">3.3. 2.3 Filter and slice — a tidy 1000-row working frame</a></li>
+<li><a href="#org4053495">3.4. 2.4 A first look</a></li>
+</ul>
+</li>
+<li><a href="#org73e6008">4. 3. Your first model: <code>lm(y ~ x)</code></a>
+<ul>
+<li><a href="#org921323a">4.1. 3.1 Fit it</a></li>
+<li><a href="#org6550a24">4.2. 3.2 The <code>Coefficients</code> table</a></li>
+<li><a href="#org2d2d3e8">4.3. 3.3 The <code>Residuals</code> block</a></li>
+<li><a href="#orga359cdb">4.4. 3.4 The model-level block</a></li>
+<li><a href="#org0d2c248">4.5. 3.5 Pulling out the pieces</a></li>
+<li><a href="#org7c9c18a">4.6. 3.6 Drawing the line, ranges, and coefficients — the geometric demo</a></li>
+</ul>
+</li>
+<li><a href="#orgf131926">5. 4. Centering and scaling — five versions of the same model</a>
+<ul>
+<li><a href="#org419b243">5.1. 4.1 Model 1a (raw): <code>Weight ~ Height</code></a></li>
+<li><a href="#org0b1a022">5.2. 4.2 Model 1b (mean-centered predictor): <code>Weight ~ HeightCtr</code></a></li>
+<li><a href="#orge5a3cad">5.3. 4.3 Model 1c (z-scored predictor): <code>Weight ~ HeightSca</code></a></li>
+<li><a href="#orgfbd117f">5.4. 4.4 Model 1d (both centered): <code>WeightCtr ~ HeightCtr</code></a></li>
+<li><a href="#org1a0283a">5.5. 4.5 Model 1e (both standardized): <code>WeightSca ~ HeightSca</code></a></li>
+<li><a href="#org5e4b0ad">5.6. 4.6 Same fit, different stories</a></li>
+</ul>
+</li>
+<li><a href="#org836f617">6. 5. A categorical predictor — four contrast variants</a>
+<ul>
+<li><a href="#org2da57e2">6.1. 5.1 What is a "contrast"?</a></li>
+<li><a href="#orgb3370e3">6.2. 5.2 Model 2a (treatment, default — Male reference)</a></li>
+<li><a href="#orgc95960f">6.3. 5.3 Model 2b (treatment — Female reference, via <code>relevel()</code>)</a></li>
+<li><a href="#orge171c89">6.4. 5.4 Model 2c (effect coding — symmetric, sum to zero)</a></li>
+<li><a href="#org5f7d240">6.5. 5.5 Model 2d (sum coding — the opposite sign convention)</a></li>
+<li><a href="#org0505699">6.6. 5.6 When to use which</a></li>
+<li><a href="#orgd255eaf">6.7. 5.7 A factor with more than two levels — <code>EduLevel</code></a></li>
+</ul>
+</li>
+<li><a href="#org77e5e14">7. 6. Two predictors together (additive)</a>
+<ul>
+<li><a href="#orga60f164">7.1. 6.1 <code>Weight ~ Height + Gender</code></a></li>
+</ul>
+</li>
+<li><a href="#orgb01cb43">8. 7. Interaction — <code>Weight ~ Height * Gender</code></a>
+<ul>
+<li><a href="#org27928ad">8.1. 7.1 Model 3a: raw Height × Gender</a></li>
+<li><a href="#org89a7269">8.2. 7.2 Model 3b: same model, but with mean-centered Height</a></li>
+<li><a href="#org8c9c656">8.3. 7.3 Model 3c: centre both Height <b>and</b> Gender (effect coding)</a></li>
+<li><a href="#org9a846ea">8.4. 7.4 The intersection trick: Model 3s and Model 3x</a></li>
+<li><a href="#org0c952e3">8.5. 7.5 Visualising the interaction</a></li>
+</ul>
+</li>
+<li><a href="#org651bd41">9. 8. Diagnostics — is the model OK?</a>
+<ul>
+<li><a href="#orgb1dabda">9.1. 8.1 Multicollinearity — when predictors overlap</a></li>
+</ul>
+</li>
+<li><a href="#org8519288">10. 9. Predicted values and simple slopes</a>
+<ul>
+<li><a href="#org248051f">10.1. 9.1 <code>predict()</code> — what does the model say about a new case?</a></li>
+<li><a href="#org3ae7984">10.2. 9.2 Simple slopes — the slope <b>for each group</b></a></li>
+<li><a href="#org04a91f0">10.3. 9.3 Cross-check with <code>predict()</code></a></li>
+<li><a href="#org12b76bb">10.4. 9.4 <code>ggeffects</code> — the modern way to plot the model</a></li>
+</ul>
+</li>
+<li><a href="#orgd226b46">11. 10. Reporting the model</a>
+<ul>
+<li><a href="#org0811393">11.1. 10.1 <code>broom</code> — tidy tibbles you can pipe further</a></li>
+<li><a href="#org2f37f83">11.2. 10.2 <code>stargazer</code> — publication-style coefficient table</a></li>
+<li><a href="#org86afeb2">11.3. 10.3 <code>report</code> — a written paragraph in plain English</a></li>
+<li><a href="#org4b85277">11.4. 10.4 <code>jtools::summ()</code> — compact summary</a></li>
+<li><a href="#org51a3873">11.5. 10.5 <code>sjPlot::tab_model()</code> — HTML table with CIs and standardized betas</a></li>
+</ul>
+</li>
+<li><a href="#orgae7cb2f">12. 11. Multiple-model comparison</a>
+<ul>
+<li><a href="#org8d41dff">12.1. 11.1 Nested models: <code>anova()</code> for an F-test</a></li>
+<li><a href="#orge5bc55c">12.2. 11.2 Non-nested or many models: AIC / BIC</a></li>
+<li><a href="#orge05fa2b">12.3. 11.3 More predictors? A bigger model</a></li>
+</ul>
+</li>
+<li><a href="#org739252c">13. 12. Logistic regression — a 10-minute extension</a>
+<ul>
+<li><a href="#org11736e1">13.1. 12.1 Reading coefficients</a></li>
+<li><a href="#org14d75a3">13.2. 12.2 Diagnostics, plotting, reporting — all the same tools</a></li>
+<li><a href="#org6f13182">13.3. 12.3 Confusion matrix at threshold 0.5</a></li>
+</ul>
+</li>
+<li><a href="#orgaef1e88">14. 13. Cheat sheet</a></li>
+<li><a href="#org54af58b">15. 14. Exercises</a>
+<ul>
+<li><a href="#org03a8823">15.1. Exercise 1 — A simple model</a></li>
+<li><a href="#orga6fc16d">15.2. Exercise 2 — A categorical predictor</a></li>
+<li><a href="#org5af70db">15.3. Exercise 3 — Multiple regression</a></li>
+<li><a href="#org70d850b">15.4. Exercise 4 — The HeightExp trick</a></li>
+<li><a href="#org460870e">15.5. Exercise 5 — Logistic regression on Titanic</a></li>
+<li><a href="#org901d020">15.6. Bonus — Report the final model</a></li>
+</ul>
+</li>
+<li><a href="#org15dece4">16. 15. Further reading</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org7a20813" class="outline-2">
+<h2 id="org7a20813"><span class="section-number-2">1.</span> 0. Setup</h2>
+<div class="outline-text-2" id="text-1">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# install once
+install.packages(c(
+  "tidyverse", "PogromcyDanych",
+  "performance",          # check_model() — model diagnostics
+  "broom",                # tidy(), glance(), augment()
+  "ggeffects",            # predicted-response plots
+  "sjPlot",               # plot_model(), tab_model()
+  "stargazer",            # publication-style tables
+  "report",               # one-paragraph English summary of a model
+  "jtools",               # tidy summary
+  "reghelper",            # simple_slopes()
+  "car",                  # vif()
+  "skimr",                # skim()
+  "psych",                # describe()
+  "GGally"                # ggpairs()
+))
+install.packages("effects")
+install.packages("broom")
+install.packages("car")
+install.packages("ggeffects")
+install.packages("jtools")
+install.packages("performance")
+install.packages("reghelper")
+install.packages("report")
+install.packages("sjPlot")
+install.packages("stargazer")
+
+</code></pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+library(tidyverse)
+library(PogromcyDanych)
+
+# Optional convenience — short separators for readable output
+sep0 &lt;- paste(rep("=", 65), collapse = "")
+sep2 &lt;- paste(rep("-", 65), collapse = "")
+cat0 &lt;- function(x, ...) cat(x, "\n", sep = "")
+
+</code></pre>
+</div>
+
+<pre class="example" id="org0d9771f">
+── Attaching core tidyverse packages ────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+v dplyr     1.1.4     v readr     2.1.5
+v forcats   1.0.0     v stringr   1.5.1
+v ggplot2   4.0.1     v tibble    3.3.0
+v lubridate 1.9.4     v tidyr     1.3.1
+v purrr     1.1.0
+── Conflicts ──────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+x dplyr::filter() masks stats::filter()
+x dplyr::lag()    masks stats::lag()
+i Use the http://conflicted.r-lib.org/conflicted package to force all conflicts to become errors
+Loading required package: SmarterPoland
+Loading required package: httr
+Loading required package: htmltools
+</pre>
+</div>
+</div>
+<div id="outline-container-org1dbda78" class="outline-2">
+<h2 id="org1dbda78"><span class="section-number-2">2.</span> 1. The intuition: a line through a cloud of points</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+A linear model is the answer to two questions:
+</p>
+
+<ol class="org-ol">
+<li>If I draw the <b>single best straight line</b> through this cloud,
+where does it go?</li>
+<li>How well does that line describe the data?</li>
+</ol>
+
+<p>
+"Best" means: minimise the <b>sum of squared vertical distances</b> from
+the points to the line. Those vertical distances are called
+<b>residuals</b>. The whole game of <code>lm()</code> is solving that minimisation
+problem for you and then telling you what the line was.
+</p>
+</div>
+</div>
+<div id="outline-container-orgd6b23b9" class="outline-2">
+<h2 id="orgd6b23b9"><span class="section-number-2">3.</span> 2. Get and clean the data</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+We use <code>PogromcyDanych::diagnoza</code> — the <b>Social Diagnosis 2013</b> dataset,
+a large survey of Polish households. Many of its column names are
+in Polish; the package ships with a dictionary.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+diagnosis     &lt;- PogromcyDanych::diagnoza
+diagnosisDict &lt;- PogromcyDanych::diagnozaDict
+
+dim(diagnosis)                       # ~38k rows, lots of columns
+head(diagnosisDict, 12)              # variable -&gt; description
+
+</code></pre>
+</div>
+
+<pre class="example" id="org5712a5f">
+[1] 38461    36
+                           name                                      description
+imie_2011             imie_2011  IMIĘ CZŁONKA Z POMIARÓW 2003, 2005, 2007 I 2009
+waga_2013_osoby waga_2013_osoby           Waga dla członków gospodarstwa z  2013
+lata_nauki_2013 lata_nauki_2013                          Liczba lat nauki w 2013
+wiek2013               wiek2013
+plec                       plec                                             Płeć
+wojewodztwo         wojewodztwo                                      województwo
+eduk4_2013           eduk4_2013            Poziom wykształcenia:4 kategorie 2013
+status9_2013       status9_2013                   status społeczno-zawodowy 2013
+gp3                         gp3 p3 Jak ocenia Pan swoje cale dotychczasowe zycie
+gp29                       gp29      p29 Co jest wedlug Pana wazniejsze w zyciu?
+gp54_01                 gp54_01                         podziwiam ludzi bogatych
+gp54_02                 gp54_02                                    życie ma sens
+                                                                            description_eng
+imie_2011                                                                              NAME
+waga_2013_osoby                                           WEIGHT FOR HOUSEHOLD MEMBERS 2013
+lata_nauki_2013                              YEARS OF FULL-TIME EDUCATION COMPLETED IN 2013
+wiek2013                                                                        AGE IN 2013
+plec                                                                                 GENDER
+wojewodztwo                                                                     WOJEWODZTWO
+eduk4_2013                                            LEVEL OF EDUCATION: 4 CATEGORIES 2013
+status9_2013                                              SOCIAL - PROFESSIONAL STATUS 2013
+gp3                                                      HOW SATISFIED WITH LIFE AS A WHOLE
+gp29                                                         WHAT DO YOU MAJOR IN YOUR LIFE
+gp54_01                         I ADMIRE PEOPLE WHO HAVE EXPENSIVE HOUSES, CARS AND CLOTHES
+gp54_02         MY LIFE IN SPITE OF THE PAINFUL EXPERIENCE IS MEANINGFUL AND OF GREAT VALUE
+</pre>
+</div>
+<div id="outline-container-org32a6c2e" class="outline-3">
+<h3 id="org32a6c2e"><span class="section-number-3">3.1.</span> 2.1 Rename and select — call things by their English names</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+We pick the columns we care about and rename them. This mirrors the
+SWPS Day-01 tutorial almost verbatim.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+df0 &lt;- diagnosis %&gt;%
+  dplyr::rename(
+    Name       = imie_2011,
+    Weight     = gp61,
+    Height     = gp60,
+    Age        = wiek2013,
+    Gender     = plec,
+    EduLevel   = eduk4_2013,
+    EduYears   = lata_nauki_2013,
+    EmpCateg   = status9_2013,
+    DispIncome = gp64,
+    WorkHours  = gp113
+  ) %&gt;%
+  dplyr::select(
+    Name, Weight, Height, Age, Gender, EduLevel,
+    EduYears, EmpCateg, DispIncome, WorkHours
+  )
+
+dim(df0)
+
+</code></pre>
+</div>
+
+<pre class="example" id="org765c6a5">
+[1] 38461    10
+</pre>
+</div>
+</div>
+<div id="outline-container-org30a3687" class="outline-3">
+<h3 id="org30a3687"><span class="section-number-3">3.2.</span> 2.2 Recode the factor labels into English</h3>
+<div class="outline-text-3" id="text-3-2">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# Education level — 4 categories
+levels(df0$EduLevel) &lt;- c(
+  NA, "PrimaryOrNone", "VocationalOrGrammar",
+  "Secondary", "HigherAndPostSecondary"
+)
+
+# Employment / professional status — 9 categories
+levels(df0$EmpCateg) &lt;- c(
+  NA, "EmployeesSectorPublic", "PrivateSectorEmployees",
+  "EntrepreneurOrSelfEmployed", "Farmers", "Pensioners",
+  "Retirees", "PupilsAndStudents", "Unemployed",
+  "OtherProfessionallyInactive"
+)
+
+# Gender: "mężczyzna" / "kobieta" -&gt; "M" / "F" (and reorder so M is first)
+levels(df0$Gender) &lt;- c("M", "F")
+df0$Gender &lt;- factor(df0$Gender, levels = c("M", "F"))
+
+summary(df0$Gender)
+summary(df0$EduLevel)
+
+</code></pre>
+</div>
+
+<pre class="example" id="org089af79">
+    M     F  NA's
+18355 20066    40
+         PrimaryOrNone    VocationalOrGrammar              Secondary HigherAndPostSecondary                   NA's
+                  6747                  10062                   8977                   5785                   6890
+</pre>
+</div>
+</div>
+<div id="outline-container-org61c2624" class="outline-3">
+<h3 id="org61c2624"><span class="section-number-3">3.3.</span> 2.3 Filter and slice — a tidy 1000-row working frame</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+We keep only adults with a sensible height, drop rows with any <code>NA</code>
+in the columns we will use, take the first 1000 rows, then add
+several <i>pre-transformed</i> versions of the numerical predictors:
+<code>Ori</code> (original), <code>Ctr</code> (mean-centered), <code>Sca</code> (z-scored), and
+<code>HeightExp</code> (a special offset we will use in §7).
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+HeightIntersect &lt;- 146.37   # where the M and F regression lines cross; see §7
+
+df2 &lt;- df0 %&gt;%
+  dplyr::filter(!is.na(Age)) %&gt;%
+  na.omit() %&gt;%
+  dplyr::filter(Height &gt; 140) %&gt;%
+  dplyr::slice_head(n = 1000) %&gt;%
+  dplyr::mutate(
+    # originals (kept for reference)
+    WeightOri = Weight,  HeightOri = Height,  AgeOri = Age,
+    # mean-centered (subtract the mean -&gt; the new 0 is "average")
+    WeightCtr = Weight - mean(Weight, na.rm = TRUE),
+    HeightCtr = Height - mean(Height, na.rm = TRUE),
+    AgeCtr    = Age    - mean(Age,    na.rm = TRUE),
+    # standardized (z-score -&gt; 0 = average, 1 = +1 SD)
+    WeightSca = as.numeric(scale(Weight)),
+    HeightSca = as.numeric(scale(Height)),
+    AgeSca    = as.numeric(scale(Age)),
+    # offset at HeightIntersect (used for the §7 trick)
+    HeightExp = Height - HeightIntersect
+  )
+
+dim(df2)
+
+# Reference statistics we will quote throughout
+cat0(paste0("mean(Height) = ", round(mean(df2$Height), 3)))
+cat0(paste0("sd(Height)   = ", round(sd(df2$Height),   3)))
+cat0(paste0("mean(Weight) = ", round(mean(df2$Weight), 3)))
+cat0(paste0("sd(Weight)   = ", round(sd(df2$Weight),   3)))
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgc0f04ff">
+[1] 1000   20
+mean(Height) = 170.871
+sd(Height)   = 8.749
+mean(Weight) = 76.994
+sd(Weight)   = 15.394
+</pre>
+
+<p>
+Numbers you will see again and again in this tutorial:
+</p>
+
+<pre class="example" id="org8a9f846">
+mean(Height) = 170.871     sd(Height) = 8.749
+mean(Weight) =  76.994     sd(Weight) = 15.394
+</pre>
+</div>
+</div>
+<div id="outline-container-org4053495" class="outline-3">
+<h3 id="org4053495"><span class="section-number-3">3.4.</span> 2.4 A first look</h3>
+<div class="outline-text-3" id="text-3-4">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+skimr::skim(df2 %&gt;% dplyr::select(Weight, Height, Age, Gender, EduLevel))
+
+# Quick scatter
+df2 %&gt;% ggplot(aes(x = Height, y = Weight)) +
+  geom_point(alpha = 0.2, size = 2) +
+  labs(title = "Weight vs Height — Social Diagnosis 2013, n = 1000",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+# Same plot coloured by Gender, with separate fits
+df2 %&gt;% ggplot(aes(x = Height, y = Weight, colour = Gender, fill = Gender)) +
+  geom_point(alpha = 0.2, size = 2) +
+  geom_smooth(method = "lm", formula = y ~ x) +
+  labs(title = "Weight vs Height by Gender",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+</code></pre>
+</div>
+
+<pre class="example" id="orge8ce72c">
+── Data Summary ────────────────────────
+                           Values
+Name                       df2 %&gt;% dplyr::select(Wei...
+Number of rows             1000
+Number of columns          5
+_______________________
+Column type frequency:
+  factor                   2
+  numeric                  3
+________________________
+Group variables            None
+
+── Variable type: factor ─────────────────────────────────────────────────────────────────────────────────────────────
+  skim_variable n_missing complete_rate ordered n_unique top_counts
+1 Gender                0             1 FALSE          2 M: 529, F: 471                       
+2 EduLevel              0             1 FALSE          4 Sec: 349, Voc: 318, Hig: 260, Pri: 73
+
+── Variable type: numeric ────────────────────────────────────────────────────────────────────────────────────────────
+  skim_variable n_missing complete_rate  mean    sd  p0 p25 p50 p75 p100 hist
+1 Weight                0             1  77.0 15.4   41  65  76  86  150 ▃▇▅▁▁
+2 Height                0             1 171.   8.75 142 164 170 176  198 ▁▅▇▆▁
+3 Age                   0             1  44.2 12.3   18  34  46  54   75 ▅▅▇▇▁
+</pre>
+
+<p>
+The shaded band around each line is a <b>95 % confidence interval</b> for
+where the <b>true</b> line lives given the data. Note already that the M
+and F lines are not parallel — that fanning is the thing called
+<b>interaction</b>, and we will come back to it in §7.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org73e6008" class="outline-2">
+<h2 id="org73e6008"><span class="section-number-2">4.</span> 3. Your first model: <code>lm(y ~ x)</code></h2>
+<div class="outline-text-2" id="text-4">
+</div>
+<div id="outline-container-org921323a" class="outline-3">
+<h3 id="org921323a"><span class="section-number-3">4.1.</span> 3.1 Fit it</h3>
+<div class="outline-text-3" id="text-4-1">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model1a &lt;- lm(Weight ~ Height, data = df2)
+summary(model1a)
+
+</code></pre>
+</div>
+
+<pre class="example" id="org5a802a2">
+
+Call:
+lm(formula = Weight ~ Height, data = df2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-31.161  -8.678  -1.268   8.098  63.408
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -86.50984    7.99673  -10.82   &lt;2e-16 ***
+Height        0.95688    0.04674   20.47   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12.92 on 998 degrees of freedom
+Multiple R-squared:  0.2958,	Adjusted R-squared:  0.2951
+F-statistic: 419.1 on 1 and 998 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<p>
+The <code>summary()</code> output has four blocks. We read them in order.
+</p>
+</div>
+</div>
+<div id="outline-container-org6550a24" class="outline-3">
+<h3 id="org6550a24"><span class="section-number-3">4.2.</span> 3.2 The <code>Coefficients</code> table</h3>
+<div class="outline-text-3" id="text-4-2">
+<pre class="example" id="orga377868">
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -86.50984    7.99673  -10.82   &lt;2e-16 ***
+Height        0.95688    0.04674   20.47   &lt;2e-16 ***
+</pre>
+
+<p>
+Two rows:
+</p>
+
+<ul class="org-ul">
+<li><code>(Intercept)</code> = <code>-86.51</code> kg. The model's prediction for a person
+with <code>Height = 0 cm</code>. Obviously nonsensical — nobody is 0 cm tall.
+The intercept here is a <b>mathematical anchor</b>, not a "typical"
+prediction. We will fix this with <b>centering</b> in §4.</li>
+<li><code>Height</code> = <code>0.957</code> kg/cm. The <b>slope</b>: for every extra centimetre
+of height, predicted weight goes up by ≈1 kg.</li>
+</ul>
+
+<p>
+Each row also has:
+</p>
+
+<ul class="org-ul">
+<li><code>Std. Error</code> — the uncertainty around that estimate.</li>
+<li><code>t value</code> = Estimate / Std. Error.</li>
+<li><code>Pr(&gt;|t|)</code> — the p-value: "if the true coefficient were 0, how
+often would we see |t| this big or bigger?"</li>
+<li>The stars are just visual aliases for the p-value:
+<code>***</code> = p&lt;.001, <code>**</code> = p&lt;.01, <code>*</code> = p&lt;.05.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org2d2d3e8" class="outline-3">
+<h3 id="org2d2d3e8"><span class="section-number-3">4.3.</span> 3.3 The <code>Residuals</code> block</h3>
+<div class="outline-text-3" id="text-4-3">
+<pre class="example" id="org2d82abc">
+Residuals:
+    Min     1Q  Median     3Q    Max
+-31.16  -8.68  -1.27    8.10   63.41
+</pre>
+
+<p>
+A residual is <code>observed − predicted</code>. A <b>good</b> model has residuals
+roughly symmetric around zero. Here median ≈ 0 and Q1/Q3 are similar
+in magnitude — symmetric. The <code>Max = 63.4</code> is worrying; somebody is
+63 kg heavier than the model predicts, which deserves a look.
+</p>
+</div>
+</div>
+<div id="outline-container-orga359cdb" class="outline-3">
+<h3 id="orga359cdb"><span class="section-number-3">4.4.</span> 3.4 The model-level block</h3>
+<div class="outline-text-3" id="text-4-4">
+<pre class="example" id="org297bc47">
+Residual standard error: 12.92 on 998 degrees of freedom
+Multiple R-squared:  0.2958,	Adjusted R-squared:  0.2951
+F-statistic: 419.1 on 1 and 998 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<ul class="org-ul">
+<li><b>R²</b> = <code>0.296</code> = ≈30 % of the variability in Weight is explained by
+Height alone. Not bad for a single predictor.</li>
+<li><b>Residual SE</b> = <code>12.92 kg</code> — the typical prediction error.</li>
+<li><b>F-statistic</b> — tests "the whole model vs intercept only".
+Significant here (p ≪ .001), but with one predictor this test
+duplicates the <code>t</code> test for the slope.</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org0d2c248" class="outline-3">
+<h3 id="org0d2c248"><span class="section-number-3">4.5.</span> 3.5 Pulling out the pieces</h3>
+<div class="outline-text-3" id="text-4-5">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+coef(model1a)
+intercept &lt;- coef(model1a)[["(Intercept)"]]
+slope     &lt;- coef(model1a)[["Height"]]
+
+c(intercept = intercept, slope = slope)
+
+fitted(model1a)   %&gt;% head()      # predicted values per row
+residuals(model1a) %&gt;% head()     # observed - predicted
+sigma(model1a)                    # residual SE
+broom::glance(model1a)            # tidy 1-row summary
+
+</code></pre>
+</div>
+
+<pre class="example" id="org20c64d9">
+(Intercept)      Height
+-86.5098360   0.9568846
+  intercept       slope
+-86.5098360   0.9568846
+       1        2        3        4        5        6
+79.03121 73.28990 78.07432 85.72940 68.50548 57.02286
+        1         2         3         4         5         6
+-1.031207 -5.289900 16.925677 -7.729400 -6.505476 -8.022861
+[1] 12.92493
+# A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC deviance df.residual  nobs
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+1     0.296         0.295  12.9      419. 4.74e-78     1 -3977. 7960. 7975.  166720.         998  1000
+</pre>
+</div>
+</div>
+<div id="outline-container-org7c9c18a" class="outline-3">
+<h3 id="org7c9c18a"><span class="section-number-3">4.6.</span> 3.6 Drawing the line, ranges, and coefficients — the geometric demo</h3>
+<div class="outline-text-3" id="text-4-6">
+<p>
+A nice trick for <b>seeing</b> what the intercept means: extend the plot
+all the way to x = 0.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+minWeight &lt;- min(df2$Weight, na.rm = TRUE)
+maxWeight &lt;- max(df2$Weight, na.rm = TRUE)
+maxHeight &lt;- max(df2$Height, na.rm = TRUE)
+
+df2 %&gt;% ggplot(aes(x = Height, y = Weight)) +
+  geom_point(alpha = 0.1, size = 2) +
+  geom_smooth(method = "lm", formula = y ~ x) +
+  xlim(-10, maxHeight + 10) +
+  ylim(intercept - 10, maxWeight + 10) +
+  geom_vline(xintercept = 0, linetype = "solid", color = "black", lwd = 0.25) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black", lwd = 0.25) +
+  geom_abline(intercept = intercept, slope = slope,
+              linetype = "dashed", color = "red", lwd = 0.25) +
+  labs(title = "Model 1a extended to Height = 0",
+       subtitle = "The dashed red line is the regression line; intercept is where it hits x = 0",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+</code></pre>
+</div>
+
+<p>
+You will <b>see</b> that the intercept of −87 kg is far below the data
+cloud — that's why it's uninterpretable as a person.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf131926" class="outline-2">
+<h2 id="orgf131926"><span class="section-number-2">5.</span> 4. Centering and scaling — five versions of the same model</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+The slope of Model 1a is fine. The intercept is gibberish. We fix
+that by changing what <code>Height = 0</code> <i>means</i>. The five models below
+all have <b>identical fit</b> — same R², same residuals, same predictions.
+What changes is how the coefficients read.
+</p>
+</div>
+<div id="outline-container-org419b243" class="outline-3">
+<h3 id="org419b243"><span class="section-number-3">5.1.</span> 4.1 Model 1a (raw): <code>Weight ~ Height</code></h3>
+<div class="outline-text-3" id="text-5-1">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model1a &lt;- lm(Weight ~ Height, data = df2)
+summary(model1a)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="org766e46a">
+               Estimate Std. Error   t value     Pr(&gt;|t|)
+(Intercept) -86.5098360 7.99672815 -10.81815 7.207793e-26
+Height        0.9568846 0.04673863  20.47310 4.739540e-78
+</pre>
+
+<pre class="example" id="org72c85d5">
+                Estimate Std.Error  t value
+(Intercept)  -86.5098    8.00     -10.82
+Height         0.9569    0.05      20.47
+</pre>
+
+<p>
+Reads: "at <code>Height = 0</code>, predicted Weight = −87 kg; +1 cm in height
+adds ≈0.96 kg".
+</p>
+</div>
+</div>
+<div id="outline-container-org0b1a022" class="outline-3">
+<h3 id="org0b1a022"><span class="section-number-3">5.2.</span> 4.2 Model 1b (mean-centered predictor): <code>Weight ~ HeightCtr</code></h3>
+<div class="outline-text-3" id="text-5-2">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model1b &lt;- lm(Weight ~ HeightCtr, data = df2)
+summary(model1b)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="org6a292a1">
+              Estimate Std. Error  t value    Pr(&gt;|t|)
+(Intercept) 76.9940000 0.40872218 188.3773 0.00000e+00
+HeightCtr    0.9568846 0.04673863  20.4731 4.73954e-78
+</pre>
+
+<pre class="example" id="orgdd6c435">
+                Estimate Std.Error  t value
+(Intercept)   76.9940    0.41    188.4
+HeightCtr      0.9569    0.05     20.5
+</pre>
+
+<p>
+Same slope. The intercept is now <code>76.99 kg</code> — the predicted Weight
+of a person of <b>average</b> Height (170.87 cm). That number you can
+actually report.
+</p>
+</div>
+</div>
+<div id="outline-container-orge5a3cad" class="outline-3">
+<h3 id="orge5a3cad"><span class="section-number-3">5.3.</span> 4.3 Model 1c (z-scored predictor): <code>Weight ~ HeightSca</code></h3>
+<div class="outline-text-3" id="text-5-3">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model1c &lt;- lm(Weight ~ HeightSca, data = df2)
+summary(model1c)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="org7cf63d1">
+             Estimate Std. Error  t value    Pr(&gt;|t|)
+(Intercept) 76.994000  0.4087222 188.3773 0.00000e+00
+HeightSca    8.371997  0.4089267  20.4731 4.73954e-78
+</pre>
+
+<pre class="example" id="org2620caf">
+                Estimate Std.Error
+(Intercept)   76.9940    0.41
+HeightSca      8.3720    0.41
+</pre>
+
+<p>
+The slope now reads <b>per SD of Height</b>: +1 SD ≈ +8.75 cm corresponds
+to +8.37 kg in Weight. Useful when comparing variables on different
+scales.
+</p>
+</div>
+</div>
+<div id="outline-container-orgfbd117f" class="outline-3">
+<h3 id="orgfbd117f"><span class="section-number-3">5.4.</span> 4.4 Model 1d (both centered): <code>WeightCtr ~ HeightCtr</code></h3>
+<div class="outline-text-3" id="text-5-4">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model1d &lt;- lm(WeightCtr ~ HeightCtr, data = df2)
+summary(model1d)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgf355509">
+                Estimate Std. Error      t value    Pr(&gt;|t|)
+(Intercept) 9.332278e-15 0.40872218 2.283281e-14 1.00000e+00
+HeightCtr   9.568846e-01 0.04673863 2.047310e+01 4.73954e-78
+</pre>
+
+<pre class="example" id="org3b3356f">
+                Estimate Std.Error
+(Intercept)    9.0e-15   0.41        # i.e. zero
+HeightCtr      0.9569    0.05
+</pre>
+
+<p>
+When we centre <b>both</b> variables, the intercept is forced to zero. We
+have the same slope as 1a/1b, expressed in the original units.
+</p>
+</div>
+</div>
+<div id="outline-container-org1a0283a" class="outline-3">
+<h3 id="org1a0283a"><span class="section-number-3">5.5.</span> 4.5 Model 1e (both standardized): <code>WeightSca ~ HeightSca</code></h3>
+<div class="outline-text-3" id="text-5-5">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model1e &lt;- lm(WeightSca ~ HeightSca, data = df2)
+summary(model1e)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="org047897c">
+                Estimate Std. Error      t value    Pr(&gt;|t|)
+(Intercept) 5.974032e-16 0.02655065 2.250051e-14 1.00000e+00
+HeightSca   5.438461e-01 0.02656394 2.047310e+01 4.73954e-78
+</pre>
+
+<pre class="example" id="orgd63861f">
+                Estimate Std.Error
+(Intercept)   6.2e-16    0.03       # zero
+HeightSca      0.5438    0.03
+</pre>
+
+<p>
+Now the slope is the <b>standardized beta</b>: a 1-SD change in Height
+corresponds to a 0.54-SD change in Weight. <code>0.54 × sd(Weight) =
+0.54 × 15.39 = 8.31 kg</code> — same prediction as 1c, just in SD units.
+</p>
+</div>
+</div>
+<div id="outline-container-org5e4b0ad" class="outline-3">
+<h3 id="org5e4b0ad"><span class="section-number-3">5.6.</span> 4.6 Same fit, different stories</h3>
+<div class="outline-text-3" id="text-5-6">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# R² is identical across 1a, 1b, 1c, 1d, 1e
+sapply(list(model1a, model1b, model1c, model1d, model1e),
+       function(m) summary(m)$r.squared) %&gt;% round(4)
+
+# Predictions for the raw and scaled versions are the same
+all.equal(fitted(model1a), fitted(model1b))
+all.equal(fitted(model1a), fitted(model1c))
+
+</code></pre>
+</div>
+
+<pre class="example" id="org4fe7ea3">
+[1] 0.2958 0.2958 0.2958 0.2958 0.2958
+[1] TRUE
+[1] TRUE
+</pre>
+
+<p>
+Take-home: <b>centering and scaling are about interpretation, not about
+fit.</b> Pick the version whose intercept makes sense for your story.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org836f617" class="outline-2">
+<h2 id="org836f617"><span class="section-number-2">6.</span> 5. A categorical predictor — four contrast variants</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-org2da57e2" class="outline-3">
+<h3 id="org2da57e2"><span class="section-number-3">6.1.</span> 5.1 What is a "contrast"?</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+R cannot multiply the letter "F" by a coefficient. When you put a
+factor into <code>lm()</code>, R secretly converts it to a numeric <b>contrast
+matrix</b>. For a 2-level factor like <code>Gender</code> the default is <b>treatment
+coding</b>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+contrasts(df2$Gender)
+# F
+# M  0
+# F  1
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgd2bcfdb">
+  F
+M 0
+F 1
+</pre>
+
+<p>
+The first level (<code>M</code>) becomes the <b>reference</b>: its dummy is 0. <code>F</code>
+gets coded as 1. So a coefficient <code>GenderF</code> literally reads "the
+expected difference in Weight when moving from M (=0) to F (=1)".
+</p>
+
+<p>
+We will fit four versions of <code>Weight ~ Gender</code>. All four have the
+same fit. Only the <b>labels</b> of the coefficients change.
+</p>
+</div>
+</div>
+<div id="outline-container-orgb3370e3" class="outline-3">
+<h3 id="orgb3370e3"><span class="section-number-3">6.2.</span> 5.2 Model 2a (treatment, default — Male reference)</h3>
+<div class="outline-text-3" id="text-6-2">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model2a &lt;- lm(Weight ~ Gender, data = df2)
+summary(model2a)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="org577606b">
+             Estimate Std. Error  t value     Pr(&gt;|t|)
+(Intercept)  84.72212  0.5668899 149.4507 0.000000e+00
+GenderF     -16.40789  0.8260157 -19.8639 2.990586e-74
+</pre>
+
+<pre class="example" id="orgfcf6bea">
+              Estimate Std.Error  t value
+(Intercept)    84.722    0.567   149.5
+GenderF       -16.408    0.826   -19.9
+</pre>
+
+<p>
+Reads: "Males weigh on average 84.7 kg. Females weigh 16.4 kg
+<b>less</b> than males."
+</p>
+</div>
+</div>
+<div id="outline-container-orgc95960f" class="outline-3">
+<h3 id="orgc95960f"><span class="section-number-3">6.3.</span> 5.3 Model 2b (treatment — Female reference, via <code>relevel()</code>)</h3>
+<div class="outline-text-3" id="text-6-3">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+df2$GenderReLvl &lt;- relevel(df2$Gender, ref = "F")
+contrasts(df2$GenderReLvl)
+
+model2b &lt;- lm(Weight ~ GenderReLvl, data = df2)
+summary(model2b)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="org22cb8b5">
+  M
+F 0
+M 1
+             Estimate Std. Error  t value     Pr(&gt;|t|)
+(Intercept)  68.31423  0.6007809 113.7091 0.000000e+00
+GenderReLvlM 16.40789  0.8260157  19.8639 2.990586e-74
+</pre>
+
+<pre class="example" id="org25f728d">
+                 Estimate Std.Error
+(Intercept)       68.314    0.601
+GenderReLvlM      16.408    0.826
+</pre>
+
+<p>
+Same difference, opposite sign. Now: "Females weigh 68.3 kg on
+average. Males weigh 16.4 kg <b>more</b> than females."
+</p>
+
+<p>
+R² is the same as Model 2a. Pick the reference category whose
+intercept you actually want to report.
+</p>
+</div>
+</div>
+<div id="outline-container-orge171c89" class="outline-3">
+<h3 id="orge171c89"><span class="section-number-3">6.4.</span> 5.4 Model 2c (effect coding — symmetric, sum to zero)</h3>
+<div class="outline-text-3" id="text-6-4">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+df2$GenderContrEff &lt;- df2$Gender
+contrasts(df2$GenderContrEff) &lt;- matrix(
+  c(-1, 1),
+  dimnames = list(c("M", "F"), c("GenEff"))
+)
+contrasts(df2$GenderContrEff)
+# M -1
+# F  1
+
+model2c &lt;- lm(Weight ~ GenderContrEff, data = df2)
+summary(model2c)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="orga337cf8">
+  GenEff
+M     -1
+F      1
+                      Estimate Std. Error  t value     Pr(&gt;|t|)
+(Intercept)          76.518171  0.4130078 185.2705 0.000000e+00
+GenderContrEffGenEff -8.203946  0.4130078 -19.8639 2.990586e-74
+</pre>
+
+<pre class="example" id="org9e17804">
+                          Estimate Std.Error
+(Intercept)                76.518    0.413
+GenderContrEffGenEff       -8.204    0.413
+</pre>
+
+<p>
+Reads: "Average person weighs 76.5 kg. Moving from 0 → +1 (=F)
+<b>lowers</b> predicted weight by 8.2 kg. Moving from 0 → −1 (=M)
+<b>raises</b> it by 8.2 kg." So the two sexes are symmetrically placed
+±8.2 kg around the grand mean.
+</p>
+</div>
+</div>
+<div id="outline-container-org5f7d240" class="outline-3">
+<h3 id="org5f7d240"><span class="section-number-3">6.5.</span> 5.5 Model 2d (sum coding — the opposite sign convention)</h3>
+<div class="outline-text-3" id="text-6-5">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+df2$GenderContrSum &lt;- df2$Gender
+contrasts(df2$GenderContrSum) &lt;- contr.sum(levels(df2$GenderContrSum))
+dimnames(contrasts(df2$GenderContrSum)) &lt;- list(levels(df2$GenderContrSum), "GenSum")
+contrasts(df2$GenderContrSum)
+# M  1
+# F -1
+
+model2d &lt;- lm(Weight ~ GenderContrSum, data = df2)
+summary(model2d)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="org2088bd0">
+  GenSum
+M      1
+F     -1
+                      Estimate Std. Error  t value     Pr(&gt;|t|)
+(Intercept)          76.518171  0.4130078 185.2705 0.000000e+00
+GenderContrSumGenSum  8.203946  0.4130078  19.8639 2.990586e-74
+</pre>
+
+<pre class="example" id="orgb21dedd">
+                          Estimate Std.Error
+(Intercept)                76.518    0.413
+GenderContrSumGenSum        8.204    0.413
+</pre>
+
+<p>
+Identical to Model 2c except the sign of the coefficient is
+flipped — because the contrast itself is flipped (<code>M = +1, F = -1</code>).
+</p>
+</div>
+</div>
+<div id="outline-container-org0505699" class="outline-3">
+<h3 id="org0505699"><span class="section-number-3">6.6.</span> 5.6 When to use which</h3>
+<div class="outline-text-3" id="text-6-6">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Contrast type</th>
+<th scope="col" class="org-left">Intercept means</th>
+<th scope="col" class="org-left">Use when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Treatment</td>
+<td class="org-left">Mean of the <b>reference</b> category</td>
+<td class="org-left">You have a control or baseline group everyone else should be compared to.</td>
+</tr>
+
+<tr>
+<td class="org-left">Effect / Sum</td>
+<td class="org-left"><b>Grand mean</b> (unweighted)</td>
+<td class="org-left">You don't want one level to be privileged. <b>Especially in models with interactions</b> (§7).</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-orgd255eaf" class="outline-3">
+<h3 id="orgd255eaf"><span class="section-number-3">6.7.</span> 5.7 A factor with more than two levels — <code>EduLevel</code></h3>
+<div class="outline-text-3" id="text-6-7">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+levels(df2$EduLevel)
+# "PrimaryOrNone" "VocationalOrGrammar" "Secondary" "HigherAndPostSecondary"
+
+contrasts(df2$EduLevel)              # default (treatment): PrimaryOrNone is reference
+
+model_edu &lt;- lm(Weight ~ EduLevel, data = df2)
+summary(model_edu)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="orge2d07fc">
+[1] "PrimaryOrNone"          "VocationalOrGrammar"    "Secondary"              "HigherAndPostSecondary"
+                       VocationalOrGrammar Secondary HigherAndPostSecondary
+PrimaryOrNone                            0         0                      0
+VocationalOrGrammar                      1         0                      0
+Secondary                                0         1                      0
+HigherAndPostSecondary                   0         0                      1
+                                Estimate Std. Error   t value      Pr(&gt;|t|)
+(Intercept)                    78.219178   1.772368 44.132582 1.310524e-236
+EduLevelVocationalOrGrammar     2.655036   1.965299  1.350957  1.770159e-01
+EduLevelSecondary              -2.563018   1.948935 -1.315086  1.887837e-01
+EduLevelHigherAndPostSecondary -4.519178   2.005808 -2.253046  2.447315e-02
+</pre>
+
+<p>
+For a <i>k</i>-level factor, treatment coding produces <i>k − 1</i> dummies.
+Each tells you "how does this level differ from the reference?". You
+can switch reference with <code>relevel()</code> (one level at a time) or get
+the "compared to grand mean" version with <code>contr.sum</code>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+df2$EduLevelContrSum &lt;- df2$EduLevel
+contrasts(df2$EduLevelContrSum) &lt;- contr.sum(levels(df2$EduLevelContrSum))
+
+# or the "each level vs the cumulative mean of earlier levels" pattern
+df2$EduLevelContrHelmert &lt;- df2$EduLevel
+contrasts(df2$EduLevelContrHelmert) &lt;- contr.helmert(levels(df2$EduLevelContrHelmert))
+
+summary(lm(Weight ~ EduLevelContrSum,     data = df2))$coefficients
+summary(lm(Weight ~ EduLevelContrHelmert, data = df2))$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgddc1e67">
+                   Estimate Std. Error     t value     Pr(&gt;|t|)
+(Intercept)       77.112388  0.5810249 132.7178671 0.000000e+00
+EduLevelContrSum1  1.106790  1.3813885   0.8012156 4.231979e-01
+EduLevelContrSum2  3.761826  0.8355517   4.5022058 7.519537e-06
+EduLevelContrSum3 -1.456228  0.8161618  -1.7842388 7.468920e-02
+                       Estimate Std. Error    t value     Pr(&gt;|t|)
+(Intercept)           77.112388  0.5810249 132.717867 0.0000000000
+EduLevelContrHelmert1  1.327518  0.9826497   1.350957 0.1770158987
+EduLevelContrHelmert2 -1.296845  0.4246123  -3.054186 0.0023167107
+EduLevelContrHelmert3 -1.137463  0.2941237  -3.867294 0.0001171918
+</pre>
+
+<p>
+Again: same fit, different labels.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org77e5e14" class="outline-2">
+<h2 id="org77e5e14"><span class="section-number-2">7.</span> 6. Two predictors together (additive)</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-orga60f164" class="outline-3">
+<h3 id="orga60f164"><span class="section-number-3">7.1.</span> 6.1 <code>Weight ~ Height + Gender</code></h3>
+<div class="outline-text-3" id="text-7-1">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model_add &lt;- lm(Weight ~ HeightCtr + Gender, data = df2)
+summary(model_add)
+
+</code></pre>
+</div>
+
+<pre class="example" id="orged77682">
+
+Call:
+lm(formula = Weight ~ HeightCtr + Gender, data = df2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-35.890  -8.861  -1.702   7.302  64.457
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) 81.40990    0.63816 127.570   &lt;2e-16 ***
+HeightCtr    0.59714    0.06084   9.814   &lt;2e-16 ***
+GenderF     -9.37557    1.06595  -8.796   &lt;2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12.46 on 997 degrees of freedom
+Multiple R-squared:  0.3465,	Adjusted R-squared:  0.3452
+F-statistic: 264.3 on 2 and 997 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<p>
+Coefficient interpretation <i>"holding the other predictors fixed"</i>:
+</p>
+
+<ul class="org-ul">
+<li><code>(Intercept)</code> ≈ Weight of an <b>average-height Male</b>.</li>
+<li><code>HeightCtr</code> = +1 cm in Height adds X kg, <b>for both sexes</b> (no
+interaction means one shared slope).</li>
+<li><code>GenderF</code> = how much Females and Males differ <b>at the same height</b>.</li>
+</ul>
+
+<p>
+Geometry: two <b>parallel</b> lines, one per sex, separated vertically by
+<code>GenderF</code>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+df2 %&gt;%
+  mutate(pred = predict(model_add)) %&gt;%
+  ggplot(aes(x = Height, colour = Gender)) +
+  geom_point(aes(y = Weight), alpha = 0.15) +
+  geom_line(aes(y = pred), linewidth = 1) +
+  labs(title = "Additive model: parallel lines, one shared slope",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgb01cb43" class="outline-2">
+<h2 id="orgb01cb43"><span class="section-number-2">8.</span> 7. Interaction — <code>Weight ~ Height * Gender</code></h2>
+<div class="outline-text-2" id="text-8">
+<p>
+What if the <b>slope</b> of Weight on Height differs between sexes? Then
+the two lines are not parallel. The model needs an <b>interaction</b>.
+</p>
+</div>
+<div id="outline-container-org27928ad" class="outline-3">
+<h3 id="org27928ad"><span class="section-number-3">8.1.</span> 7.1 Model 3a: raw Height × Gender</h3>
+<div class="outline-text-3" id="text-8-1">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model3a &lt;- lm(Weight ~ Height * Gender, data = df2)
+summary(model3a)
+
+</code></pre>
+</div>
+
+<pre class="example" id="org7c631a3">
+
+Call:
+lm(formula = Weight ~ Height * Gender, data = df2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-34.781  -8.640  -1.781   7.139  63.522
+
+Coefficients:
+                Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)    -51.09669   14.57759  -3.505 0.000477 ***
+Height           0.76987    0.08257   9.323  &lt; 2e-16 ***
+GenderF         54.26098   20.69740   2.622 0.008884 **
+Height:GenderF  -0.37416    0.12153  -3.079 0.002136 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12.4 on 996 degrees of freedom
+Multiple R-squared:  0.3526,	Adjusted R-squared:  0.3507
+F-statistic: 180.9 on 3 and 996 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<pre class="example" id="org8fa4ab7">
+                  Estimate Std. Error  t value  Pr(&gt;|t|)
+(Intercept)        -51.097     14.578   -3.51   0.00048 ***
+Height               0.770      0.083    9.32   &lt; 2e-16 ***
+GenderF             54.261     20.697    2.62   0.00888 **
+Height:GenderF      -0.374      0.122   -3.08   0.00214 **
+</pre>
+
+<p>
+The <code>*</code> shorthand expands to: <code>Height + Gender + Height:Gender</code>.
+</p>
+
+<p>
+The first three rows describe the <b>reference category</b> (Males) — as
+if we had fit only Male data:
+</p>
+
+<ul class="org-ul">
+<li><b>Males</b> of height 0 cm weigh −51 kg (mathematical anchor).</li>
+<li><b>Male</b> slope: each +1 cm of height → +0.770 kg.</li>
+</ul>
+
+<p>
+The last two rows describe how the <b>Female</b> line <b>differs</b> from the
+Male line:
+</p>
+
+<ul class="org-ul">
+<li><code>GenderF = +54.26</code> : at Height = 0, Females are 54 kg <b>heavier</b>
+than Males (artificial: extrapolation to Height = 0).</li>
+<li><code>Height:GenderF = −0.374</code> : the <b>Female slope</b> is 0.374 <b>less</b> than
+the Male slope.</li>
+</ul>
+
+<p>
+So:
+</p>
+
+<ul class="org-ul">
+<li>Male slope: 0.770 kg/cm.</li>
+<li>Female slope: 0.770 + (−0.374) = <b>0.396 kg/cm</b>.</li>
+</ul>
+
+<p>
+Males' weight rises more steeply with height than females'. Whether
+F or M is "heavier" at any given height depends on <i>where on Height</i>
+we evaluate.
+</p>
+</div>
+</div>
+<div id="outline-container-org89a7269" class="outline-3">
+<h3 id="org89a7269"><span class="section-number-3">8.2.</span> 7.2 Model 3b: same model, but with mean-centered Height</h3>
+<div class="outline-text-3" id="text-8-2">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model3b &lt;- lm(Weight ~ HeightCtr * Gender, data = df2)
+summary(model3b)
+
+</code></pre>
+</div>
+
+<pre class="example" id="org504e214">
+
+Call:
+lm(formula = Weight ~ HeightCtr * Gender, data = df2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-34.781  -8.640  -1.781   7.139  63.522
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)       80.45182    0.70757 113.701  &lt; 2e-16 ***
+HeightCtr          0.76987    0.08257   9.323  &lt; 2e-16 ***
+GenderF           -9.67241    1.06582  -9.075  &lt; 2e-16 ***
+HeightCtr:GenderF -0.37416    0.12153  -3.079  0.00214 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12.4 on 996 degrees of freedom
+Multiple R-squared:  0.3526,	Adjusted R-squared:  0.3507
+F-statistic: 180.9 on 3 and 996 DF,  p-value: &lt; 2.2e-16
+</pre>
+
+<pre class="example" id="orgac32943">
+                     Estimate Std. Error t value
+(Intercept)            80.452      0.708 113.7
+HeightCtr               0.770      0.083   9.3
+GenderF                -9.672      1.066  -9.1
+HeightCtr:GenderF      -0.374      0.122  -3.1
+</pre>
+
+<p>
+<b>Same model</b> — same R², same residuals, same predictions. Only the
+<b>labels</b> change:
+</p>
+
+<ul class="org-ul">
+<li><code>(Intercept) = 80.45</code> : the predicted Weight for a <b>Male of average
+height</b> (170.87 cm).</li>
+<li><code>GenderF = −9.67</code> : <b>at the mean Height</b>, Females are predicted to
+be 9.67 kg lighter than Males. Now this is a number you can put in
+a paper.</li>
+<li>The interaction coefficient is unchanged (it doesn't care about
+centering — it's a <b>change in slope</b>, which is unit-invariant).</li>
+</ul>
+
+<p>
+<b>This is why we centre.</b> The "main effects" in an interaction model
+are evaluated <b>at zero on the other variable</b>. If zero is not in the
+data, the main-effect coefficients are nonsense. Centering puts zero
+in the middle of the cloud.
+</p>
+</div>
+</div>
+<div id="outline-container-org8c9c656" class="outline-3">
+<h3 id="org8c9c656"><span class="section-number-3">8.3.</span> 7.3 Model 3c: centre both Height <b>and</b> Gender (effect coding)</h3>
+<div class="outline-text-3" id="text-8-3">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model3c &lt;- lm(Weight ~ HeightCtr * GenderContrEff, data = df2)
+summary(model3c)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgb1ca7a9">
+                                 Estimate Std. Error    t value     Pr(&gt;|t|)
+(Intercept)                    75.6156194 0.53290849 141.892314 0.000000e+00
+HeightCtr                       0.5827895 0.06076683   9.590585 6.770920e-21
+GenderContrEffGenEff           -4.8362046 0.53290849  -9.075113 5.934428e-19
+HeightCtr:GenderContrEffGenEff -0.1870809 0.06076683  -3.078668 2.136217e-03
+</pre>
+
+<p>
+Now the intercept is the grand mean of Weight at the mean Height,
+and the Gender coefficient is the symmetric (±) deviation. Useful
+when you want neither sex to act as "the baseline".
+</p>
+</div>
+</div>
+<div id="outline-container-org9a846ea" class="outline-3">
+<h3 id="org9a846ea"><span class="section-number-3">8.4.</span> 7.4 The intersection trick: Model 3s and Model 3x</h3>
+<div class="outline-text-3" id="text-8-4">
+<p>
+The two regression lines (one for Males, one for Females) cross at a
+specific height — call it <code>HeightIntersect</code>. We can read it off the
+plot or compute it:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# (Intercept_F - Intercept_M) / (slope_M - slope_F)
+# from Model 3a (raw scale):
+#   Intercept_M = -51.097
+#   Intercept_F = -51.097 + 54.261 = 3.164
+#   slope_M     = 0.770
+#   slope_F     = 0.770 - 0.374 = 0.396
+height_cross &lt;- (3.164 - (-51.097)) / (0.770 - 0.396)
+height_cross   # ~145 cm — close to HeightIntersect = 146.37 we defined earlier
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgc55b027">
+[1] 145.0829
+</pre>
+
+<p>
+If we centre Height <b>at the crossing point</b> (<code>HeightExp = Height −
+146.37</code>), the Female-vs-Male difference <b>at that centre</b> should be
+approximately zero — because the lines cross there.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model3s &lt;- lm(Weight ~ HeightExp + Gender, data = df2)             # additive, no interaction
+summary(model3s)$coefficients
+
+model3x &lt;- lm(Weight ~ HeightExp * Gender, data = df2)             # with interaction
+summary(model3x)$coefficients
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgcc48d33">
+              Estimate Std. Error   t value      Pr(&gt;|t|)
+(Intercept) 66.7792642 1.90678812 35.021859 7.583338e-176
+HeightExp    0.5971443 0.06084475  9.814228  9.116022e-22
+GenderF     -9.3755748 1.06595055 -8.795506  6.159184e-18
+                    Estimate Std. Error    t value      Pr(&gt;|t|)
+(Intercept)       61.5892309 2.53911841 24.2561476 1.670712e-102
+HeightExp          0.7698703 0.08257448  9.3233444  7.059680e-20
+GenderF           -0.5050723 3.07057698 -0.1644877  8.693806e-01
+HeightExp:GenderF -0.3741617 0.12153367 -3.0786675  2.136217e-03
+</pre>
+
+<pre class="example" id="orge9f3984">
+                  Estimate Std.Error t value Pr(&gt;|t|)
+(Intercept)        61.589    2.539   24.3    &lt;2e-16
+HeightExp           0.770    0.083    9.3    &lt;2e-16
+GenderF            -0.505    3.071   -0.16   0.869   &lt;-- NOT significant!
+HeightExp:GenderF  -0.374    0.122   -3.1    0.002
+</pre>
+
+<p>
+The <code>GenderF</code> coefficient is now <code>−0.51</code> and <b>not significant</b>. The
+sexes differ in <i>slope</i> (the interaction is still significant), but
+<b>at Height = 146.37 cm</b> — exactly where the two lines cross — they
+are predicted to weigh the same. This is what "main effects depend
+on where you centre" looks like in practice.
+</p>
+</div>
+</div>
+<div id="outline-container-org0c952e3" class="outline-3">
+<h3 id="org0c952e3"><span class="section-number-3">8.5.</span> 7.5 Visualising the interaction</h3>
+<div class="outline-text-3" id="text-8-5">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+df2 %&gt;%
+  mutate(pred = predict(model3a)) %&gt;%
+  ggplot(aes(x = Height, colour = Gender)) +
+  geom_point(aes(y = Weight), alpha = 0.15) +
+  geom_line(aes(y = pred), linewidth = 1) +
+  labs(title = "Interaction model: one slope per sex",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+# The proper "model-implied" way
+# install.packages("sjPlot")
+# sjPlot::plot_model(model3a, type = "eff", terms = c("Height", "Gender"))
+
+# Or the modern ggeffects way
+# install.packages("ggeffects")
+ggeffects::predict_response(model3a, terms = c("Height", "Gender")) %&gt;% plot()
+
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-org651bd41" class="outline-2">
+<h2 id="org651bd41"><span class="section-number-2">9.</span> 8. Diagnostics — is the model OK?</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+A linear regression rests on four assumptions:
+</p>
+
+<ol class="org-ol">
+<li><b>Linearity</b> — the relationship is actually linear.</li>
+<li><b>Independence</b> — observations don't share residuals.</li>
+<li><b>Homoscedasticity</b> — residual variance is roughly constant.</li>
+<li><b>Normality of residuals</b> — for the inferential bits (t-tests,
+confidence intervals) to be valid.</li>
+</ol>
+
+<p>
+The <code>performance</code> package gives all four diagnostics in one figure:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# install.packages("performance")
+performance::check_model(model3a)
+
+</code></pre>
+</div>
+
+<p>
+If you don't have <code>performance</code> installed, base R's <code>plot.lm()</code>
+gives you the classical four panels:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+par(mfrow = c(2, 2))
+plot(model3a)
+par(mfrow = c(1, 1))
+
+</code></pre>
+</div>
+</div>
+<div id="outline-container-orgb1dabda" class="outline-3">
+<h3 id="orgb1dabda"><span class="section-number-3">9.1.</span> 8.1 Multicollinearity — when predictors overlap</h3>
+<div class="outline-text-3" id="text-9-1">
+<p>
+If two predictors are strongly correlated, the model cannot tell
+their effects apart. The <b>variance inflation factor</b> (<code>VIF</code>) flags
+this:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# install.packages("car")
+car::vif(model_add)                   # additive model: simple VIF
+
+# For models WITH interactions you must use type = "predictor"
+car::vif(model3a, type = "predictor")
+
+</code></pre>
+</div>
+
+<pre class="example" id="org9790359">
+HeightCtr    Gender
+ 1.824374  1.824374
+GVIFs computed for predictors
+       GVIF Df GVIF^(1/(2*Df)) Interacts With Other Predictors
+Height    1  3               1         Gender             --
+Gender    1  3               1         Height             --
+</pre>
+
+<p>
+Rule of thumb: VIF &lt; 5 is fine; VIF 5–10 is suspicious; VIF &gt; 10 is a
+real problem.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org8519288" class="outline-2">
+<h2 id="org8519288"><span class="section-number-2">10.</span> 9. Predicted values and simple slopes</h2>
+<div class="outline-text-2" id="text-10">
+</div>
+<div id="outline-container-org248051f" class="outline-3">
+<h3 id="org248051f"><span class="section-number-3">10.1.</span> 9.1 <code>predict()</code> — what does the model say about a new case?</h3>
+<div class="outline-text-3" id="text-10-1">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+new_data &lt;- tibble(
+  Height = c(160, 170, 180),
+  Gender = factor(c("F", "F", "F"), levels = levels(df2$Gender))
+)
+new_data$pred &lt;- predict(model3a, newdata = new_data)
+new_data
+
+# Confidence interval (where the mean line plausibly is)
+predict(model3a, newdata = new_data, interval = "confidence")
+
+# Prediction interval (where a single new person plausibly falls)
+predict(model3a, newdata = new_data, interval = "prediction")
+
+</code></pre>
+</div>
+
+<pre class="example" id="org3143ed8">
+# A tibble: 3 × 3
+  Height Gender  pred
+   &lt;dbl&gt; &lt;fct&gt;  &lt;dbl&gt;
+1    160 F       66.5
+2    170 F       70.4
+3    180 F       74.4
+       fit      lwr      upr
+1 66.47767 65.09288 67.86245
+2 70.43475 68.97278 71.89673
+3 74.39184 71.47956 77.30412
+       fit      lwr      upr
+1 66.47767 42.09634 90.85900
+2 70.43475 46.04892 94.82059
+3 74.39184 49.87627 98.90741
+</pre>
+</div>
+</div>
+<div id="outline-container-org3ae7984" class="outline-3">
+<h3 id="org3ae7984"><span class="section-number-3">10.2.</span> 9.2 Simple slopes — the slope <b>for each group</b></h3>
+<div class="outline-text-3" id="text-10-2">
+<p>
+For interaction models, "the effect of Height" depends on Gender,
+and "the M-F difference" depends on Height. <code>reghelper::simple_slopes()</code>
+splits this up cleanly:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# install.packages("reghelper")
+reghelper::simple_slopes(model3a)
+
+</code></pre>
+</div>
+
+<pre class="example" id="org9bc087f">
+      Height Gender Test Estimate Std. Error t value  df  Pr(&gt;|t|) Sig.
+1 162.121777 sstest       -6.3988     1.4358 -4.4565 996 9.274e-06  ***
+2    170.871 sstest       -9.6724     1.0658 -9.0751 996 &lt; 2.2e-16  ***
+3 179.620223 sstest      -12.9460     1.5722 -8.2346 996 5.617e-16  ***
+4     sstest      M        0.7699     0.0826  9.3233 996 &lt; 2.2e-16  ***
+5     sstest      F        0.3957     0.0892  4.4375 996 1.011e-05  ***
+</pre>
+
+<p>
+You will get rows like:
+</p>
+
+<pre class="example" id="orga67299d">
+   Height  Gender Test  Estimate  Std.Error t value   Pr(&gt;|t|)
+1  162.12  sstest        -6.40      1.44     -4.46   9.3e-06  ***
+2  170.87  sstest        -9.67      1.07     -9.08   &lt; 2e-16  ***
+3  179.62  sstest       -12.95      1.57     -8.23   5.6e-16  ***
+4  sstest  M             0.770      0.083     9.32   &lt; 2e-16  ***
+5  sstest  F             0.396      0.089     4.44   1.0e-05  ***
+</pre>
+
+<p>
+The bottom two rows are the <b>species-specific&hellip; err, sex-specific
+slopes</b>: Males 0.770 kg/cm, Females 0.396 kg/cm. The top three rows
+are the M–F <i>differences</i> at three values of Height (mean ± 1 SD).
+</p>
+
+<p>
+You can ask for slopes at specific heights:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+reghelper::simple_slopes(
+  model3a,
+  levels = list(
+    Height = c(160, 170, 180, "sstest"),
+    Gender = c("M", "F", "sstest")
+  )
+)
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgde31259">
+  Height Gender Test Estimate Std. Error t value  df  Pr(&gt;|t|) Sig.
+1 sstest      M        0.7699     0.0826  9.3233 996 &lt; 2.2e-16  ***
+2 sstest      F        0.3957     0.0892  4.4375 996 1.011e-05  ***
+3    160 sstest       -5.6049     1.6207 -3.4583 996 0.0005667  ***
+4    170 sstest       -9.3465     1.0615 -8.8051 996 &lt; 2.2e-16  ***
+5    180 sstest      -13.0881     1.6065 -8.1470 996 1.111e-15  ***
+</pre>
+</div>
+</div>
+<div id="outline-container-org04a91f0" class="outline-3">
+<h3 id="org04a91f0"><span class="section-number-3">10.3.</span> 9.3 Cross-check with <code>predict()</code></h3>
+<div class="outline-text-3" id="text-10-3">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+df4 &lt;- tibble(
+  Height = c(160, 170, 180, 160, 170, 180),
+  Gender = factor(c("F","F","F", "M","M","M"), levels = c("M","F"))
+)
+df4$pred &lt;- predict(model3a, newdata = df4)
+
+dplyr::left_join(
+  df4 %&gt;% filter(Gender == "F") %&gt;% rename(predF = pred) %&gt;% select(-Gender),
+  df4 %&gt;% filter(Gender == "M") %&gt;% rename(predM = pred) %&gt;% select(-Gender),
+  by = "Height"
+) %&gt;%
+  mutate(diff_FminusM = predF - predM)
+
+</code></pre>
+</div>
+
+<pre class="example" id="org76f67f7">
+# A tibble: 3 × 4
+  Height predF predM diff_FminusM
+   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;
+1    160  66.5  72.1        -5.60
+2    170  70.4  79.8        -9.35
+3    180  74.4  87.5       -13.1
+</pre>
+</div>
+</div>
+<div id="outline-container-org12b76bb" class="outline-3">
+<h3 id="org12b76bb"><span class="section-number-3">10.4.</span> 9.4 <code>ggeffects</code> — the modern way to plot the model</h3>
+<div class="outline-text-3" id="text-10-4">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+library(ggeffects)
+
+# One-dimensional effect
+predict_response(model3a, terms = "Height") %&gt;% plot()
+
+# Two-dimensional (interaction)
+predict_response(model3a, terms = c("Height", "Gender")) %&gt;% plot()
+
+# Pick specific x values
+predict_response(model3a, terms = c("Height [160,170,180]", "Gender")) %&gt;% plot()
+
+# Statistical test on the predictions (e.g. pairwise differences)
+predict_response(model3a, terms = c("Height [160,170,180]", "Gender")) %&gt;%
+  test_predictions()
+
+</code></pre>
+</div>
+
+<pre class="example" id="org03d501b">
+# Pairwise comparisons
+
+Gender | Contrast |     95% CI |     p
+--------------------------------------
+M-F    |     0.37 | 0.14, 0.61 | 0.002
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgd226b46" class="outline-2">
+<h2 id="orgd226b46"><span class="section-number-2">11.</span> 10. Reporting the model</h2>
+<div class="outline-text-2" id="text-11">
+<p>
+Different tools for different audiences. Pick one and be consistent.
+</p>
+</div>
+<div id="outline-container-org0811393" class="outline-3">
+<h3 id="org0811393"><span class="section-number-3">11.1.</span> 10.1 <code>broom</code> — tidy tibbles you can pipe further</h3>
+<div class="outline-text-3" id="text-11-1">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# install.packages("broom")
+broom::tidy(model3a)        # one row per coefficient
+broom::glance(model3a)      # one row of overall fit (R², AIC, F, ...)
+broom::augment(model3a)     # original data + fitted + residuals + leverage
+
+</code></pre>
+</div>
+
+<pre class="example" id="org68b4e5f">
+# A tibble: 4 × 5
+  term           estimate std.error statistic  p.value
+  &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)     -51.1     14.6        -3.51 4.77e- 4
+2 Height            0.770    0.0826      9.32 7.06e-20
+3 GenderF          54.3     20.7         2.62 8.88e- 3
+4 Height:GenderF   -0.374    0.122      -3.08 2.14e- 3
+# A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC deviance df.residual  nobs
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt; &lt;int&gt;
+1     0.353         0.351  12.4      181. 1.34e-93     3 -3935. 7880. 7905.  153256.         996  1000
+# A tibble: 1,000 × 9
+   Weight Height Gender .fitted .resid    .hat .sigma    .cooksd .std.resid
+    &lt;dbl&gt;  &lt;dbl&gt; &lt;fct&gt;    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
+ 1     78    173 M         82.1  -4.09 0.00241   12.4 0.0000658      -0.330
+ 2     68    167 F         69.2  -1.25 0.00241   12.4 0.00000613     -0.101
+ 3     95    172 M         81.3  13.7  0.00276   12.4 0.000842        1.10
+ 4     78    180 M         87.5  -9.48 0.00246   12.4 0.000361       -0.765
+ 5     62    162 F         67.3  -5.27 0.00248   12.4 0.000113       -0.425
+ 6     49    150 F         62.5 -13.5  0.0132    12.4 0.00403        -1.10
+ 7     82    180 M         87.5  -5.48 0.00246   12.4 0.000121       -0.442
+ 8     61    165 F         68.5  -7.46 0.00213   12.4 0.000193       -0.602
+ 9     94    184 M         90.6   3.44 0.00444   12.4 0.0000861       0.278
+10     62    164 F         68.1  -6.06 0.00214   12.4 0.000129       -0.489
+# i 990 more rows
+# i Use `print(n = ...)` to see more rows
+</pre>
+</div>
+</div>
+<div id="outline-container-org2f37f83" class="outline-3">
+<h3 id="org2f37f83"><span class="section-number-3">11.2.</span> 10.2 <code>stargazer</code> — publication-style coefficient table</h3>
+<div class="outline-text-3" id="text-11-2">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# install.packages("stargazer")
+stargazer::stargazer(model3a, type = "text")
+# stargazer::stargazer(model3a, type = "latex", out = "model.tex")
+# stargazer::stargazer(model3a, type = "html",  out = "model.html")
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgfe55c5f">
+
+===============================================
+                        Dependent variable:
+                    ---------------------------
+                              Weight
+-----------------------------------------------
+Height                       0.770***
+                              (0.083)
+
+GenderF                      54.261***
+                             (20.697)
+
+Height:GenderF               -0.374***
+                              (0.122)
+
+Constant                    -51.097***
+                             (14.578)
+
+-----------------------------------------------
+Observations                   1,000
+R2                             0.353
+Adjusted R2                    0.351
+Residual Std. Error      12.405 (df = 996)
+F Statistic          180.851*** (df = 3; 996)
+===============================================
+Note:               *p&lt;0.1; **p&lt;0.05; ***p&lt;0.01
+</pre>
+</div>
+</div>
+<div id="outline-container-org86afeb2" class="outline-3">
+<h3 id="org86afeb2"><span class="section-number-3">11.3.</span> 10.3 <code>report</code> — a written paragraph in plain English</h3>
+<div class="outline-text-3" id="text-11-3">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# install.packages("report")
+report::report(model3a)
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgfe87015">
+We fitted a linear model (estimated using OLS) to predict Weight with Height and Gender (formula: Weight ~ Height *
+Gender). The model explains a statistically significant and substantial proportion of variance (R2 = 0.35, F(3, 996)
+= 180.85, p &lt; .001, adj. R2 = 0.35). The model's intercept, corresponding to Height = 0 and Gender = M, is at -51.10
+(95% CI [-79.70, -22.49], t(996) = -3.51, p &lt; .001). Within this model:
+
+  - The effect of Height is statistically significant and positive (beta = 0.77, 95% CI [0.61, 0.93], t(996) = 9.32, p
+&lt; .001; Std. beta = 0.44, 95% CI [0.35, 0.53])
+  - The effect of Gender [F] is statistically significant and positive (beta = 54.26, 95% CI [13.65, 94.88], t(996) =
+2.62, p = 0.009; Std. beta = -0.63, 95% CI [-0.76, -0.49])
+  - The effect of Height × Gender [F] is statistically significant and negative (beta = -0.37, 95% CI [-0.61, -0.14],
+t(996) = -3.08, p = 0.002; Std. beta = -0.21, 95% CI [-0.35, -0.08])
+
+Standardized parameters were obtained by fitting the model on a standardized version of the dataset. 95% Confidence
+Intervals (CIs) and p-values were computed using a Wald t-distribution approximation.
+</pre>
+
+<p>
+Output reads almost like a Results section:
+</p>
+
+<pre class="example" id="orgd3aba3e">
+We fitted a linear model (estimated using OLS) to predict Weight with
+Height and Gender (formula: Weight ~ Height * Gender). The model
+explains a statistically significant and substantial proportion of
+variance (R2 = 0.35, F(3, 996) = 180.85, p &lt; .001, adj. R2 = 0.35).
+The model's intercept, corresponding to Height = 0 and Gender = M,
+is at -51.10 (95% CI [-79.70, -22.49], t(996) = -3.51, p &lt; .001).
+Within this model:
+  - The effect of Height is statistically significant and positive
+    (beta = 0.77, 95% CI [0.61, 0.93], t(996) = 9.32, p &lt; .001;
+     Std. beta = 0.44, 95% CI [0.35, 0.53])
+  - The effect of Gender [F] is statistically significant and positive
+    (beta = 54.26, ...)
+  - The effect of Height × Gender [F] is statistically significant and
+    negative (beta = -0.37, ...)
+</pre>
+
+<p>
+Useful as a <b>starting point</b> — <b>not</b> something to copy in unedited.
+</p>
+</div>
+</div>
+<div id="outline-container-org4b85277" class="outline-3">
+<h3 id="org4b85277"><span class="section-number-3">11.4.</span> 10.4 <code>jtools::summ()</code> — compact summary</h3>
+<div class="outline-text-3" id="text-11-4">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+# install.packages("jtools")
+jtools::summ(model3a)
+jtools::summ(model3a, confint = TRUE, digits = 3)
+
+</code></pre>
+</div>
+
+<pre class="example" id="orgb851765">
+MODEL INFO:
+Observations: 1000
+Dependent Variable: Weight
+Type: OLS linear regression
+
+MODEL FIT:
+F(3,996) = 180.85, p = 0.00
+R² = 0.35
+Adj. R² = 0.35
+
+Standard errors:OLS
+-----------------------------------------------------
+                         Est.    S.E.   t val.      p
+-------------------- -------- ------- -------- ------
+(Intercept)            -51.10   14.58    -3.51   0.00
+Height                   0.77    0.08     9.32   0.00
+GenderF                 54.26   20.70     2.62   0.01
+Height:GenderF          -0.37    0.12    -3.08   0.00
+-----------------------------------------------------
+MODEL INFO:
+Observations: 1000
+Dependent Variable: Weight
+Type: OLS linear regression
+
+MODEL FIT:
+F(3,996) = 180.851, p = 0.000
+R² = 0.353
+Adj. R² = 0.351
+
+Standard errors:OLS
+-------------------------------------------------------------------
+                          Est.      2.5%     97.5%   t val.       p
+-------------------- --------- --------- --------- -------- -------
+(Intercept)            -51.097   -79.703   -22.490   -3.505   0.000
+Height                   0.770     0.608     0.932    9.323   0.000
+GenderF                 54.261    13.645    94.876    2.622   0.009
+Height:GenderF          -0.374    -0.613    -0.136   -3.079   0.002
+-------------------------------------------------------------------
+</pre>
+</div>
+</div>
+<div id="outline-container-org51a3873" class="outline-3">
+<h3 id="org51a3873"><span class="section-number-3">11.5.</span> 10.5 <code>sjPlot::tab_model()</code> — HTML table with CIs and standardized betas</h3>
+<div class="outline-text-3" id="text-11-5">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+sjPlot::tab_model(
+  model3a,
+  show.stat      = TRUE,
+  show.std       = "std",
+  show.p         = TRUE,
+  p.style        = "numeric_stars",
+  collapse.ci    = FALSE,
+  show.reflvl    = TRUE,
+  show.intercept = TRUE
+)
+
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgae7cb2f" class="outline-2">
+<h2 id="orgae7cb2f"><span class="section-number-2">12.</span> 11. Multiple-model comparison</h2>
+<div class="outline-text-2" id="text-12">
+</div>
+<div id="outline-container-org8d41dff" class="outline-3">
+<h3 id="org8d41dff"><span class="section-number-3">12.1.</span> 11.1 Nested models: <code>anova()</code> for an F-test</h3>
+<div class="outline-text-3" id="text-12-1">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+anova(model_add, model3a)     # is the Height × Gender interaction worth its df?
+
+</code></pre>
+</div>
+
+<pre class="example" id="org4c42519">
+Analysis of Variance Table
+
+Model 1: Weight ~ HeightCtr + Gender
+Model 2: Weight ~ Height * Gender
+  Res.Df    RSS Df Sum of Sq      F   Pr(&gt;F)
+1    997 154715
+2    996 153256  1    1458.4 9.4782 0.002136 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+</pre>
+
+<p>
+If the p-value is small, the bigger model explains significantly more
+variance than the additive one.
+</p>
+</div>
+</div>
+<div id="outline-container-orge5bc55c" class="outline-3">
+<h3 id="orge5bc55c"><span class="section-number-3">12.2.</span> 11.2 Non-nested or many models: AIC / BIC</h3>
+<div class="outline-text-3" id="text-12-2">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+AIC(model1a, model_add, model3a)
+BIC(model1a, model_add, model3a)
+
+</code></pre>
+</div>
+
+<pre class="example" id="org892447e">
+          df      AIC
+model1a    3 7960.191
+model_add  4 7887.461
+model3a    5 7879.989
+          df      BIC
+model1a    3 7974.914
+model_add  4 7907.092
+model3a    5 7904.528
+</pre>
+
+<p>
+Lower is better. AIC rewards complexity less harshly; BIC is stricter.
+</p>
+</div>
+</div>
+<div id="outline-container-orge05fa2b" class="outline-3">
+<h3 id="orge05fa2b"><span class="section-number-3">12.3.</span> 11.3 More predictors? A bigger model</h3>
+<div class="outline-text-3" id="text-12-3">
+<p>
+The SWPS day-01 final example threw the kitchen sink at it:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+model4 &lt;- lm(Weight ~ Height * Gender * EduLevel, data = df2)
+summary(model4)
+
+# Visualising the 3-way interaction
+sjPlot::plot_model(model4, type = "eff",
+                   terms = c("Height", "Gender", "EduLevel"))
+
+</code></pre>
+</div>
+
+<p>
+The output is huge. With four EduLevel categories, two Gender
+categories and one continuous Height, the 3-way interaction model
+has <i>2 × 4 × 2 = 16</i> coefficients. Lesson: <b>just because you can does
+not mean you should.</b> Start simple, add a predictor only when there
+is a question that needs it.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org739252c" class="outline-2">
+<h2 id="org739252c"><span class="section-number-2">13.</span> 12. Logistic regression — a 10-minute extension</h2>
+<div class="outline-text-2" id="text-13">
+<p>
+When the outcome is <b>binary</b> (yes/no, survived/died), use a logistic
+regression. Same <code>formula</code> syntax, different function. We switch
+data sets to <b>Titanic</b>, which the class already knows.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+titanic &lt;- read_csv(
+  "https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/Titanic.csv",
+  show_col_types = FALSE
+) %&gt;%
+  mutate(
+    Pclass = factor(Pclass, labels = c("1st", "2nd", "3rd")),
+    Sex    = factor(Sex)
+  )
+
+m_log &lt;- glm(Survived ~ Sex + Pclass + Age,
+             data   = titanic %&gt;% drop_na(Age),
+             family = binomial)
+summary(m_log)
+
+</code></pre>
+</div>
+</div>
+<div id="outline-container-org11736e1" class="outline-3">
+<h3 id="org11736e1"><span class="section-number-3">13.1.</span> 12.1 Reading coefficients</h3>
+<div class="outline-text-3" id="text-13-1">
+<p>
+GLM coefficients are <b>log-odds</b>, not probabilities. Exponentiate to
+get <b>odds ratios</b>:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-R"><code>
+exp(coef(m_log))
+exp(confint(m_log))
+
+</code></pre>
+</div>
+
+<p>
+A coefficient of <code>exp(...) ≈ 0.08</code> for <code>Sexmale</code> means: "the odds of
+surviving are about 8% of what they are for women, holding class and
+age fixed" — i.e. men were <b>much</b> less likely to survive.
+</p>
+</div>
+</div>
+<div id="outline-container-org14d75a3" class="outline-3">
+<h3 id="org14d75a3"><span class="section-number-3">13.2.</span> 12.2 Diagnostics, plotting, reporting — all the same tools</h3>
+<div class="outline-text-3" id="text-13-2">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+performance::check_model(m_log)
+performance::r2(m_log)                  # pseudo-R² (McFadden, Nagelkerke)
+
+ggeffects::predict_response(m_log, terms = c("Age", "Sex", "Pclass")) %&gt;% plot()
+sjPlot::plot_model(m_log, type = "eff", terms = c("Age", "Sex"))
+
+report::report(m_log)
+
+</code></pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org6f13182" class="outline-3">
+<h3 id="org6f13182"><span class="section-number-3">13.3.</span> 12.3 Confusion matrix at threshold 0.5</h3>
+<div class="outline-text-3" id="text-13-3">
+<div class="org-src-container">
+<pre class="src src-R"><code>
+preds &lt;- ifelse(predict(m_log, type = "response") &gt; 0.5, 1, 0)
+table(predicted = preds,
+      observed  = titanic %&gt;% drop_na(Age) %&gt;% pull(Survived))
+
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-orgaef1e88" class="outline-2">
+<h2 id="orgaef1e88"><span class="section-number-2">14.</span> 13. Cheat sheet</h2>
+<div class="outline-text-2" id="text-14">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Goal</th>
+<th scope="col" class="org-left">Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Fit a linear model</td>
+<td class="org-left"><code>lm(y ~ x, data = df)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Add a predictor</td>
+<td class="org-left"><code>lm(y ~ x1 + x2, data = df)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Interaction (all main + pairwise)</td>
+<td class="org-left"><code>lm(y ~ x1 * x2, data = df)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Only the interaction term</td>
+<td class="org-left"><code>lm(y ~ x1 + x2 + x1:x2, data = df)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Three-way interaction</td>
+<td class="org-left"><code>lm(y ~ x1 * x2 * x3, data = df)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Remove the intercept</td>
+<td class="org-left"><code>lm(y ~ 0 + x, data = df)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Mean-centre a predictor</td>
+<td class="org-left"><code>mutate(xc = x - mean(x, na.rm = TRUE))</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Standardize</td>
+<td class="org-left"><code>mutate(xs = as.numeric(scale(x)))</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Change reference level</td>
+<td class="org-left"><code>relevel(f, ref = "X")</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Sum / effect coding</td>
+<td class="org-left"><code>contrasts(f) &lt;- contr.sum(levels(f))</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Helmert coding</td>
+<td class="org-left"><code>contrasts(f) &lt;- contr.helmert(levels(f))</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Inspect current contrasts</td>
+<td class="org-left"><code>contrasts(f)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Coefficient table</td>
+<td class="org-left"><code>summary(model)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Tidy coefficient table</td>
+<td class="org-left"><code>broom::tidy(model)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Overall fit (R², AIC, &hellip;)</td>
+<td class="org-left"><code>broom::glance(model)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Data + fitted + residuals</td>
+<td class="org-left"><code>broom::augment(model)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Diagnostics figure</td>
+<td class="org-left"><code>performance::check_model(model)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Multicollinearity</td>
+<td class="org-left"><code>car::vif(model)</code> or <code>car::vif(model, type</code>"predictor")=</td>
+</tr>
+
+<tr>
+<td class="org-left">Predictions on new data</td>
+<td class="org-left"><code>predict(model, newdata = ..., interval = "confidence")</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Effect plot (one term)</td>
+<td class="org-left"><code>ggeffects::predict_response(model, "x") %&gt;% plot()</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Effect plot (interaction)</td>
+<td class="org-left"><code>ggeffects::predict_response(model, c("x", "g")) %&gt;% plot()</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Simple slopes</td>
+<td class="org-left"><code>reghelper::simple_slopes(model)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Pretty model table</td>
+<td class="org-left"><code>sjPlot::tab_model(model)</code> / <code>stargazer::stargazer(model)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Plain-English summary</td>
+<td class="org-left"><code>report::report(model)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Compare nested models</td>
+<td class="org-left"><code>anova(m_small, m_big)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Compare any models</td>
+<td class="org-left"><code>AIC(m1, m2, m3)</code> / <code>BIC(m1, m2, m3)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Logistic regression</td>
+<td class="org-left"><code>glm(y ~ x, data = df, family = binomial)</code></td>
+</tr>
+
+<tr>
+<td class="org-left">Convert log-odds → odds ratios</td>
+<td class="org-left"><code>exp(coef(model))</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-org54af58b" class="outline-2">
+<h2 id="org54af58b"><span class="section-number-2">15.</span> 14. Exercises</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+Use <code>df2</code> (the cleaned 1000-row Social Diagnosis subset).
+</p>
+</div>
+<div id="outline-container-org03a8823" class="outline-3">
+<h3 id="org03a8823"><span class="section-number-3">15.1.</span> Exercise 1 — A simple model</h3>
+<div class="outline-text-3" id="text-15-1">
+<ol class="org-ol">
+<li>Fit <code>lm(Weight ~ Age)</code> on <code>df2</code>.</li>
+<li>Report the slope, the intercept, R², and the residual SE in plain
+English.</li>
+<li>Re-fit after mean-centering Age. Which numbers change and which
+stay the same?</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-orga6fc16d" class="outline-3">
+<h3 id="orga6fc16d"><span class="section-number-3">15.2.</span> Exercise 2 — A categorical predictor</h3>
+<div class="outline-text-3" id="text-15-2">
+<ol class="org-ol">
+<li>Fit <code>lm(Weight ~ EduLevel)</code>. Which education group is the
+reference?</li>
+<li>Compute the four EduLevel means by hand with <code>group_by()</code> and
+compare to the model's intercept + coefficients. They should
+agree.</li>
+<li>Re-fit after <code>relevel(EduLevel, "HigherAndPostSecondary")</code>. Same
+R²? Different coefficient labels?</li>
+<li>Re-fit using <code>contr.sum</code>. What does the intercept mean now?</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org5af70db" class="outline-3">
+<h3 id="org5af70db"><span class="section-number-3">15.3.</span> Exercise 3 — Multiple regression</h3>
+<div class="outline-text-3" id="text-15-3">
+<ol class="org-ol">
+<li>Fit <code>m_add = lm(Weight ~ HeightCtr + Gender + Age)</code>.</li>
+<li>Fit <code>m_int = lm(Weight ~ HeightCtr * Gender + Age)</code>.</li>
+<li>Run <code>anova(m_add, m_int)</code> — is the Height × Gender interaction
+worth its extra df?</li>
+<li>Plot the interaction with <code>ggeffects::predict_response</code> .</li>
+<li>Run <code>performance::check_model(m_int)</code>. Comment in one paragraph
+on linearity, homoscedasticity, normality, and any influential
+observations.</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org70d850b" class="outline-3">
+<h3 id="org70d850b"><span class="section-number-3">15.4.</span> Exercise 4 — The HeightExp trick</h3>
+<div class="outline-text-3" id="text-15-4">
+<ol class="org-ol">
+<li>Find the value of <code>HeightExp</code> for which <code>GenderF</code> becomes
+non-significant in <code>Weight ~ HeightExp * Gender</code>. Hint: that's
+where the M and F lines cross.</li>
+<li>Verify by fitting the model with your value substituted for
+<code>HeightIntersect</code>.</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org460870e" class="outline-3">
+<h3 id="org460870e"><span class="section-number-3">15.5.</span> Exercise 5 — Logistic regression on Titanic</h3>
+<div class="outline-text-3" id="text-15-5">
+<ol class="org-ol">
+<li>Load Titanic.</li>
+<li>Fit <code>glm(Survived ~ Sex + Pclass + Age, data = ..., family = binomial)</code>.</li>
+<li>Exponentiate the coefficients. Which predictor reduces the odds of
+survival most?</li>
+<li>Predict the probability of survival for a <b>30-year-old male
+3rd-class passenger</b> and for a <b>6-year-old female 1st-class
+passenger</b>. Use <code>predict(..., type = "response")</code>.</li>
+<li>Compare <code>m_log</code> against <code>glm(Survived ~ Sex + Pclass + Age + Fare, ...)</code>
+with AIC. Does adding <code>Fare</code> help?</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org901d020" class="outline-3">
+<h3 id="org901d020"><span class="section-number-3">15.6.</span> Bonus — Report the final model</h3>
+<div class="outline-text-3" id="text-15-6">
+<p>
+Pick your favourite model and produce a half-page write-up using
+<code>report::report()</code> as a starting draft. Edit it into proper prose.
+Include a single <code>ggeffects</code> plot.
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org15dece4" class="outline-2">
+<h2 id="org15dece4"><span class="section-number-2">16.</span> 15. Further reading</h2>
+<div class="outline-text-2" id="text-16">
+<ul class="org-ul">
+<li>The <code>sjPlot</code>, <code>ggeffects</code> and <code>performance</code> vignettes
+<ul class="org-ul">
+<li><a href="https://strengejacke.github.io/sjPlot/">https://strengejacke.github.io/sjPlot/</a></li>
+<li><a href="https://strengejacke.github.io/ggeffects/">https://strengejacke.github.io/ggeffects/</a></li>
+<li><a href="https://easystats.github.io/performance/">https://easystats.github.io/performance/</a></li>
+</ul></li>
+<li>The <code>report</code> package — <a href="https://easystats.github.io/report/">https://easystats.github.io/report/</a></li>
+<li>Gelman, Hill &amp; Vehtari, <i>Regression and Other Stories</i> — free PDF online.</li>
+<li>Fox, <i>An R Companion to Applied Regression</i> — the <code>car</code> package's textbook companion.</li>
+<li>The SWPS Intermediate Day-01 source tutorial this is built from:
+<code>warsztaty_01_liniowa-linear-regression-CORE-ultimate.org</code>.</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: 2026</p>
+<p class="author">Author: R Course</p>
+<p class="date">Created: 2026-05-28 Thu 17:05</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
