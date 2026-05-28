@@ -1,0 +1,1859 @@
+#+TITLE: Regression in R — from the ground up (with diagnoza data)
+#+AUTHOR: R Course
+#+DATE: 2026
+#+STARTUP: overview
+#+OPTIONS: toc:3 num:t
+
+#+PROPERTY: header-args:R  :tangle   yes
+#+PROPERTY: header-args:R+ :eval     yes
+#+PROPERTY: header-args:R+ :comments org
+#+PROPERTY: header-args:R+ :results  output drawer pp
+#+PROPERTY: header-args:R+ :exports  both
+#+PROPERTY: header-args:R+ :session  *R*
+#+PROPERTY: header-args:R+ :var      HERE=(file-name-directory buffer-file-name)
+
+# ============================================================
+# A long, careful walk-through of linear regression in R.
+# Built on the SWPS Intermediate Day-01 tutorial
+# (warsztaty_01_liniowa-linear-regression-CORE-ultimate.org),
+# using the same dataset — the Polish Social Diagnosis 2013
+# (PogromcyDanych::diagnoza).
+#
+# Running example throughout:
+#   Weight  ~  Height   *   Gender   (with later expansions to EduLevel, Age)
+#
+# Topics:
+#   1.  Intuition  (a line through points)
+#   2.  Get and clean the diagnoza data
+#   3.  Your first model: lm(y ~ x) + reading summary()
+#   4.  Centering and scaling — 5 versions of the same model (1a..1e)
+#   5.  A categorical predictor — 4 contrast variants (2a..2d)
+#   6.  Two predictors together (additive)
+#   7.  Interactions: Weight ~ Height * Gender — 5 variants (3a..3x)
+#   8.  Diagnostics (performance::check_model, car::vif)
+#   9.  Predicted values and simple slopes (reghelper, ggeffects)
+#  10.  Reporting the model (broom, stargazer, report, jtools, sjPlot)
+#  11.  Logistic regression (Titanic — Survived)
+#  12.  Cheat sheet
+#  13.  Exercises
+# ============================================================
+
+* 0. Setup
+
+#+begin_src R :eval no
+
+# install once
+install.packages(c(
+  "tidyverse", "PogromcyDanych",
+  "performance",          # check_model() — model diagnostics
+  "broom",                # tidy(), glance(), augment()
+  "ggeffects",            # predicted-response plots
+  "sjPlot",               # plot_model(), tab_model()
+  "stargazer",            # publication-style tables
+  "report",               # one-paragraph English summary of a model
+  "jtools",               # tidy summary
+  "reghelper",            # simple_slopes()
+  "car",                  # vif()
+  "skimr",                # skim()
+  "psych",                # describe()
+  "GGally"                # ggpairs()
+))
+install.packages("effects")
+install.packages("broom")
+install.packages("car")
+install.packages("ggeffects")
+install.packages("jtools")
+install.packages("performance")
+install.packages("reghelper")
+install.packages("report")
+install.packages("sjPlot")
+install.packages("stargazer")
+
+#+end_src
+
+#+begin_src R
+
+library(tidyverse)
+library(PogromcyDanych)
+
+# Optional convenience — short separators for readable output
+sep0 <- paste(rep("=", 65), collapse = "")
+sep2 <- paste(rep("-", 65), collapse = "")
+cat0 <- function(x, ...) cat(x, "\n", sep = "")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+── Attaching core tidyverse packages ────────────────────────────────────────────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   4.0.1     ✔ tibble    3.3.0
+✔ lubridate 1.9.4     ✔ tidyr     1.3.1
+✔ purrr     1.1.0
+── Conflicts ──────────────────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the ]8;;http://conflicted.r-lib.org/conflicted package]8;; to force all conflicts to become errors
+Loading required package: SmarterPoland
+Loading required package: httr
+Loading required package: htmltools
+#+end_example
+
+* 1. The intuition: a line through a cloud of points
+
+A linear model is the answer to two questions:
+
+1. If I draw the *single best straight line* through this cloud,
+   where does it go?
+2. How well does that line describe the data?
+
+"Best" means: minimise the *sum of squared vertical distances* from
+the points to the line. Those vertical distances are called
+*residuals*. The whole game of =lm()= is solving that minimisation
+problem for you and then telling you what the line was.
+
+* 2. Get and clean the data
+
+We use =PogromcyDanych::diagnoza= — the *Social Diagnosis 2013* dataset,
+a large survey of Polish households. Many of its column names are
+in Polish; the package ships with a dictionary.
+
+#+begin_src R
+
+diagnosis     <- PogromcyDanych::diagnoza
+diagnosisDict <- PogromcyDanych::diagnozaDict
+
+dim(diagnosis)                       # ~38k rows, lots of columns
+head(diagnosisDict, 12)              # variable -> description
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 38461    36
+                           name                                      description
+imie_2011             imie_2011  IMIĘ CZŁONKA Z POMIARÓW 2003, 2005, 2007 I 2009
+waga_2013_osoby waga_2013_osoby           Waga dla członków gospodarstwa z  2013
+lata_nauki_2013 lata_nauki_2013                          Liczba lat nauki w 2013
+wiek2013               wiek2013
+plec                       plec                                             Płeć
+wojewodztwo         wojewodztwo                                      województwo
+eduk4_2013           eduk4_2013            Poziom wykształcenia:4 kategorie 2013
+status9_2013       status9_2013                   status społeczno-zawodowy 2013
+gp3                         gp3 p3 Jak ocenia Pan swoje cale dotychczasowe zycie
+gp29                       gp29      p29 Co jest wedlug Pana wazniejsze w zyciu?
+gp54_01                 gp54_01                         podziwiam ludzi bogatych
+gp54_02                 gp54_02                                    życie ma sens
+                                                                            description_eng
+imie_2011                                                                              NAME
+waga_2013_osoby                                           WEIGHT FOR HOUSEHOLD MEMBERS 2013
+lata_nauki_2013                              YEARS OF FULL-TIME EDUCATION COMPLETED IN 2013
+wiek2013                                                                        AGE IN 2013
+plec                                                                                 GENDER
+wojewodztwo                                                                     WOJEWODZTWO
+eduk4_2013                                            LEVEL OF EDUCATION: 4 CATEGORIES 2013
+status9_2013                                              SOCIAL - PROFESSIONAL STATUS 2013
+gp3                                                      HOW SATISFIED WITH LIFE AS A WHOLE
+gp29                                                         WHAT DO YOU MAJOR IN YOUR LIFE
+gp54_01                         I ADMIRE PEOPLE WHO HAVE EXPENSIVE HOUSES, CARS AND CLOTHES
+gp54_02         MY LIFE IN SPITE OF THE PAINFUL EXPERIENCE IS MEANINGFUL AND OF GREAT VALUE
+#+end_example
+
+** 2.1 Rename and select — call things by their English names
+
+We pick the columns we care about and rename them. This mirrors the
+SWPS Day-01 tutorial almost verbatim.
+
+#+begin_src R
+
+df0 <- diagnosis %>%
+  dplyr::rename(
+    Name       = imie_2011,
+    Weight     = gp61,
+    Height     = gp60,
+    Age        = wiek2013,
+    Gender     = plec,
+    EduLevel   = eduk4_2013,
+    EduYears   = lata_nauki_2013,
+    EmpCateg   = status9_2013,
+    DispIncome = gp64,
+    WorkHours  = gp113
+  ) %>%
+  dplyr::select(
+    Name, Weight, Height, Age, Gender, EduLevel,
+    EduYears, EmpCateg, DispIncome, WorkHours
+  )
+
+dim(df0)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 38461    10
+#+end_example
+
+** 2.2 Recode the factor labels into English
+
+#+begin_src R
+
+# Education level — 4 categories
+levels(df0$EduLevel) <- c(
+  NA, "PrimaryOrNone", "VocationalOrGrammar",
+  "Secondary", "HigherAndPostSecondary"
+)
+
+# Employment / professional status — 9 categories
+levels(df0$EmpCateg) <- c(
+  NA, "EmployeesSectorPublic", "PrivateSectorEmployees",
+  "EntrepreneurOrSelfEmployed", "Farmers", "Pensioners",
+  "Retirees", "PupilsAndStudents", "Unemployed",
+  "OtherProfessionallyInactive"
+)
+
+# Gender: "mężczyzna" / "kobieta" -> "M" / "F" (and reorder so M is first)
+levels(df0$Gender) <- c("M", "F")
+df0$Gender <- factor(df0$Gender, levels = c("M", "F"))
+
+summary(df0$Gender)
+summary(df0$EduLevel)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+    M     F  NA's
+18355 20066    40
+         PrimaryOrNone    VocationalOrGrammar              Secondary HigherAndPostSecondary                   NA's
+                  6747                  10062                   8977                   5785                   6890
+#+end_example
+
+** 2.3 Filter and slice — a tidy 1000-row working frame
+
+We keep only adults with a sensible height, drop rows with any =NA=
+in the columns we will use, take the first 1000 rows, then add
+several /pre-transformed/ versions of the numerical predictors:
+=Ori= (original), =Ctr= (mean-centered), =Sca= (z-scored), and
+=HeightExp= (a special offset we will use in §7).
+
+#+begin_src R
+
+HeightIntersect <- 146.37   # where the M and F regression lines cross; see §7
+
+df2 <- df0 %>%
+  dplyr::filter(!is.na(Age)) %>%
+  na.omit() %>%
+  dplyr::filter(Height > 140) %>%
+  dplyr::slice_head(n = 1000) %>%
+  dplyr::mutate(
+    # originals (kept for reference)
+    WeightOri = Weight,  HeightOri = Height,  AgeOri = Age,
+    # mean-centered (subtract the mean -> the new 0 is "average")
+    WeightCtr = Weight - mean(Weight, na.rm = TRUE),
+    HeightCtr = Height - mean(Height, na.rm = TRUE),
+    AgeCtr    = Age    - mean(Age,    na.rm = TRUE),
+    # standardized (z-score -> 0 = average, 1 = +1 SD)
+    WeightSca = as.numeric(scale(Weight)),
+    HeightSca = as.numeric(scale(Height)),
+    AgeSca    = as.numeric(scale(Age)),
+    # offset at HeightIntersect (used for the §7 trick)
+    HeightExp = Height - HeightIntersect
+  )
+
+dim(df2)
+
+# Reference statistics we will quote throughout
+cat0(paste0("mean(Height) = ", round(mean(df2$Height), 3)))
+cat0(paste0("sd(Height)   = ", round(sd(df2$Height),   3)))
+cat0(paste0("mean(Weight) = ", round(mean(df2$Weight), 3)))
+cat0(paste0("sd(Weight)   = ", round(sd(df2$Weight),   3)))
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 1000   20
+mean(Height) = 170.871
+sd(Height)   = 8.749
+mean(Weight) = 76.994
+sd(Weight)   = 15.394
+#+end_example
+
+Numbers you will see again and again in this tutorial:
+
+#+begin_example
+mean(Height) = 170.871     sd(Height) = 8.749
+mean(Weight) =  76.994     sd(Weight) = 15.394
+#+end_example
+
+** 2.4 A first look
+
+#+begin_src R
+
+skimr::skim(df2 %>% dplyr::select(Weight, Height, Age, Gender, EduLevel))
+
+# Quick scatter
+df2 %>% ggplot(aes(x = Height, y = Weight)) +
+  geom_point(alpha = 0.2, size = 2) +
+  labs(title = "Weight vs Height — Social Diagnosis 2013, n = 1000",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+# Same plot coloured by Gender, with separate fits
+df2 %>% ggplot(aes(x = Height, y = Weight, colour = Gender, fill = Gender)) +
+  geom_point(alpha = 0.2, size = 2) +
+  geom_smooth(method = "lm", formula = y ~ x) +
+  labs(title = "Weight vs Height by Gender",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+── Data Summary ────────────────────────
+                           Values
+Name                       df2 %>% dplyr::select(Wei...
+Number of rows             1000
+Number of columns          5
+_______________________
+Column type frequency:
+  factor                   2
+  numeric                  3
+________________________
+Group variables            None
+
+── Variable type: factor ─────────────────────────────────────────────────────────────────────────────────────────────
+  skim_variable n_missing complete_rate ordered n_unique top_counts
+1 Gender                0             1 FALSE          2 M: 529, F: 471                       
+2 EduLevel              0             1 FALSE          4 Sec: 349, Voc: 318, Hig: 260, Pri: 73
+
+── Variable type: numeric ────────────────────────────────────────────────────────────────────────────────────────────
+  skim_variable n_missing complete_rate  mean    sd  p0 p25 p50 p75 p100 hist
+1 Weight                0             1  77.0 15.4   41  65  76  86  150 ▃▇▅▁▁
+2 Height                0             1 171.   8.75 142 164 170 176  198 ▁▅▇▆▁
+3 Age                   0             1  44.2 12.3   18  34  46  54   75 ▅▅▇▇▁
+#+end_example
+
+The shaded band around each line is a *95 % confidence interval* for
+where the *true* line lives given the data. Note already that the M
+and F lines are not parallel — that fanning is the thing called
+*interaction*, and we will come back to it in §7.
+
+* 3. Your first model: =lm(y ~ x)=
+
+** 3.1 Fit it
+
+#+begin_src R
+
+model1a <- lm(Weight ~ Height, data = df2)
+summary(model1a)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Weight ~ Height, data = df2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-31.161  -8.678  -1.268   8.098  63.408
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) -86.50984    7.99673  -10.82   <2e-16 ***
+Height        0.95688    0.04674   20.47   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12.92 on 998 degrees of freedom
+Multiple R-squared:  0.2958,	Adjusted R-squared:  0.2951
+F-statistic: 419.1 on 1 and 998 DF,  p-value: < 2.2e-16
+#+end_example
+
+The =summary()= output has four blocks. We read them in order.
+
+** 3.2 The =Coefficients= table
+
+#+begin_example
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)
+(Intercept) -86.50984    7.99673  -10.82   <2e-16 ***
+Height        0.95688    0.04674   20.47   <2e-16 ***
+#+end_example
+
+Two rows:
+
+- =(Intercept)= = =-86.51= kg. The model's prediction for a person
+  with =Height = 0 cm=. Obviously nonsensical — nobody is 0 cm tall.
+  The intercept here is a *mathematical anchor*, not a "typical"
+  prediction. We will fix this with *centering* in §4.
+- =Height= = =0.957= kg/cm. The *slope*: for every extra centimetre
+  of height, predicted weight goes up by ≈1 kg.
+
+Each row also has:
+
+- =Std. Error= — the uncertainty around that estimate.
+- =t value= = Estimate / Std. Error.
+- =Pr(>|t|)= — the p-value: "if the true coefficient were 0, how
+  often would we see |t| this big or bigger?"
+- The stars are just visual aliases for the p-value:
+  =***= = p<.001, =**= = p<.01, =*= = p<.05.
+
+** 3.3 The =Residuals= block
+
+#+begin_example
+Residuals:
+    Min     1Q  Median     3Q    Max
+-31.16  -8.68  -1.27    8.10   63.41
+#+end_example
+
+A residual is =observed − predicted=. A *good* model has residuals
+roughly symmetric around zero. Here median ≈ 0 and Q1/Q3 are similar
+in magnitude — symmetric. The =Max = 63.4= is worrying; somebody is
+63 kg heavier than the model predicts, which deserves a look.
+
+** 3.4 The model-level block
+
+#+begin_example
+Residual standard error: 12.92 on 998 degrees of freedom
+Multiple R-squared:  0.2958,	Adjusted R-squared:  0.2951
+F-statistic: 419.1 on 1 and 998 DF,  p-value: < 2.2e-16
+#+end_example
+
+- *R²* = =0.296= = ≈30 % of the variability in Weight is explained by
+  Height alone. Not bad for a single predictor.
+- *Residual SE* = =12.92 kg= — the typical prediction error.
+- *F-statistic* — tests "the whole model vs intercept only".
+  Significant here (p ≪ .001), but with one predictor this test
+  duplicates the =t= test for the slope.
+
+** 3.5 Pulling out the pieces
+
+#+begin_src R
+
+coef(model1a)
+intercept <- coef(model1a)[["(Intercept)"]]
+slope     <- coef(model1a)[["Height"]]
+
+c(intercept = intercept, slope = slope)
+
+fitted(model1a)   %>% head()      # predicted values per row
+residuals(model1a) %>% head()     # observed - predicted
+sigma(model1a)                    # residual SE
+broom::glance(model1a)            # tidy 1-row summary
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+(Intercept)      Height
+-86.5098360   0.9568846
+  intercept       slope
+-86.5098360   0.9568846
+       1        2        3        4        5        6
+79.03121 73.28990 78.07432 85.72940 68.50548 57.02286
+        1         2         3         4         5         6
+-1.031207 -5.289900 16.925677 -7.729400 -6.505476 -8.022861
+[1] 12.92493
+# A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC deviance df.residual  nobs
+      <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>    <dbl>       <int> <int>
+1     0.296         0.295  12.9      419. 4.74e-78     1 -3977. 7960. 7975.  166720.         998  1000
+#+end_example
+
+** 3.6 Drawing the line, ranges, and coefficients — the geometric demo
+
+A nice trick for *seeing* what the intercept means: extend the plot
+all the way to x = 0.
+
+#+begin_src R
+
+minWeight <- min(df2$Weight, na.rm = TRUE)
+maxWeight <- max(df2$Weight, na.rm = TRUE)
+maxHeight <- max(df2$Height, na.rm = TRUE)
+
+df2 %>% ggplot(aes(x = Height, y = Weight)) +
+  geom_point(alpha = 0.1, size = 2) +
+  geom_smooth(method = "lm", formula = y ~ x) +
+  xlim(-10, maxHeight + 10) +
+  ylim(intercept - 10, maxWeight + 10) +
+  geom_vline(xintercept = 0, linetype = "solid", color = "black", lwd = 0.25) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black", lwd = 0.25) +
+  geom_abline(intercept = intercept, slope = slope,
+              linetype = "dashed", color = "red", lwd = 0.25) +
+  labs(title = "Model 1a extended to Height = 0",
+       subtitle = "The dashed red line is the regression line; intercept is where it hits x = 0",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+
+You will *see* that the intercept of −87 kg is far below the data
+cloud — that's why it's uninterpretable as a person.
+
+* 4. Centering and scaling — five versions of the same model
+
+The slope of Model 1a is fine. The intercept is gibberish. We fix
+that by changing what =Height = 0= /means/. The five models below
+all have *identical fit* — same R², same residuals, same predictions.
+What changes is how the coefficients read.
+
+** 4.1 Model 1a (raw): =Weight ~ Height=
+
+#+begin_src R
+
+model1a <- lm(Weight ~ Height, data = df2)
+summary(model1a)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+               Estimate Std. Error   t value     Pr(>|t|)
+(Intercept) -86.5098360 7.99672815 -10.81815 7.207793e-26
+Height        0.9568846 0.04673863  20.47310 4.739540e-78
+#+end_example
+
+#+begin_example
+                Estimate Std.Error  t value
+(Intercept)  -86.5098    8.00     -10.82
+Height         0.9569    0.05      20.47
+#+end_example
+
+Reads: "at =Height = 0=, predicted Weight = −87 kg; +1 cm in height
+adds ≈0.96 kg".
+
+** 4.2 Model 1b (mean-centered predictor): =Weight ~ HeightCtr=
+
+#+begin_src R
+
+model1b <- lm(Weight ~ HeightCtr, data = df2)
+summary(model1b)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+              Estimate Std. Error  t value    Pr(>|t|)
+(Intercept) 76.9940000 0.40872218 188.3773 0.00000e+00
+HeightCtr    0.9568846 0.04673863  20.4731 4.73954e-78
+#+end_example
+
+#+begin_example
+                Estimate Std.Error  t value
+(Intercept)   76.9940    0.41    188.4
+HeightCtr      0.9569    0.05     20.5
+#+end_example
+
+Same slope. The intercept is now =76.99 kg= — the predicted Weight
+of a person of *average* Height (170.87 cm). That number you can
+actually report.
+
+** 4.3 Model 1c (z-scored predictor): =Weight ~ HeightSca=
+
+#+begin_src R
+
+model1c <- lm(Weight ~ HeightSca, data = df2)
+summary(model1c)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+             Estimate Std. Error  t value    Pr(>|t|)
+(Intercept) 76.994000  0.4087222 188.3773 0.00000e+00
+HeightSca    8.371997  0.4089267  20.4731 4.73954e-78
+#+end_example
+
+#+begin_example
+                Estimate Std.Error
+(Intercept)   76.9940    0.41
+HeightSca      8.3720    0.41
+#+end_example
+
+The slope now reads *per SD of Height*: +1 SD ≈ +8.75 cm corresponds
+to +8.37 kg in Weight. Useful when comparing variables on different
+scales.
+
+** 4.4 Model 1d (both centered): =WeightCtr ~ HeightCtr=
+
+#+begin_src R
+
+model1d <- lm(WeightCtr ~ HeightCtr, data = df2)
+summary(model1d)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+                Estimate Std. Error      t value    Pr(>|t|)
+(Intercept) 9.332278e-15 0.40872218 2.283281e-14 1.00000e+00
+HeightCtr   9.568846e-01 0.04673863 2.047310e+01 4.73954e-78
+#+end_example
+
+#+begin_example
+                Estimate Std.Error
+(Intercept)    9.0e-15   0.41        # i.e. zero
+HeightCtr      0.9569    0.05
+#+end_example
+
+When we centre *both* variables, the intercept is forced to zero. We
+have the same slope as 1a/1b, expressed in the original units.
+
+** 4.5 Model 1e (both standardized): =WeightSca ~ HeightSca=
+
+#+begin_src R
+
+model1e <- lm(WeightSca ~ HeightSca, data = df2)
+summary(model1e)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+                Estimate Std. Error      t value    Pr(>|t|)
+(Intercept) 5.974032e-16 0.02655065 2.250051e-14 1.00000e+00
+HeightSca   5.438461e-01 0.02656394 2.047310e+01 4.73954e-78
+#+end_example
+
+#+begin_example
+                Estimate Std.Error
+(Intercept)   6.2e-16    0.03       # zero
+HeightSca      0.5438    0.03
+#+end_example
+
+Now the slope is the *standardized beta*: a 1-SD change in Height
+corresponds to a 0.54-SD change in Weight. =0.54 × sd(Weight) =
+0.54 × 15.39 = 8.31 kg= — same prediction as 1c, just in SD units.
+
+** 4.6 Same fit, different stories
+
+#+begin_src R
+
+# R² is identical across 1a, 1b, 1c, 1d, 1e
+sapply(list(model1a, model1b, model1c, model1d, model1e),
+       function(m) summary(m)$r.squared) %>% round(4)
+
+# Predictions for the raw and scaled versions are the same
+all.equal(fitted(model1a), fitted(model1b))
+all.equal(fitted(model1a), fitted(model1c))
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 0.2958 0.2958 0.2958 0.2958 0.2958
+[1] TRUE
+[1] TRUE
+#+end_example
+
+Take-home: *centering and scaling are about interpretation, not about
+fit.* Pick the version whose intercept makes sense for your story.
+
+* 5. A categorical predictor — four contrast variants
+
+** 5.1 What is a "contrast"?
+
+R cannot multiply the letter "F" by a coefficient. When you put a
+factor into =lm()=, R secretly converts it to a numeric *contrast
+matrix*. For a 2-level factor like =Gender= the default is *treatment
+coding*:
+
+#+begin_src R
+
+contrasts(df2$Gender)
+# F
+# M  0
+# F  1
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  F
+M 0
+F 1
+#+end_example
+
+The first level (=M=) becomes the *reference*: its dummy is 0. =F=
+gets coded as 1. So a coefficient =GenderF= literally reads "the
+expected difference in Weight when moving from M (=0) to F (=1)".
+
+We will fit four versions of =Weight ~ Gender=. All four have the
+same fit. Only the *labels* of the coefficients change.
+
+** 5.2 Model 2a (treatment, default — Male reference)
+
+#+begin_src R
+
+model2a <- lm(Weight ~ Gender, data = df2)
+summary(model2a)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+             Estimate Std. Error  t value     Pr(>|t|)
+(Intercept)  84.72212  0.5668899 149.4507 0.000000e+00
+GenderF     -16.40789  0.8260157 -19.8639 2.990586e-74
+#+end_example
+
+#+begin_example
+              Estimate Std.Error  t value
+(Intercept)    84.722    0.567   149.5
+GenderF       -16.408    0.826   -19.9
+#+end_example
+
+Reads: "Males weigh on average 84.7 kg. Females weigh 16.4 kg
+*less* than males."
+
+** 5.3 Model 2b (treatment — Female reference, via =relevel()=)
+
+#+begin_src R
+
+df2$GenderReLvl <- relevel(df2$Gender, ref = "F")
+contrasts(df2$GenderReLvl)
+
+model2b <- lm(Weight ~ GenderReLvl, data = df2)
+summary(model2b)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  M
+F 0
+M 1
+             Estimate Std. Error  t value     Pr(>|t|)
+(Intercept)  68.31423  0.6007809 113.7091 0.000000e+00
+GenderReLvlM 16.40789  0.8260157  19.8639 2.990586e-74
+#+end_example
+
+#+begin_example
+                 Estimate Std.Error
+(Intercept)       68.314    0.601
+GenderReLvlM      16.408    0.826
+#+end_example
+
+Same difference, opposite sign. Now: "Females weigh 68.3 kg on
+average. Males weigh 16.4 kg *more* than females."
+
+R² is the same as Model 2a. Pick the reference category whose
+intercept you actually want to report.
+
+** 5.4 Model 2c (effect coding — symmetric, sum to zero)
+
+#+begin_src R
+
+df2$GenderContrEff <- df2$Gender
+contrasts(df2$GenderContrEff) <- matrix(
+  c(-1, 1),
+  dimnames = list(c("M", "F"), c("GenEff"))
+)
+contrasts(df2$GenderContrEff)
+# M -1
+# F  1
+
+model2c <- lm(Weight ~ GenderContrEff, data = df2)
+summary(model2c)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  GenEff
+M     -1
+F      1
+                      Estimate Std. Error  t value     Pr(>|t|)
+(Intercept)          76.518171  0.4130078 185.2705 0.000000e+00
+GenderContrEffGenEff -8.203946  0.4130078 -19.8639 2.990586e-74
+#+end_example
+
+#+begin_example
+                          Estimate Std.Error
+(Intercept)                76.518    0.413
+GenderContrEffGenEff       -8.204    0.413
+#+end_example
+
+Reads: "Average person weighs 76.5 kg. Moving from 0 → +1 (=F)
+*lowers* predicted weight by 8.2 kg. Moving from 0 → −1 (=M)
+*raises* it by 8.2 kg." So the two sexes are symmetrically placed
+±8.2 kg around the grand mean.
+
+** 5.5 Model 2d (sum coding — the opposite sign convention)
+
+#+begin_src R
+
+df2$GenderContrSum <- df2$Gender
+contrasts(df2$GenderContrSum) <- contr.sum(levels(df2$GenderContrSum))
+dimnames(contrasts(df2$GenderContrSum)) <- list(levels(df2$GenderContrSum), "GenSum")
+contrasts(df2$GenderContrSum)
+# M  1
+# F -1
+
+model2d <- lm(Weight ~ GenderContrSum, data = df2)
+summary(model2d)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  GenSum
+M      1
+F     -1
+                      Estimate Std. Error  t value     Pr(>|t|)
+(Intercept)          76.518171  0.4130078 185.2705 0.000000e+00
+GenderContrSumGenSum  8.203946  0.4130078  19.8639 2.990586e-74
+#+end_example
+
+#+begin_example
+                          Estimate Std.Error
+(Intercept)                76.518    0.413
+GenderContrSumGenSum        8.204    0.413
+#+end_example
+
+Identical to Model 2c except the sign of the coefficient is
+flipped — because the contrast itself is flipped (=M = +1, F = -1=).
+
+** 5.6 When to use which
+
+| Contrast type    | Intercept means                  | Use when                                                                                    |
+|------------------+----------------------------------+---------------------------------------------------------------------------------------------|
+| Treatment        | Mean of the *reference* category | You have a control or baseline group everyone else should be compared to.                   |
+| Effect / Sum     | *Grand mean* (unweighted)        | You don't want one level to be privileged. *Especially in models with interactions* (§7).   |
+
+** 5.7 A factor with more than two levels — =EduLevel=
+
+#+begin_src R
+
+levels(df2$EduLevel)
+# "PrimaryOrNone" "VocationalOrGrammar" "Secondary" "HigherAndPostSecondary"
+
+contrasts(df2$EduLevel)              # default (treatment): PrimaryOrNone is reference
+
+model_edu <- lm(Weight ~ EduLevel, data = df2)
+summary(model_edu)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] "PrimaryOrNone"          "VocationalOrGrammar"    "Secondary"              "HigherAndPostSecondary"
+                       VocationalOrGrammar Secondary HigherAndPostSecondary
+PrimaryOrNone                            0         0                      0
+VocationalOrGrammar                      1         0                      0
+Secondary                                0         1                      0
+HigherAndPostSecondary                   0         0                      1
+                                Estimate Std. Error   t value      Pr(>|t|)
+(Intercept)                    78.219178   1.772368 44.132582 1.310524e-236
+EduLevelVocationalOrGrammar     2.655036   1.965299  1.350957  1.770159e-01
+EduLevelSecondary              -2.563018   1.948935 -1.315086  1.887837e-01
+EduLevelHigherAndPostSecondary -4.519178   2.005808 -2.253046  2.447315e-02
+#+end_example
+
+For a /k/-level factor, treatment coding produces /k − 1/ dummies.
+Each tells you "how does this level differ from the reference?". You
+can switch reference with =relevel()= (one level at a time) or get
+the "compared to grand mean" version with =contr.sum=:
+
+#+begin_src R
+
+df2$EduLevelContrSum <- df2$EduLevel
+contrasts(df2$EduLevelContrSum) <- contr.sum(levels(df2$EduLevelContrSum))
+
+# or the "each level vs the cumulative mean of earlier levels" pattern
+df2$EduLevelContrHelmert <- df2$EduLevel
+contrasts(df2$EduLevelContrHelmert) <- contr.helmert(levels(df2$EduLevelContrHelmert))
+
+summary(lm(Weight ~ EduLevelContrSum,     data = df2))$coefficients
+summary(lm(Weight ~ EduLevelContrHelmert, data = df2))$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+                   Estimate Std. Error     t value     Pr(>|t|)
+(Intercept)       77.112388  0.5810249 132.7178671 0.000000e+00
+EduLevelContrSum1  1.106790  1.3813885   0.8012156 4.231979e-01
+EduLevelContrSum2  3.761826  0.8355517   4.5022058 7.519537e-06
+EduLevelContrSum3 -1.456228  0.8161618  -1.7842388 7.468920e-02
+                       Estimate Std. Error    t value     Pr(>|t|)
+(Intercept)           77.112388  0.5810249 132.717867 0.0000000000
+EduLevelContrHelmert1  1.327518  0.9826497   1.350957 0.1770158987
+EduLevelContrHelmert2 -1.296845  0.4246123  -3.054186 0.0023167107
+EduLevelContrHelmert3 -1.137463  0.2941237  -3.867294 0.0001171918
+#+end_example
+
+Again: same fit, different labels.
+
+* 6. Two predictors together (additive)
+
+** 6.1 =Weight ~ Height + Gender=
+
+#+begin_src R
+
+model_add <- lm(Weight ~ HeightCtr + Gender, data = df2)
+summary(model_add)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Weight ~ HeightCtr + Gender, data = df2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-35.890  -8.861  -1.702   7.302  64.457
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)
+(Intercept) 81.40990    0.63816 127.570   <2e-16 ***
+HeightCtr    0.59714    0.06084   9.814   <2e-16 ***
+GenderF     -9.37557    1.06595  -8.796   <2e-16 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12.46 on 997 degrees of freedom
+Multiple R-squared:  0.3465,	Adjusted R-squared:  0.3452
+F-statistic: 264.3 on 2 and 997 DF,  p-value: < 2.2e-16
+#+end_example
+
+Coefficient interpretation /"holding the other predictors fixed"/:
+
+- =(Intercept)= ≈ Weight of an *average-height Male*.
+- =HeightCtr= = +1 cm in Height adds X kg, *for both sexes* (no
+  interaction means one shared slope).
+- =GenderF= = how much Females and Males differ *at the same height*.
+
+Geometry: two *parallel* lines, one per sex, separated vertically by
+=GenderF=.
+
+#+begin_src R
+
+df2 %>%
+  mutate(pred = predict(model_add)) %>%
+  ggplot(aes(x = Height, colour = Gender)) +
+  geom_point(aes(y = Weight), alpha = 0.15) +
+  geom_line(aes(y = pred), linewidth = 1) +
+  labs(title = "Additive model: parallel lines, one shared slope",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+#+end_src
+
+#+RESULTS:
+
+* 7. Interaction — =Weight ~ Height * Gender=
+
+What if the *slope* of Weight on Height differs between sexes? Then
+the two lines are not parallel. The model needs an *interaction*.
+
+** 7.1 Model 3a: raw Height × Gender
+
+#+begin_src R
+
+model3a <- lm(Weight ~ Height * Gender, data = df2)
+summary(model3a)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Weight ~ Height * Gender, data = df2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-34.781  -8.640  -1.781   7.139  63.522
+
+Coefficients:
+                Estimate Std. Error t value Pr(>|t|)
+(Intercept)    -51.09669   14.57759  -3.505 0.000477 ***
+Height           0.76987    0.08257   9.323  < 2e-16 ***
+GenderF         54.26098   20.69740   2.622 0.008884 **
+Height:GenderF  -0.37416    0.12153  -3.079 0.002136 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12.4 on 996 degrees of freedom
+Multiple R-squared:  0.3526,	Adjusted R-squared:  0.3507
+F-statistic: 180.9 on 3 and 996 DF,  p-value: < 2.2e-16
+#+end_example
+
+#+begin_example
+                  Estimate Std. Error  t value  Pr(>|t|)
+(Intercept)        -51.097     14.578   -3.51   0.00048 ***
+Height               0.770      0.083    9.32   < 2e-16 ***
+GenderF             54.261     20.697    2.62   0.00888 **
+Height:GenderF      -0.374      0.122   -3.08   0.00214 **
+#+end_example
+
+The =*= shorthand expands to: =Height + Gender + Height:Gender=.
+
+The first three rows describe the *reference category* (Males) — as
+if we had fit only Male data:
+
+- *Males* of height 0 cm weigh −51 kg (mathematical anchor).
+- *Male* slope: each +1 cm of height → +0.770 kg.
+
+The last two rows describe how the *Female* line *differs* from the
+Male line:
+
+- =GenderF = +54.26= : at Height = 0, Females are 54 kg *heavier*
+  than Males (artificial: extrapolation to Height = 0).
+- =Height:GenderF = −0.374= : the *Female slope* is 0.374 *less* than
+  the Male slope.
+
+So:
+
+- Male slope: 0.770 kg/cm.
+- Female slope: 0.770 + (−0.374) = *0.396 kg/cm*.
+
+Males' weight rises more steeply with height than females'. Whether
+F or M is "heavier" at any given height depends on /where on Height/
+we evaluate.
+
+** 7.2 Model 3b: same model, but with mean-centered Height
+
+#+begin_src R
+
+model3b <- lm(Weight ~ HeightCtr * Gender, data = df2)
+summary(model3b)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = Weight ~ HeightCtr * Gender, data = df2)
+
+Residuals:
+    Min      1Q  Median      3Q     Max
+-34.781  -8.640  -1.781   7.139  63.522
+
+Coefficients:
+                  Estimate Std. Error t value Pr(>|t|)
+(Intercept)       80.45182    0.70757 113.701  < 2e-16 ***
+HeightCtr          0.76987    0.08257   9.323  < 2e-16 ***
+GenderF           -9.67241    1.06582  -9.075  < 2e-16 ***
+HeightCtr:GenderF -0.37416    0.12153  -3.079  0.00214 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 12.4 on 996 degrees of freedom
+Multiple R-squared:  0.3526,	Adjusted R-squared:  0.3507
+F-statistic: 180.9 on 3 and 996 DF,  p-value: < 2.2e-16
+#+end_example
+
+#+begin_example
+                     Estimate Std. Error t value
+(Intercept)            80.452      0.708 113.7
+HeightCtr               0.770      0.083   9.3
+GenderF                -9.672      1.066  -9.1
+HeightCtr:GenderF      -0.374      0.122  -3.1
+#+end_example
+
+*Same model* — same R², same residuals, same predictions. Only the
+*labels* change:
+
+- =(Intercept) = 80.45= : the predicted Weight for a *Male of average
+  height* (170.87 cm).
+- =GenderF = −9.67= : *at the mean Height*, Females are predicted to
+  be 9.67 kg lighter than Males. Now this is a number you can put in
+  a paper.
+- The interaction coefficient is unchanged (it doesn't care about
+  centering — it's a *change in slope*, which is unit-invariant).
+
+*This is why we centre.* The "main effects" in an interaction model
+are evaluated *at zero on the other variable*. If zero is not in the
+data, the main-effect coefficients are nonsense. Centering puts zero
+in the middle of the cloud.
+
+** 7.3 Model 3c: centre both Height *and* Gender (effect coding)
+
+#+begin_src R
+
+model3c <- lm(Weight ~ HeightCtr * GenderContrEff, data = df2)
+summary(model3c)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+                                 Estimate Std. Error    t value     Pr(>|t|)
+(Intercept)                    75.6156194 0.53290849 141.892314 0.000000e+00
+HeightCtr                       0.5827895 0.06076683   9.590585 6.770920e-21
+GenderContrEffGenEff           -4.8362046 0.53290849  -9.075113 5.934428e-19
+HeightCtr:GenderContrEffGenEff -0.1870809 0.06076683  -3.078668 2.136217e-03
+#+end_example
+
+Now the intercept is the grand mean of Weight at the mean Height,
+and the Gender coefficient is the symmetric (±) deviation. Useful
+when you want neither sex to act as "the baseline".
+
+** 7.4 The intersection trick: Model 3s and Model 3x
+
+The two regression lines (one for Males, one for Females) cross at a
+specific height — call it =HeightIntersect=. We can read it off the
+plot or compute it:
+
+#+begin_src R
+
+# (Intercept_F - Intercept_M) / (slope_M - slope_F)
+# from Model 3a (raw scale):
+#   Intercept_M = -51.097
+#   Intercept_F = -51.097 + 54.261 = 3.164
+#   slope_M     = 0.770
+#   slope_F     = 0.770 - 0.374 = 0.396
+height_cross <- (3.164 - (-51.097)) / (0.770 - 0.396)
+height_cross   # ~145 cm — close to HeightIntersect = 146.37 we defined earlier
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[1] 145.0829
+#+end_example
+
+If we centre Height *at the crossing point* (=HeightExp = Height −
+146.37=), the Female-vs-Male difference *at that centre* should be
+approximately zero — because the lines cross there.
+
+#+begin_src R
+
+model3s <- lm(Weight ~ HeightExp + Gender, data = df2)             # additive, no interaction
+summary(model3s)$coefficients
+
+model3x <- lm(Weight ~ HeightExp * Gender, data = df2)             # with interaction
+summary(model3x)$coefficients
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+              Estimate Std. Error   t value      Pr(>|t|)
+(Intercept) 66.7792642 1.90678812 35.021859 7.583338e-176
+HeightExp    0.5971443 0.06084475  9.814228  9.116022e-22
+GenderF     -9.3755748 1.06595055 -8.795506  6.159184e-18
+                    Estimate Std. Error    t value      Pr(>|t|)
+(Intercept)       61.5892309 2.53911841 24.2561476 1.670712e-102
+HeightExp          0.7698703 0.08257448  9.3233444  7.059680e-20
+GenderF           -0.5050723 3.07057698 -0.1644877  8.693806e-01
+HeightExp:GenderF -0.3741617 0.12153367 -3.0786675  2.136217e-03
+#+end_example
+
+#+begin_example
+                  Estimate Std.Error t value Pr(>|t|)
+(Intercept)        61.589    2.539   24.3    <2e-16
+HeightExp           0.770    0.083    9.3    <2e-16
+GenderF            -0.505    3.071   -0.16   0.869   <-- NOT significant!
+HeightExp:GenderF  -0.374    0.122   -3.1    0.002
+#+end_example
+
+The =GenderF= coefficient is now =−0.51= and *not significant*. The
+sexes differ in /slope/ (the interaction is still significant), but
+*at Height = 146.37 cm* — exactly where the two lines cross — they
+are predicted to weigh the same. This is what "main effects depend
+on where you centre" looks like in practice.
+
+** 7.5 Visualising the interaction
+
+#+begin_src R
+
+df2 %>%
+  mutate(pred = predict(model3a)) %>%
+  ggplot(aes(x = Height, colour = Gender)) +
+  geom_point(aes(y = Weight), alpha = 0.15) +
+  geom_line(aes(y = pred), linewidth = 1) +
+  labs(title = "Interaction model: one slope per sex",
+       x = "Height (cm)", y = "Weight (kg)") +
+  theme_minimal()
+
+# The proper "model-implied" way
+# install.packages("sjPlot")
+# sjPlot::plot_model(model3a, type = "eff", terms = c("Height", "Gender"))
+
+# Or the modern ggeffects way
+# install.packages("ggeffects")
+ggeffects::predict_response(model3a, terms = c("Height", "Gender")) %>% plot()
+
+#+end_src
+
+#+RESULTS:
+
+* 8. Diagnostics — is the model OK?
+
+A linear regression rests on four assumptions:
+
+1. *Linearity* — the relationship is actually linear.
+2. *Independence* — observations don't share residuals.
+3. *Homoscedasticity* — residual variance is roughly constant.
+4. *Normality of residuals* — for the inferential bits (t-tests,
+   confidence intervals) to be valid.
+
+The =performance= package gives all four diagnostics in one figure:
+
+#+begin_src R
+
+# install.packages("performance")
+performance::check_model(model3a)
+
+#+end_src
+
+#+RESULTS:
+
+If you don't have =performance= installed, base R's =plot.lm()=
+gives you the classical four panels:
+
+#+begin_src R
+
+par(mfrow = c(2, 2))
+plot(model3a)
+par(mfrow = c(1, 1))
+
+#+end_src
+
+#+RESULTS:
+
+** 8.1 Multicollinearity — when predictors overlap
+
+If two predictors are strongly correlated, the model cannot tell
+their effects apart. The *variance inflation factor* (=VIF=) flags
+this:
+
+#+begin_src R
+
+# install.packages("car")
+car::vif(model_add)                   # additive model: simple VIF
+
+# For models WITH interactions you must use type = "predictor"
+car::vif(model3a, type = "predictor")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+HeightCtr    Gender
+ 1.824374  1.824374
+GVIFs computed for predictors
+       GVIF Df GVIF^(1/(2*Df)) Interacts With Other Predictors
+Height    1  3               1         Gender             --
+Gender    1  3               1         Height             --
+#+end_example
+
+Rule of thumb: VIF < 5 is fine; VIF 5–10 is suspicious; VIF > 10 is a
+real problem.
+
+* 9. Predicted values and simple slopes
+
+** 9.1 =predict()= — what does the model say about a new case?
+
+#+begin_src R
+
+new_data <- tibble(
+  Height = c(160, 170, 180),
+  Gender = factor(c("F", "F", "F"), levels = levels(df2$Gender))
+)
+new_data$pred <- predict(model3a, newdata = new_data)
+new_data
+
+# Confidence interval (where the mean line plausibly is)
+predict(model3a, newdata = new_data, interval = "confidence")
+
+# Prediction interval (where a single new person plausibly falls)
+predict(model3a, newdata = new_data, interval = "prediction")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+# A tibble: 3 × 3
+  Height Gender  pred
+   <dbl> <fct>  <dbl>
+1    160 F       66.5
+2    170 F       70.4
+3    180 F       74.4
+       fit      lwr      upr
+1 66.47767 65.09288 67.86245
+2 70.43475 68.97278 71.89673
+3 74.39184 71.47956 77.30412
+       fit      lwr      upr
+1 66.47767 42.09634 90.85900
+2 70.43475 46.04892 94.82059
+3 74.39184 49.87627 98.90741
+#+end_example
+
+** 9.2 Simple slopes — the slope *for each group*
+
+For interaction models, "the effect of Height" depends on Gender,
+and "the M-F difference" depends on Height. =reghelper::simple_slopes()=
+splits this up cleanly:
+
+#+begin_src R
+
+# install.packages("reghelper")
+reghelper::simple_slopes(model3a)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+      Height Gender Test Estimate Std. Error t value  df  Pr(>|t|) Sig.
+1 162.121777 sstest       -6.3988     1.4358 -4.4565 996 9.274e-06  ***
+2    170.871 sstest       -9.6724     1.0658 -9.0751 996 < 2.2e-16  ***
+3 179.620223 sstest      -12.9460     1.5722 -8.2346 996 5.617e-16  ***
+4     sstest      M        0.7699     0.0826  9.3233 996 < 2.2e-16  ***
+5     sstest      F        0.3957     0.0892  4.4375 996 1.011e-05  ***
+#+end_example
+
+You will get rows like:
+
+#+begin_example
+   Height  Gender Test  Estimate  Std.Error t value   Pr(>|t|)
+1  162.12  sstest        -6.40      1.44     -4.46   9.3e-06  ***
+2  170.87  sstest        -9.67      1.07     -9.08   < 2e-16  ***
+3  179.62  sstest       -12.95      1.57     -8.23   5.6e-16  ***
+4  sstest  M             0.770      0.083     9.32   < 2e-16  ***
+5  sstest  F             0.396      0.089     4.44   1.0e-05  ***
+#+end_example
+
+The bottom two rows are the *species-specific... err, sex-specific
+slopes*: Males 0.770 kg/cm, Females 0.396 kg/cm. The top three rows
+are the M–F /differences/ at three values of Height (mean ± 1 SD).
+
+You can ask for slopes at specific heights:
+
+#+begin_src R
+
+reghelper::simple_slopes(
+  model3a,
+  levels = list(
+    Height = c(160, 170, 180, "sstest"),
+    Gender = c("M", "F", "sstest")
+  )
+)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+  Height Gender Test Estimate Std. Error t value  df  Pr(>|t|) Sig.
+1 sstest      M        0.7699     0.0826  9.3233 996 < 2.2e-16  ***
+2 sstest      F        0.3957     0.0892  4.4375 996 1.011e-05  ***
+3    160 sstest       -5.6049     1.6207 -3.4583 996 0.0005667  ***
+4    170 sstest       -9.3465     1.0615 -8.8051 996 < 2.2e-16  ***
+5    180 sstest      -13.0881     1.6065 -8.1470 996 1.111e-15  ***
+#+end_example
+
+** 9.3 Cross-check with =predict()=
+
+#+begin_src R
+
+df4 <- tibble(
+  Height = c(160, 170, 180, 160, 170, 180),
+  Gender = factor(c("F","F","F", "M","M","M"), levels = c("M","F"))
+)
+df4$pred <- predict(model3a, newdata = df4)
+
+dplyr::left_join(
+  df4 %>% filter(Gender == "F") %>% rename(predF = pred) %>% select(-Gender),
+  df4 %>% filter(Gender == "M") %>% rename(predM = pred) %>% select(-Gender),
+  by = "Height"
+) %>%
+  mutate(diff_FminusM = predF - predM)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+# A tibble: 3 × 4
+  Height predF predM diff_FminusM
+   <dbl> <dbl> <dbl>        <dbl>
+1    160  66.5  72.1        -5.60
+2    170  70.4  79.8        -9.35
+3    180  74.4  87.5       -13.1
+#+end_example
+
+** 9.4 =ggeffects= — the modern way to plot the model
+
+#+begin_src R
+
+library(ggeffects)
+
+# One-dimensional effect
+predict_response(model3a, terms = "Height") %>% plot()
+
+# Two-dimensional (interaction)
+predict_response(model3a, terms = c("Height", "Gender")) %>% plot()
+
+# Pick specific x values
+predict_response(model3a, terms = c("Height [160,170,180]", "Gender")) %>% plot()
+
+# Statistical test on the predictions (e.g. pairwise differences)
+predict_response(model3a, terms = c("Height [160,170,180]", "Gender")) %>%
+  test_predictions()
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+# Pairwise comparisons
+
+Gender | Contrast |     95% CI |     p
+--------------------------------------
+M-F    |     0.37 | 0.14, 0.61 | 0.002
+#+end_example
+
+* 10. Reporting the model
+
+Different tools for different audiences. Pick one and be consistent.
+
+** 10.1 =broom= — tidy tibbles you can pipe further
+
+#+begin_src R
+
+# install.packages("broom")
+broom::tidy(model3a)        # one row per coefficient
+broom::glance(model3a)      # one row of overall fit (R², AIC, F, ...)
+broom::augment(model3a)     # original data + fitted + residuals + leverage
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+# A tibble: 4 × 5
+  term           estimate std.error statistic  p.value
+  <chr>             <dbl>     <dbl>     <dbl>    <dbl>
+1 (Intercept)     -51.1     14.6        -3.51 4.77e- 4
+2 Height            0.770    0.0826      9.32 7.06e-20
+3 GenderF          54.3     20.7         2.62 8.88e- 3
+4 Height:GenderF   -0.374    0.122      -3.08 2.14e- 3
+# A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC deviance df.residual  nobs
+      <dbl>         <dbl> <dbl>     <dbl>    <dbl> <dbl>  <dbl> <dbl> <dbl>    <dbl>       <int> <int>
+1     0.353         0.351  12.4      181. 1.34e-93     3 -3935. 7880. 7905.  153256.         996  1000
+# A tibble: 1,000 × 9
+   Weight Height Gender .fitted .resid    .hat .sigma    .cooksd .std.resid
+    <dbl>  <dbl> <fct>    <dbl>  <dbl>   <dbl>  <dbl>      <dbl>      <dbl>
+ 1     78    173 M         82.1  -4.09 0.00241   12.4 0.0000658      -0.330
+ 2     68    167 F         69.2  -1.25 0.00241   12.4 0.00000613     -0.101
+ 3     95    172 M         81.3  13.7  0.00276   12.4 0.000842        1.10
+ 4     78    180 M         87.5  -9.48 0.00246   12.4 0.000361       -0.765
+ 5     62    162 F         67.3  -5.27 0.00248   12.4 0.000113       -0.425
+ 6     49    150 F         62.5 -13.5  0.0132    12.4 0.00403        -1.10
+ 7     82    180 M         87.5  -5.48 0.00246   12.4 0.000121       -0.442
+ 8     61    165 F         68.5  -7.46 0.00213   12.4 0.000193       -0.602
+ 9     94    184 M         90.6   3.44 0.00444   12.4 0.0000861       0.278
+10     62    164 F         68.1  -6.06 0.00214   12.4 0.000129       -0.489
+# ℹ 990 more rows
+# ℹ Use `print(n = ...)` to see more rows
+#+end_example
+
+** 10.2 =stargazer= — publication-style coefficient table
+
+#+begin_src R
+
+# install.packages("stargazer")
+stargazer::stargazer(model3a, type = "text")
+# stargazer::stargazer(model3a, type = "latex", out = "model.tex")
+# stargazer::stargazer(model3a, type = "html",  out = "model.html")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+
+===============================================
+                        Dependent variable:
+                    ---------------------------
+                              Weight
+-----------------------------------------------
+Height                       0.770***
+                              (0.083)
+
+GenderF                      54.261***
+                             (20.697)
+
+Height:GenderF               -0.374***
+                              (0.122)
+
+Constant                    -51.097***
+                             (14.578)
+
+-----------------------------------------------
+Observations                   1,000
+R2                             0.353
+Adjusted R2                    0.351
+Residual Std. Error      12.405 (df = 996)
+F Statistic          180.851*** (df = 3; 996)
+===============================================
+Note:               *p<0.1; **p<0.05; ***p<0.01
+#+end_example
+
+** 10.3 =report= — a written paragraph in plain English
+
+#+begin_src R
+
+# install.packages("report")
+report::report(model3a)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+We fitted a linear model (estimated using OLS) to predict Weight with Height and Gender (formula: Weight ~ Height *
+Gender). The model explains a statistically significant and substantial proportion of variance (R2 = 0.35, F(3, 996)
+= 180.85, p < .001, adj. R2 = 0.35). The model's intercept, corresponding to Height = 0 and Gender = M, is at -51.10
+(95% CI [-79.70, -22.49], t(996) = -3.51, p < .001). Within this model:
+
+  - The effect of Height is statistically significant and positive (beta = 0.77, 95% CI [0.61, 0.93], t(996) = 9.32, p
+< .001; Std. beta = 0.44, 95% CI [0.35, 0.53])
+  - The effect of Gender [F] is statistically significant and positive (beta = 54.26, 95% CI [13.65, 94.88], t(996) =
+2.62, p = 0.009; Std. beta = -0.63, 95% CI [-0.76, -0.49])
+  - The effect of Height × Gender [F] is statistically significant and negative (beta = -0.37, 95% CI [-0.61, -0.14],
+t(996) = -3.08, p = 0.002; Std. beta = -0.21, 95% CI [-0.35, -0.08])
+
+Standardized parameters were obtained by fitting the model on a standardized version of the dataset. 95% Confidence
+Intervals (CIs) and p-values were computed using a Wald t-distribution approximation.
+#+end_example
+
+Output reads almost like a Results section:
+
+#+begin_example
+We fitted a linear model (estimated using OLS) to predict Weight with
+Height and Gender (formula: Weight ~ Height * Gender). The model
+explains a statistically significant and substantial proportion of
+variance (R2 = 0.35, F(3, 996) = 180.85, p < .001, adj. R2 = 0.35).
+The model's intercept, corresponding to Height = 0 and Gender = M,
+is at -51.10 (95% CI [-79.70, -22.49], t(996) = -3.51, p < .001).
+Within this model:
+  - The effect of Height is statistically significant and positive
+    (beta = 0.77, 95% CI [0.61, 0.93], t(996) = 9.32, p < .001;
+     Std. beta = 0.44, 95% CI [0.35, 0.53])
+  - The effect of Gender [F] is statistically significant and positive
+    (beta = 54.26, ...)
+  - The effect of Height × Gender [F] is statistically significant and
+    negative (beta = -0.37, ...)
+#+end_example
+
+Useful as a *starting point* — *not* something to copy in unedited.
+
+** 10.4 =jtools::summ()= — compact summary
+
+#+begin_src R
+
+# install.packages("jtools")
+jtools::summ(model3a)
+jtools::summ(model3a, confint = TRUE, digits = 3)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+MODEL INFO:
+Observations: 1000
+Dependent Variable: Weight
+Type: OLS linear regression
+
+MODEL FIT:
+F(3,996) = 180.85, p = 0.00
+R² = 0.35
+Adj. R² = 0.35
+
+Standard errors:OLS
+-----------------------------------------------------
+                         Est.    S.E.   t val.      p
+-------------------- -------- ------- -------- ------
+(Intercept)            -51.10   14.58    -3.51   0.00
+Height                   0.77    0.08     9.32   0.00
+GenderF                 54.26   20.70     2.62   0.01
+Height:GenderF          -0.37    0.12    -3.08   0.00
+-----------------------------------------------------
+MODEL INFO:
+Observations: 1000
+Dependent Variable: Weight
+Type: OLS linear regression
+
+MODEL FIT:
+F(3,996) = 180.851, p = 0.000
+R² = 0.353
+Adj. R² = 0.351
+
+Standard errors:OLS
+-------------------------------------------------------------------
+                          Est.      2.5%     97.5%   t val.       p
+-------------------- --------- --------- --------- -------- -------
+(Intercept)            -51.097   -79.703   -22.490   -3.505   0.000
+Height                   0.770     0.608     0.932    9.323   0.000
+GenderF                 54.261    13.645    94.876    2.622   0.009
+Height:GenderF          -0.374    -0.613    -0.136   -3.079   0.002
+-------------------------------------------------------------------
+#+end_example
+
+** 10.5 =sjPlot::tab_model()= — HTML table with CIs and standardized betas
+
+#+begin_src R
+
+sjPlot::tab_model(
+  model3a,
+  show.stat      = TRUE,
+  show.std       = "std",
+  show.p         = TRUE,
+  p.style        = "numeric_stars",
+  collapse.ci    = FALSE,
+  show.reflvl    = TRUE,
+  show.intercept = TRUE
+)
+
+#+end_src
+
+#+RESULTS:
+
+* 11. Multiple-model comparison
+
+** 11.1 Nested models: =anova()= for an F-test
+
+#+begin_src R
+
+anova(model_add, model3a)     # is the Height × Gender interaction worth its df?
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Analysis of Variance Table
+
+Model 1: Weight ~ HeightCtr + Gender
+Model 2: Weight ~ Height * Gender
+  Res.Df    RSS Df Sum of Sq      F   Pr(>F)
+1    997 154715
+2    996 153256  1    1458.4 9.4782 0.002136 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+#+end_example
+
+If the p-value is small, the bigger model explains significantly more
+variance than the additive one.
+
+** 11.2 Non-nested or many models: AIC / BIC
+
+#+begin_src R
+
+AIC(model1a, model_add, model3a)
+BIC(model1a, model_add, model3a)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+          df      AIC
+model1a    3 7960.191
+model_add  4 7887.461
+model3a    5 7879.989
+          df      BIC
+model1a    3 7974.914
+model_add  4 7907.092
+model3a    5 7904.528
+#+end_example
+
+Lower is better. AIC rewards complexity less harshly; BIC is stricter.
+
+** 11.3 More predictors? A bigger model
+
+The SWPS day-01 final example threw the kitchen sink at it:
+
+#+begin_src R
+
+model4 <- lm(Weight ~ Height * Gender * EduLevel, data = df2)
+summary(model4)
+
+# Visualising the 3-way interaction
+sjPlot::plot_model(model4, type = "eff",
+                   terms = c("Height", "Gender", "EduLevel"))
+
+#+end_src
+
+The output is huge. With four EduLevel categories, two Gender
+categories and one continuous Height, the 3-way interaction model
+has /2 × 4 × 2 = 16/ coefficients. Lesson: *just because you can does
+not mean you should.* Start simple, add a predictor only when there
+is a question that needs it.
+
+* 12. Logistic regression — a 10-minute extension
+
+When the outcome is *binary* (yes/no, survived/died), use a logistic
+regression. Same =formula= syntax, different function. We switch
+data sets to *Titanic*, which the class already knows.
+
+#+begin_src R
+
+titanic <- read_csv(
+  "https://raw.githubusercontent.com/nt246/NTRES-6100-data-science/master/datasets/Titanic.csv",
+  show_col_types = FALSE
+) %>%
+  mutate(
+    Pclass = factor(Pclass, labels = c("1st", "2nd", "3rd")),
+    Sex    = factor(Sex)
+  )
+
+m_log <- glm(Survived ~ Sex + Pclass + Age,
+             data   = titanic %>% drop_na(Age),
+             family = binomial)
+summary(m_log)
+
+#+end_src
+
+** 12.1 Reading coefficients
+
+GLM coefficients are *log-odds*, not probabilities. Exponentiate to
+get *odds ratios*:
+
+#+begin_src R
+
+exp(coef(m_log))
+exp(confint(m_log))
+
+#+end_src
+
+A coefficient of =exp(...) ≈ 0.08= for =Sexmale= means: "the odds of
+surviving are about 8% of what they are for women, holding class and
+age fixed" — i.e. men were *much* less likely to survive.
+
+** 12.2 Diagnostics, plotting, reporting — all the same tools
+
+#+begin_src R
+
+performance::check_model(m_log)
+performance::r2(m_log)                  # pseudo-R² (McFadden, Nagelkerke)
+
+ggeffects::predict_response(m_log, terms = c("Age", "Sex", "Pclass")) %>% plot()
+sjPlot::plot_model(m_log, type = "eff", terms = c("Age", "Sex"))
+
+report::report(m_log)
+
+#+end_src
+
+** 12.3 Confusion matrix at threshold 0.5
+
+#+begin_src R
+
+preds <- ifelse(predict(m_log, type = "response") > 0.5, 1, 0)
+table(predicted = preds,
+      observed  = titanic %>% drop_na(Age) %>% pull(Survived))
+
+#+end_src
+
+* 13. Cheat sheet
+
+| Goal                                         | Code                                                    |
+|----------------------------------------------+---------------------------------------------------------|
+| Fit a linear model                           | =lm(y ~ x, data = df)=                                  |
+| Add a predictor                              | =lm(y ~ x1 + x2, data = df)=                            |
+| Interaction (all main + pairwise)            | =lm(y ~ x1 * x2, data = df)=                            |
+| Only the interaction term                    | =lm(y ~ x1 + x2 + x1:x2, data = df)=                    |
+| Three-way interaction                        | =lm(y ~ x1 * x2 * x3, data = df)=                       |
+| Remove the intercept                         | =lm(y ~ 0 + x, data = df)=                              |
+| Mean-centre a predictor                      | =mutate(xc = x - mean(x, na.rm = TRUE))=                |
+| Standardize                                  | =mutate(xs = as.numeric(scale(x)))=                     |
+| Change reference level                       | =relevel(f, ref = "X")=                                 |
+| Sum / effect coding                          | =contrasts(f) <- contr.sum(levels(f))=                  |
+| Helmert coding                               | =contrasts(f) <- contr.helmert(levels(f))=              |
+| Inspect current contrasts                    | =contrasts(f)=                                          |
+| Coefficient table                            | =summary(model)=                                        |
+| Tidy coefficient table                       | =broom::tidy(model)=                                    |
+| Overall fit (R², AIC, ...)                   | =broom::glance(model)=                                  |
+| Data + fitted + residuals                    | =broom::augment(model)=                                 |
+| Diagnostics figure                           | =performance::check_model(model)=                       |
+| Multicollinearity                            | =car::vif(model)= or =car::vif(model, type="predictor")= |
+| Predictions on new data                      | =predict(model, newdata = ..., interval = "confidence")= |
+| Effect plot (one term)                       | =ggeffects::predict_response(model, "x") %>% plot()=    |
+| Effect plot (interaction)                    | =ggeffects::predict_response(model, c("x", "g")) %>% plot()= |
+| Simple slopes                                | =reghelper::simple_slopes(model)=                       |
+| Pretty model table                           | =sjPlot::tab_model(model)= / =stargazer::stargazer(model)= |
+| Plain-English summary                        | =report::report(model)=                                 |
+| Compare nested models                        | =anova(m_small, m_big)=                                 |
+| Compare any models                           | =AIC(m1, m2, m3)= / =BIC(m1, m2, m3)=                   |
+| Logistic regression                          | =glm(y ~ x, data = df, family = binomial)=              |
+| Convert log-odds → odds ratios               | =exp(coef(model))=                                      |
+
+* 14. Exercises
+
+Use =df2= (the cleaned 1000-row Social Diagnosis subset).
+
+** Exercise 1 — A simple model
+
+1. Fit =lm(Weight ~ Age)= on =df2=.
+2. Report the slope, the intercept, R², and the residual SE in plain
+   English.
+3. Re-fit after mean-centering Age. Which numbers change and which
+   stay the same?
+
+** Exercise 2 — A categorical predictor
+
+1. Fit =lm(Weight ~ EduLevel)=. Which education group is the
+   reference?
+2. Compute the four EduLevel means by hand with =group_by()= and
+   compare to the model's intercept + coefficients. They should
+   agree.
+3. Re-fit after =relevel(EduLevel, "HigherAndPostSecondary")=. Same
+   R²? Different coefficient labels?
+4. Re-fit using =contr.sum=. What does the intercept mean now?
+
+** Exercise 3 — Multiple regression
+
+1. Fit =m_add = lm(Weight ~ HeightCtr + Gender + Age)=.
+2. Fit =m_int = lm(Weight ~ HeightCtr * Gender + Age)=.
+3. Run =anova(m_add, m_int)= — is the Height × Gender interaction
+   worth its extra df?
+4. Plot the interaction with =ggeffects::predict_response= .
+5. Run =performance::check_model(m_int)=. Comment in one paragraph
+   on linearity, homoscedasticity, normality, and any influential
+   observations.
+
+** Exercise 4 — The HeightExp trick
+
+1. Find the value of =HeightExp= for which =GenderF= becomes
+   non-significant in =Weight ~ HeightExp * Gender=. Hint: that's
+   where the M and F lines cross.
+2. Verify by fitting the model with your value substituted for
+   =HeightIntersect=.
+
+** Exercise 5 — Logistic regression on Titanic
+
+1. Load Titanic.
+2. Fit =glm(Survived ~ Sex + Pclass + Age, data = ..., family = binomial)=.
+3. Exponentiate the coefficients. Which predictor reduces the odds of
+   survival most?
+4. Predict the probability of survival for a *30-year-old male
+   3rd-class passenger* and for a *6-year-old female 1st-class
+   passenger*. Use =predict(..., type = "response")=.
+5. Compare =m_log= against =glm(Survived ~ Sex + Pclass + Age + Fare, ...)=
+   with AIC. Does adding =Fare= help?
+
+** Bonus — Report the final model
+
+Pick your favourite model and produce a half-page write-up using
+=report::report()= as a starting draft. Edit it into proper prose.
+Include a single =ggeffects= plot.
+
+* 15. Further reading
+
+- The =sjPlot=, =ggeffects= and =performance= vignettes
+  - https://strengejacke.github.io/sjPlot/
+  - https://strengejacke.github.io/ggeffects/
+  - https://easystats.github.io/performance/
+- The =report= package — https://easystats.github.io/report/
+- Gelman, Hill & Vehtari, /Regression and Other Stories/ — free PDF online.
+- Fox, /An R Companion to Applied Regression/ — the =car= package's textbook companion.
+- The SWPS Intermediate Day-01 source tutorial this is built from:
+  =warsztaty_01_liniowa-linear-regression-CORE-ultimate.org=.
